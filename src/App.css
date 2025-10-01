@@ -1,26 +1,34 @@
+*,
+::before,
+::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 body {
-    margin: 0;
-    color: #fff;
-    font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
-    background-image: linear-gradient(to bottom, #020917, #101725);
+  width: 100svw;
+  height: 100svh;
+  margin: 0;
+  color: #fff;
+  font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
+  background-image: linear-gradient(to bottom, #020917, #101725);
+  overflow: hidden;
 }
 
 .content {
-    display: flex;
-    min-height: 100vh;
-    line-height: 1.1;
-    text-align: center;
-    flex-direction: column;
-    justify-content: center;
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
 }
 
 .content h1 {
-    font-size: 3.6rem;
-    font-weight: 700;
+  font-size: 3.6rem;
+  font-weight: 700;
 }
 
 .content p {
-    font-size: 1.5rem;
-    font-weight: 400;
-    opacity: 0.5;
+  font-size: 1.5rem;
+  font-weight: 400;
+  opacity: 0.5;
 }
