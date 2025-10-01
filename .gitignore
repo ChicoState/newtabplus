@@ -1,3 +1,6 @@
+# Auto-generated
+*.css.d.ts
+
 # Local
 .DS_Store
 *.local
