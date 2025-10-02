@@ -25,7 +25,7 @@ const App = () => {
         <Widget size={{ width: 4, height: 4 }}>
           <TestBox></TestBox>
         </Widget>
-        <Widget size={{ width: 3, height: 2 }}>
+        <Widget size={{ width: 8, height: 1 }}>
           <TestBox></TestBox>
         </Widget>
       </Grid>
