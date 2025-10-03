@@ -1,17 +1,26 @@
 import React from "react";
-import { GridSize, GridItem } from "./Grid";
+import { GridSize, GridItem, GridPosition } from "./Grid";
 import styles from "./Widget.css";
 
 export default function Widget({
-  size,
+  size = { width: 6, height: 4 },
+  position = { gridX: 0, gridY: 0 },
+  resizeable = true,
   children,
 }: {
-  size: GridSize;
+  size?: GridSize;
+  position?: GridPosition;
+  resizeable?: boolean;
   children: React.ReactNode;
 }) {
   return (
     <div className={styles.widget}>
-      <GridItem initialSize={size} initialPosition={{ gridX: 0, gridY: 0 }}>
+      <GridItem
+        resizeable={resizeable}
+        draggable={true}
+        initialSize={size}
+        initialPosition={position}
+      >
         {children}
       </GridItem>
     </div>

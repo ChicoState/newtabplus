@@ -31,13 +31,17 @@ const GridContext = createContext<GridContextType>(null);
 export function GridItem({
   initialSize,
   initialPosition,
+  draggable = true,
+  resizeable = true,
   children,
 }: {
   initialSize: GridSize;
   initialPosition: GridPosition;
+  draggable?: boolean;
+  resizeable?: boolean;
   children?: React.ReactNode;
 }) {
-  const ref = useRef<HTMLElement>(null);
+  const ref = useRef<HTMLDivElement>(null);
   const [position, setPosition] = useState<GridPosition>(initialPosition);
   const [size, setSize] = useState<GridSize>(initialSize);
   const [dragging, setDragging] = useState(false);
@@ -58,14 +62,7 @@ export function GridItem({
 
   function handleResizeLeft(x: number, y: number, dragging: boolean) {
     x -= ctx.cellSize / 2;
-    const [gridX, gridY] = pixelToGrid(x, y);
-    setDragging(dragging);
-    setResizing(dragging);
-
-    setPosition({
-      gridX: gridX,
-      gridY: position.gridY,
-    });
+    handleDrag(x, position.gridY * ctx.cellSize, dragging);
   }
 
   function handleResizeRight(x: number, y: number, dragging: boolean) {
@@ -74,21 +71,17 @@ export function GridItem({
     setResizing(dragging);
 
     setSize({
-      width: Math.max(1, gridX - position.gridX),
+      width: Math.min(
+        ctx.width - position.gridX,
+        Math.max(1, gridX - position.gridX),
+      ),
       height: size.height,
     });
   }
 
   function handleResizeUp(x: number, y: number, dragging: boolean) {
     y -= ctx.cellSize / 2;
-    const [gridX, gridY] = pixelToGrid(x, y);
-    setDragging(dragging);
-    setResizing(dragging);
-
-    setPosition({
-      gridX: position.gridX,
-      gridY: gridY,
-    });
+    handleDrag(position.gridX * ctx.cellSize, y, dragging);
   }
 
   function handleResizeDown(x: number, y: number, dragging: boolean) {
@@ -98,7 +91,10 @@ export function GridItem({
 
     setSize({
       width: size.width,
-      height: Math.max(1, gridY - position.gridY),
+      height: Math.min(
+        ctx.height - position.gridY,
+        Math.max(1, gridY - position.gridY),
+      ),
     });
   }
 
@@ -117,23 +113,33 @@ export function GridItem({
       }}
       ref={ref}
     >
-      <Draggable onDrag={handleDrag}>{children}</Draggable>
+      <Draggable enabled={draggable} onDrag={handleDrag}>
+        {children}
+      </Draggable>
 
-      <div className={[styles.resize, styles.resizeLeft].join(" ")}>
-        <Draggable onDrag={handleResizeLeft}></Draggable>
-      </div>
+      {resizeable && (
+        <div className={[styles.resize, styles.resizeLeft].join(" ")}>
+          <Draggable onDrag={handleResizeLeft}></Draggable>
+        </div>
+      )}
 
-      <div className={[styles.resize, styles.resizeRight].join(" ")}>
-        <Draggable onDrag={handleResizeRight}></Draggable>
-      </div>
+      {resizeable && (
+        <div className={[styles.resize, styles.resizeRight].join(" ")}>
+          <Draggable onDrag={handleResizeRight}></Draggable>
+        </div>
+      )}
 
-      <div className={[styles.resize, styles.resizeUp].join(" ")}>
-        <Draggable onDrag={handleResizeUp}></Draggable>
-      </div>
+      {resizeable && (
+        <div className={[styles.resize, styles.resizeUp].join(" ")}>
+          <Draggable onDrag={handleResizeUp}></Draggable>
+        </div>
+      )}
 
-      <div className={[styles.resize, styles.resizeDown].join(" ")}>
-        <Draggable onDrag={handleResizeDown}></Draggable>
-      </div>
+      {resizeable && (
+        <div className={[styles.resize, styles.resizeDown].join(" ")}>
+          <Draggable onDrag={handleResizeDown}></Draggable>
+        </div>
+      )}
     </div>
   );
 }
@@ -149,13 +155,15 @@ function GridSlot() {
 export function Grid({
   width = 16,
   height = 8,
+  showGrid = true,
   children,
 }: {
   width: number;
   height: number;
+  showGrid?: boolean;
   children?: React.ReactNode;
 }) {
-  const ref = useRef<HTMLElement>(null);
+  const ref = useRef<HTMLDivElement>(null);
   const [cellSize, setCellSize] = useState(0);
 
   useEffect(() => {
@@ -180,15 +188,17 @@ export function Grid({
 
   return (
     <div className={styles.grid} ref={ref}>
-      <div
-        className={styles.gridSlots}
-        style={{
-          gridTemplateColumns: `repeat(${width}, 1fr)`,
-          gridTemplateRows: `repeat(${height}, 1fr)`,
-        }}
-      >
-        {slots}
-      </div>
+      {showGrid && (
+        <div
+          className={styles.gridSlots}
+          style={{
+            gridTemplateColumns: `repeat(${width}, 1fr)`,
+            gridTemplateRows: `repeat(${height}, 1fr)`,
+          }}
+        >
+          {slots}
+        </div>
+      )}
       <div className={styles.gridItems}>
         <GridContext
           value={{

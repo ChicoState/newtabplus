@@ -32,12 +32,12 @@ export function Draggable({
   children?: React.ReactNode;
 }) {
   const ctx = useContext(DragContext);
-  const ref = useRef<HTMLElement>(null);
+  const ref = useRef<HTMLDivElement>(null);
 
   const [position, setPosition] = useState({ x: 0, y: 0 });
 
   function handleMouseDown(e: React.MouseEvent) {
-    if (ctx.isDragging) return;
+    if (!enabled || ctx.isDragging) return;
     e.preventDefault();
 
     ctx.isDragging = true;
@@ -92,8 +92,8 @@ export function Draggable({
       style={{
         width: "100%",
         height: "100%",
-        cursor: "grab",
-        pointerEvents: enabled ? "auto" : "none",
+        cursor: enabled ? "grab" : "default",
+        // pointerEvents: enabled ? "auto" : "none",
       }}
       onMouseDown={handleMouseDown}
     >
