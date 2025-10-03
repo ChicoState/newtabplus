@@ -2,6 +2,7 @@ import React from "react";
 import { Grid } from "./Grid";
 import Widget from "./Widget";
 import "./App.css";
+import Shortcut from "./widgets/Shortcut";
 
 const TestBox = () => {
   return (
@@ -37,6 +38,9 @@ const App = () => {
         >
           <TestBox></TestBox>
         </Widget>
+
+        <Shortcut url="https://google.com"></Shortcut>
+        <Shortcut url="invalid-url"></Shortcut>
       </Grid>
     </div>
   );
