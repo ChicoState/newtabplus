@@ -22,17 +22,20 @@ const App = () => {
   return (
     <div className="content">
       <Grid width={24} height={12} showGrid={true}>
-        <Widget position={{ gridX: 0, gridY: 2 }}>
+        <Widget position={{ gridX: 9, gridY: 4 }}>
           <TestBox></TestBox>
         </Widget>
 
-        <Widget size={{ width: 8, height: 1 }}>
+        <Widget
+          size={{ width: 10, height: 1 }}
+          position={{ gridX: 7, gridY: 2 }}
+        >
           <TestBox></TestBox>
         </Widget>
 
         <Widget
           size={{ width: 1, height: 1 }}
-          position={{ gridX: 7, gridY: 2 }}
+          position={{ gridX: 7, gridY: 4 }}
           resizeable={false}
         >
           <TestBox></TestBox>

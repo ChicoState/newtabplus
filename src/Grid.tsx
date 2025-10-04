@@ -24,6 +24,7 @@ interface GridContextType {
   width: number;
   height: number;
   cellSize: number;
+  items: Map<HTMLElement, { position: GridPosition; size: GridSize }>;
 }
 
 const GridContext = createContext<GridContextType>(null);
@@ -42,33 +43,70 @@ export function GridItem({
   children?: React.ReactNode;
 }) {
   const ref = useRef<HTMLDivElement>(null);
+  const ctx = useContext(GridContext);
+
   const [position, setPosition] = useState<GridPosition>(initialPosition);
   const [size, setSize] = useState<GridSize>(initialSize);
   const [dragging, setDragging] = useState(false);
   const [resizing, setResizing] = useState(false);
-  const ctx = useContext(GridContext);
+
+  const [lastPosition, setLastPosition] = useState<GridPosition>(position);
+  const [lastSize, setLastSize] = useState<GridSize>(size);
+  const [isValid, setIsValid] = useState(true);
+
+  useEffect(() => {
+    ctx.items.set(ref.current, { position: position, size: size });
+    verifyPosition();
+
+    return () => {
+      ctx.items.delete(ref.current);
+    };
+  }, [size, position, ref.current]);
 
   function pixelToGrid(x: number, y: number): [number, number] {
     return [Math.round(x / ctx.cellSize), Math.round(y / ctx.cellSize)];
   }
 
-  function handleDrag(x: number, y: number, dragging: boolean) {
+  function verifyPosition() {
+    let output = true;
+    ctx.items.forEach((state, el) => {
+      if (el === ref.current) return;
+
+      const overlapping =
+        position.gridX < state.position.gridX + state.size.width &&
+        position.gridX + size.width > state.position.gridX &&
+        position.gridY < state.position.gridY + state.size.height &&
+        position.gridY + size.height > state.position.gridY;
+
+      if (overlapping) output = false;
+    });
+    setIsValid(output);
+  }
+
+  function handleDrag(x: number, y: number, drag: boolean) {
     let [gridX, gridY] = pixelToGrid(x, y);
     gridX = Math.min(ctx.width - size.width, Math.max(0, gridX));
     gridY = Math.min(ctx.height - size.height, Math.max(0, gridY));
+
     setPosition({ gridX: gridX, gridY: gridY });
-    setDragging(dragging);
+    setDragging(drag);
+
+    if (isValid) {
+      setLastPosition(position);
+    } else if (!drag && dragging) {
+      setPosition(lastPosition);
+    }
   }
 
-  function handleResizeLeft(x: number, y: number, dragging: boolean) {
+  function handleResizeLeft(x: number, y: number, drag: boolean) {
     x -= ctx.cellSize / 2;
-    handleDrag(x, position.gridY * ctx.cellSize, dragging);
+    handleDrag(x, position.gridY * ctx.cellSize, drag);
   }
 
-  function handleResizeRight(x: number, y: number, dragging: boolean) {
+  function handleResizeRight(x: number, y: number, drag: boolean) {
     x += ctx.cellSize / 2;
     const [gridX, gridY] = pixelToGrid(x, y);
-    setResizing(dragging);
+    setResizing(drag);
 
     setSize({
       width: Math.min(
@@ -77,17 +115,23 @@ export function GridItem({
       ),
       height: size.height,
     });
+
+    if (isValid) {
+      setLastSize(size);
+    } else if (!drag && resizing) {
+      setSize(lastSize);
+    }
   }
 
-  function handleResizeUp(x: number, y: number, dragging: boolean) {
+  function handleResizeUp(x: number, y: number, drag: boolean) {
     y -= ctx.cellSize / 2;
-    handleDrag(position.gridX * ctx.cellSize, y, dragging);
+    handleDrag(position.gridX * ctx.cellSize, y, drag);
   }
 
-  function handleResizeDown(x: number, y: number, dragging: boolean) {
+  function handleResizeDown(x: number, y: number, drag: boolean) {
     y += ctx.cellSize / 2;
     const [gridX, gridY] = pixelToGrid(x, y);
-    setResizing(dragging);
+    setResizing(drag);
 
     setSize({
       width: size.width,
@@ -96,6 +140,12 @@ export function GridItem({
         Math.max(1, gridY - position.gridY),
       ),
     });
+
+    if (isValid) {
+      setLastSize(size);
+    } else if (!drag && resizing) {
+      setSize(lastSize);
+    }
   }
 
   return (
@@ -104,6 +154,7 @@ export function GridItem({
         styles.gridItem,
         dragging ? styles.dragging : "",
         resizing ? styles.resizing : "",
+        !isValid ? styles.invalid : "",
       ].join(" ")}
       style={{
         left: position.gridX * ctx.cellSize,
@@ -205,6 +256,7 @@ export function Grid({
             width: width,
             height: height,
             cellSize: cellSize,
+            items: new Map(),
           }}
         >
           {children}

@@ -88,6 +88,15 @@
   z-index: 99;
 }
 
+.grid-item.invalid::after {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: #f004;
+  pointer-events: none;
+}
+
 .resize {
   background-color: white;
   border-radius: 4px;
