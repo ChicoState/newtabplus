@@ -12,7 +12,6 @@ const TestBox = () => {
         backgroundColor: "slategray",
         borderRadius: "12px",
         border: "4px solid darkgray",
-        // opacity: 0.75,
       }}
     ></div>
   );
