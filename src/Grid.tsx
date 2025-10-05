@@ -102,7 +102,7 @@ export function GridItem({
 
   function handleResizeLeft(x: number, y: number, drag: boolean) {
     x -= ctx.cellSize / 2;
-    handleDrag(x, position.gridY * ctx.cellSize, drag);
+    handleDrag(x, position.gridY * ctx.cellSize + ctx.grid.offsetTop, drag);
   }
 
   function handleResizeRight(x: number, y: number, drag: boolean) {
