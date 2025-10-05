@@ -95,7 +95,7 @@ export function Draggable({
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        cursor: enabled ? "grab" : "default",
+        cursor: enabled ? "grab" : "auto",
         // pointerEvents: enabled ? "auto" : "none",
       }}
       onMouseDown={handleMouseDown}
