@@ -17,7 +17,6 @@ export default function Widget({
     <div className={styles.widget}>
       <GridItem
         resizeable={resizeable}
-        draggable={true}
         initialSize={size}
         initialPosition={position}
       >
