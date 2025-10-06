@@ -11,50 +11,67 @@ type DragCallback = (x: number, y: number, dragging: boolean) => void;
 interface DragContextType {
   isDragging: boolean;
   activeItem?: HTMLElement;
+  dragStart: { x: number; y: number };
 }
 
 const DragContext = createContext<DragContextType>({
   isDragging: false,
   activeItem: null,
+  dragStart: { x: 0, y: 0 },
 });
 
 export function Draggable({
-  onDrag,
+  enabled = true,
+  onDrag = () => {},
+  onDragRelative = () => {},
   children,
 }: {
-  onDrag: DragCallback;
-  children: React.ReactNode;
+  enabled?: boolean;
+  onDrag?: DragCallback;
+  onDragRelative?: DragCallback;
+  children?: React.ReactNode;
 }) {
   const ctx = useContext(DragContext);
-  const ref = useRef<HTMLElement>(null);
+  const ref = useRef<HTMLDivElement>(null);
 
   const [position, setPosition] = useState({ x: 0, y: 0 });
 
   function handleMouseDown(e: React.MouseEvent) {
-    if (ctx.isDragging) return;
+    if (!enabled || ctx.isDragging) return;
+    e.preventDefault();
 
     ctx.isDragging = true;
     ctx.activeItem = ref.current;
     const rect = ref.current.getBoundingClientRect();
+    ctx.dragStart = { x: rect.left, y: rect.top };
     setPosition({ x: rect.left, y: rect.top });
 
-    onDrag(position.x, position.y, ctx.isDragging);
+    onDrag(rect.left, rect.top, true);
+    onDragRelative(0, 0, true);
   }
 
   function handleMouseUp(e: React.MouseEvent) {
     if (!ctx.isDragging || ctx.activeItem !== ref.current) return;
+    e.preventDefault();
 
     ctx.isDragging = false;
     ctx.activeItem = null;
 
-    onDrag(position.x, position.y, ctx.isDragging);
+    onDrag(position.x, position.y, false);
+    onDragRelative(0, 0, false);
   }
 
   function handleMouseMove(e: React.MouseEvent) {
     if (!ctx.isDragging || ctx.activeItem !== ref.current) return;
     e.preventDefault();
     setPosition({ x: position.x + e.movementX, y: position.y + e.movementY });
-    onDrag(position.x, position.y, ctx.isDragging);
+
+    onDrag(position.x, position.y, true);
+    onDragRelative(
+      position.x - ctx.dragStart.x,
+      position.y - ctx.dragStart.y,
+      true,
+    );
   }
 
   useEffect(() => {
@@ -75,7 +92,11 @@ export function Draggable({
       style={{
         width: "100%",
         height: "100%",
-        cursor: "move",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        cursor: enabled ? "grab" : "auto",
+        // pointerEvents: enabled ? "auto" : "none",
       }}
       onMouseDown={handleMouseDown}
     >
@@ -83,23 +104,3 @@ export function Draggable({
     </div>
   );
 }
-
-// export default function DragHandler({
-//   onDrag,
-//   children,
-// }: {
-//   onDrag: DragCallback;
-//   children: React.ReactNode;
-// }) {
-//   return (
-//     <div>
-//       <DragContext
-//         value={{ isDragging: false, activeItem: null, onDrag: onDrag }}
-//       >
-//         {Children.map(children, (child) => (
-//           <Draggable>{child}</Draggable>
-//         ))}
-//       </DragContext>
-//     </div>
-//   );
-// }
