@@ -1,39 +1,43 @@
-import React from "react";
+import React, { useState } from "react";
 import { Grid } from "./Grid";
 import Widget from "./Widget";
-import "./App.css";
 import Shortcut from "./widgets/Shortcut";
+import styles from "./App.css";
 
 const TestBox = () => {
-  return (
-    <div
-      style={{
-        width: "100%",
-        height: "100%",
-        backgroundColor: "slategray",
-        borderRadius: "12px",
-        border: "4px solid darkgray",
-        // opacity: 0.75,
-      }}
-    ></div>
-  );
+  return <div className={styles.testBox}></div>;
 };
 
 const App = () => {
+  const [editing, setEditing] = useState(false);
+
   return (
-    <div className="content">
-      <Grid width={24} height={12} showGrid={true}>
-        <Widget position={{ gridX: 0, gridY: 2 }}>
+    <div className={styles.content}>
+      {/*Temporary button for testing edit mode*/}
+      <button
+        className={[styles.testBox, styles.testButton].join(" ")}
+        onClick={() => {
+          setEditing(!editing);
+        }}
+      >
+        {editing ? "Disable" : "Enable"} Edit Mode
+      </button>
+
+      <Grid width={24} height={12} editing={editing}>
+        <Widget
+          size={{ width: 10, height: 1 }}
+          position={{ gridX: 7, gridY: 2 }}
+        >
           <TestBox></TestBox>
         </Widget>
 
-        <Widget size={{ width: 8, height: 1 }}>
+        <Widget position={{ gridX: 8, gridY: 4 }}>
           <TestBox></TestBox>
         </Widget>
 
         <Widget
-          size={{ width: 1, height: 1 }}
-          position={{ gridX: 7, gridY: 2 }}
+          size={{ width: 1, height: 4 }}
+          position={{ gridX: 15, gridY: 4 }}
           resizeable={false}
         >
           <TestBox></TestBox>
