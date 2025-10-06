@@ -19,7 +19,9 @@ export function Clock() {
     <Widget size={{ width: 6, height: 3 }}>
       <div className={styles.body}>
         <span className={styles.clock}>
-          {date.getHours() + ":" + date.getMinutes()}
+          {date.getHours() +
+            ":" +
+            date.getMinutes().toString().padStart(2, "0")}
         </span>
         <span className={styles.date}>
           {date.toLocaleDateString(undefined, {
