@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Grid } from "./Grid";
 import Widget from "./Widget";
+import { Weather } from "./widgets/Weather";
 import styles from "./App.css";
 
 const TestBox = () => {
@@ -41,6 +42,8 @@ const App = () => {
         >
           <TestBox></TestBox>
         </Widget>
+
+        <Weather></Weather>
       </Grid>
     </div>
   );
