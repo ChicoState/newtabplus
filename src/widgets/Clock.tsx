@@ -16,22 +16,18 @@ export function Clock() {
   }, []);
 
   return (
-    <Widget size={{ width: 6, height: 3 }}>
-      <div className={styles.body}>
-        <span className={styles.clock}>
-          {date.getHours() +
-            ":" +
-            date.getMinutes().toString().padStart(2, "0")}
-        </span>
-        <span className={styles.date}>
-          {date.toLocaleDateString(undefined, {
-            weekday: "long",
-            year: "numeric",
-            month: "long",
-            day: "numeric",
-          })}
-        </span>
-      </div>
-    </Widget>
+    <div className={styles.body}>
+      <span className={styles.clock}>
+        {date.getHours() + ":" + date.getMinutes().toString().padStart(2, "0")}
+      </span>
+      <span className={styles.date}>
+        {date.toLocaleDateString(undefined, {
+          weekday: "long",
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+        })}
+      </span>
+    </div>
   );
 }
