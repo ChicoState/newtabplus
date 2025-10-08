@@ -3,6 +3,7 @@ import { Grid } from "./Grid";
 import Widget from "./Widget";
 import { Clock } from "./widgets/Clock";
 import styles from "./App.css";
+import BatteryWidget from "./BatteryWidget";
 
 const TestBox = () => {
   return <div className={styles.testBox}></div>;
@@ -49,6 +50,11 @@ const App = () => {
         >
           <TestBox></TestBox>
         </Widget>
+
+        <Widget size={{ width: 2, height: 1 }} position={{ gridX: 20, gridY: 0 }}>
+          <BatteryWidget />
+        </Widget>
+
       </Grid>
     </div>
   );

@@ -1,0 +1,56 @@
+/* batterywidget.css */
+.row {
+  --ok: #34c759;
+  --low: #ff3b30;
+  --stroke: rgba(255, 255, 255, 0.35);
+  --level: rgba(255, 255, 255, 0.25);
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  height: 100%;
+  color: #fff;
+  font-family: ui-sans-serif, -apple-system, system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  font-variant-numeric: tabular-nums;
+}
+
+@media (prefers-color-scheme: light) {
+  .row {
+    --stroke: rgba(232, 225, 225, 0.35);
+    color: #a9a9b8;
+  }
+}
+
+.value {
+  font-size: 32px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+
+.icon {
+  width: 56px;
+  height: 24px;
+  display: block;
+}
+
+.body {
+  fill: none;
+  stroke: var(--stroke);
+  stroke-width: 2;
+}
+
+.cap {
+  fill: var(--stroke);
+}
+
+.level {
+  fill: var(--level); /* overridden by state below */
+  transition: width 220ms cubic-bezier(.2,.8,.2,1);
+}
+
+.ok .level  { fill: var(--ok); }  /* > 20% */
+.low .level { fill: var(--low); } /* <= 20% */
+
+.neutral .level { fill: var(--level); }
