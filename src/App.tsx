@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Grid } from "./Grid";
 import Widget from "./Widget";
 import styles from "./App.css";
+import { Note } from "./widgets/Note";
 
 const TestBox = () => {
   return <div className={styles.testBox}></div>;
@@ -28,6 +29,13 @@ const App = () => {
           position={{ gridX: 7, gridY: 2 }}
         >
           <TestBox></TestBox>
+        </Widget>
+
+        <Widget
+          size={{ width: 4, height: 2 }}
+          position={{ gridX: 10, gridY: 1 }}
+        >
+          <Note></Note>
         </Widget>
 
         <Widget position={{ gridX: 8, gridY: 4 }}>
