@@ -31,13 +31,6 @@ const App = () => {
           <TestBox></TestBox>
         </Widget>
 
-        <Widget
-          size={{ width: 4, height: 2 }}
-          position={{ gridX: 10, gridY: 1 }}
-        >
-          <Note></Note>
-        </Widget>
-
         <Widget position={{ gridX: 8, gridY: 4 }}>
           <TestBox></TestBox>
         </Widget>
