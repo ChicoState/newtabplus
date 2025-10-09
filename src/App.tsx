@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Grid } from "./Grid";
 import Widget from "./Widget";
 import styles from "./App.css";
-import { Note } from "./widgets/Note";
+import { Search } from "./widgets/Search";
 
 const TestBox = () => {
   return <div className={styles.testBox}></div>;

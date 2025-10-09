@@ -4,11 +4,19 @@
 
   text-align: center;
 
+  align-items: center;
+  justify-content: center;
 }
 
-.body textarea
+.body input
 {
-    width: 100%;
+    width: 50%;
+
+    
+    text-align: center;
+
+    align-items: center;
+    justify-content: center;
     height: 100%;
 
     border: 1.5px solid #fff4;
