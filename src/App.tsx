@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Grid } from "./Grid";
 import Widget from "./Widget";
+import { Weather } from "./widgets/Weather";
 import { Clock } from "./widgets/Clock";
 import styles from "./App.css";
 
@@ -45,9 +46,8 @@ const App = () => {
         <Widget
           size={{ width: 1, height: 4 }}
           position={{ gridX: 15, gridY: 5 }}
-          resizeable={false}
         >
-          <TestBox></TestBox>
+          <Weather></Weather>
         </Widget>
       </Grid>
     </div>
