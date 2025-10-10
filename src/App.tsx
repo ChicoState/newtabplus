@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Grid } from "./Grid";
 import Widget from "./Widget";
 import { Weather } from "./widgets/Weather";
+import { Clock } from "./widgets/Clock";
 import styles from "./App.css";
 
 const TestBox = () => {
@@ -25,13 +26,20 @@ const App = () => {
 
       <Grid width={24} height={12} editing={editing}>
         <Widget
+          size={{ width: 4, height: 2 }}
+          position={{ gridX: 10, gridY: 1 }}
+        >
+          <Clock></Clock>
+        </Widget>
+
+        <Widget
           size={{ width: 10, height: 1 }}
-          position={{ gridX: 7, gridY: 2 }}
+          position={{ gridX: 7, gridY: 3 }}
         >
           <TestBox></TestBox>
         </Widget>
 
-        <Widget position={{ gridX: 8, gridY: 4 }}>
+        <Widget position={{ gridX: 8, gridY: 5 }}>
           <TestBox></TestBox>
         </Widget>
 
