@@ -37,13 +37,10 @@ const App = () => {
 
         <Widget
           size={{ width: 1, height: 4 }}
-          position={{ gridX: 15, gridY: 4 }}
-          resizeable={false}
+          position={{ gridX: 15, gridY: 5 }}
         >
-          <TestBox></TestBox>
+          <Weather></Weather>
         </Widget>
-
-        <Weather></Weather>
       </Grid>
     </div>
   );

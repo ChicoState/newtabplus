@@ -66,29 +66,28 @@ export function Weather() {
   }
 
   return (
-    <Widget size={{ width: 4, height: 1 }}>
-      <div className={styles.body}>
-        {!stats && <span>Loading...</span>}
-        {stats && (
-          <div className={styles.forecast}>
-            {stats.map((t, i) => {
-              return (
-                <div className={styles.day} key={i}>
-                  {getIcon(t.cloudCover, { size: 16, weight: "fill" })}
-                  <div className={styles.temp}>
-                    <span className={styles.tempMin}>
-                      {Math.round(t.minTemp)}
-                    </span>
-                    <span className={styles.tempMax}>
-                      {Math.round(t.maxTemp)}
-                    </span>
-                  </div>
+    <div className={styles.body}>
+      {!stats && <span style={{ position: "absolute" }}>Loading...</span>}
+      <div className={styles.forecast}>
+        {!stats &&
+          Array.from(Array(7)).map(() => <div className={styles.day}></div>)}
+        {stats &&
+          stats.map((t, i) => {
+            return (
+              <div className={styles.day} key={i}>
+                {getIcon(t.cloudCover, { size: 16, weight: "fill" })}
+                <div className={styles.temp}>
+                  <span className={styles.tempMin}>
+                    {Math.round(t.minTemp)}
+                  </span>
+                  <span className={styles.tempMax}>
+                    {Math.round(t.maxTemp)}
+                  </span>
                 </div>
-              );
-            })}
-          </div>
-        )}
+              </div>
+            );
+          })}
       </div>
-    </Widget>
+    </div>
   );
 }
