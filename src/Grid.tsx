@@ -197,10 +197,13 @@ export function GridItem({
   );
 }
 
-function GridSlot() {
+function GridSlot({ index }: { index: number }) {
   return (
     <div className={styles.gridSlot}>
-      <div className={styles.gridSlotInner}></div>
+      <div
+        className={styles.gridSlotInner}
+        style={{ animationDelay: 10 * index + "ms" }}
+      ></div>
     </div>
   );
 }
@@ -235,8 +238,10 @@ export function Grid({
   }, [width, height]);
 
   const slots = [];
-  for (let i = 0; i < width * height; i++) {
-    slots.push(<GridSlot key={i}></GridSlot>);
+  for (let y = 0; y < height; y++) {
+    for (let x = 0; x < width; x++) {
+      slots.push(<GridSlot key={x + y * width} index={x + y}></GridSlot>);
+    }
   }
 
   return (
