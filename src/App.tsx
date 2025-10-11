@@ -3,6 +3,7 @@ import { Grid } from "./Grid";
 import Widget from "./Widget";
 import { Clock } from "./widgets/Clock";
 import styles from "./App.css";
+import Menu from "./Menu";
 
 const TestBox = () => {
   return <div className={styles.testBox}></div>;
@@ -50,6 +51,8 @@ const App = () => {
           <TestBox></TestBox>
         </Widget>
       </Grid>
+
+      <Menu></Menu>
     </div>
   );
 };
