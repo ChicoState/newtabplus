@@ -25,13 +25,20 @@
   transition: padding 0.25s;
 }
 
-@keyframes fade-in {
+@keyframes zoom-in {
   from {
     scale: 0.5;
-    opacity: 0;
   }
   to {
     scale: 1;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
     opacity: 1;
   }
 }
@@ -43,7 +50,9 @@
   border: 1.5px solid #fff4;
   border-radius: 6px;
   transition: background-color 0.25s;
-  animation: fade-in var(--transition-time) var(--bounce) forwards;
+  animation:
+    zoom-in var(--transition-time) var(--bounce) forwards,
+    fade-in var(--transition-time) var(--bounce) forwards;
 }
 
 .grid-slot:hover {
@@ -128,7 +137,7 @@
   transition:
     opacity var(--transition-time),
     transform var(--transition-time);
-  animation: fade-in var(--transition-time) var(--bounce) forwards;
+  animation: zoom-in var(--transition-time) var(--bounce) forwards;
 }
 
 .resize:hover,
