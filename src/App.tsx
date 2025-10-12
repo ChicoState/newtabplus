@@ -1,28 +1,62 @@
 import React, { useState } from "react";
-import { Grid } from "./Grid";
 import Widget from "./Widget";
+import Menu from "./Menu";
+import { Grid } from "./Grid";
 import { Clock } from "./widgets/Clock";
 import styles from "./App.css";
-import Menu from "./Menu";
+import {
+  PencilSimpleIcon,
+  CheckIcon,
+  XIcon,
+  ListIcon,
+} from "@phosphor-icons/react";
 
 const TestBox = () => {
-  return <div className={styles.testBox}></div>;
+  return <div className={styles.container}></div>;
 };
 
 const App = () => {
   const [editing, setEditing] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   return (
     <div className={styles.content}>
-      {/*Temporary button for testing edit mode*/}
-      <button
-        className={[styles.testBox, styles.testButton].join(" ")}
-        onClick={() => {
-          setEditing(!editing);
-        }}
-      >
-        {editing ? "Disable" : "Enable"} Edit Mode
-      </button>
+      <div className={[styles.container, styles.header].join(" ")}>
+        <div className={styles.row}>
+          {editing && (
+            <button
+              className={[styles.container, styles.button].join(" ")}
+              onClick={() => {
+                setEditing(!editing);
+              }}
+            >
+              <XIcon weight="bold"></XIcon>
+              Cancel
+            </button>
+          )}
+
+          <button
+            className={[styles.container, styles.button].join(" ")}
+            onClick={() => {
+              setEditing(!editing);
+            }}
+          >
+            {editing && <CheckIcon weight="bold"></CheckIcon>}
+            {!editing && <PencilSimpleIcon weight="bold"></PencilSimpleIcon>}
+            {editing ? "Done" : "Edit"}
+          </button>
+
+          <button
+            className={[styles.container, styles.button].join(" ")}
+            onClick={() => {
+              setMenuOpen(!menuOpen);
+            }}
+          >
+            <ListIcon weight="bold"></ListIcon>
+            Settings
+          </button>
+        </div>
+      </div>
 
       <Grid width={24} height={12} editing={editing}>
         <Widget
@@ -52,7 +86,7 @@ const App = () => {
         </Widget>
       </Grid>
 
-      <Menu></Menu>
+      <Menu active={menuOpen}></Menu>
     </div>
   );
 };

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Type } from "../node_modules/typescript/lib/typescript";
+import globalStyles from "./App.css";
 import styles from "./Menu.css";
 
 const testSettings = {
@@ -19,7 +20,7 @@ function MenuItem<T>({
   const [value, setValue] = useState<T>(initialValue);
 
   return (
-    <div className={styles.menuItem}>
+    <div className={[globalStyles.container, styles.menuItem].join(" ")}>
       <span className={styles.itemName}>{name}</span>
 
       <div className={styles.itemInput}>
@@ -57,12 +58,19 @@ function MenuItem<T>({
   );
 }
 
-export default function Menu() {
+export default function Menu({ active }: { active: boolean }) {
   return (
-    <div className={styles.menu}>
-      {Object.entries(testSettings).map(([key, value]) => {
+    <div
+      className={[
+        globalStyles.container,
+        styles.menu,
+        active ? styles.active : "",
+      ].join(" ")}
+    >
+      {Object.entries(testSettings).map(([key, value], i) => {
         return (
           <MenuItem
+            key={i}
             name={key
               .replace(/([A-Z])/g, (match) => ` ${match}`)
               .replace(/^./, (match) => match.toUpperCase())

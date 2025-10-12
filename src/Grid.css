@@ -76,9 +76,8 @@
   width: 100%;
   height: 100%;
 
-  transition:
-    transform var(--transition-time),
-    opacity var(--transition-time);
+  transition: transform var(--transition-time);
+  /*opacity var(--transition-time);*/
 }
 
 .grid-item.resizing,

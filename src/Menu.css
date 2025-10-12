@@ -1,21 +1,29 @@
 .menu {
   position: absolute;
-  top: 8px;
+  top: calc(32px + 8px);
   right: 8px;
 
   display: flex;
   flex-flow: column nowrap;
   gap: 8px;
 
-  width: min(500px, max(300px, 25vw));
-  height: calc(100% - 16px);
+  width: min(400px, max(300px, 25vw));
+  height: calc(100% - 32px - 16px);
   padding: 8px;
 
-  border: 1px solid #fff4;
-  border-radius: 12px;
-  background-color: #0002;
+  opacity: 0;
+  transform: translateX(calc(100% + 16px));
+  transition:
+    transform 0.25s ease-in,
+    opacity 0.15s ease-in;
+}
 
-  backdrop-filter: blur(80px);
+.menu.active {
+  opacity: 1;
+  transform: translateX(0%);
+  transition:
+    transform 0.25s ease-out,
+    opacity 0.25s ease-out;
 }
 
 .menu-item {
@@ -24,10 +32,8 @@
   align-items: center;
   justify-content: space-between;
 
+  height: auto;
   padding: 6px;
-  border: 1px solid #fff4;
-  border-radius: 8px;
-  background-color: #fff2;
 
   transition: border-color 0.1s;
 }
@@ -46,7 +52,7 @@
 .item-input {
   min-width: 25%;
   min-height: 24px;
-  border: 1px solid #fff4;
+  /*border: 1px solid #fff2;*/
   border-radius: 4px;
   background-color: #fff2;
 
