@@ -71,7 +71,7 @@ const App = () => {
           size={{ width: 10, height: 1 }}
           position={{ gridX: 7, gridY: 3 }}
         >
-          <TestBox></TestBox>
+          <Search></Search>
         </Widget>
 
         <Widget position={{ gridX: 8, gridY: 5 }}>
