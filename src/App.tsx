@@ -5,6 +5,7 @@ import { Grid } from "./Grid";
 import { Weather } from "./widgets/Weather";
 import { Clock } from "./widgets/Clock";
 import { Search } from "./widgets/Search";
+import { Shortcut } from "./widgets/Shortcut";
 import styles from "./App.css";
 import {
   PencilSimpleIcon,
@@ -80,6 +81,38 @@ const App = () => {
           position={{ gridX: 9, gridY: 4 }}
         >
           <Weather></Weather>
+        </Widget>
+
+        <Widget
+          size={{ width: 1, height: 1 }}
+          position={{ gridX: 10, gridY: 5 }}
+          resizeable={false}
+        >
+          <Shortcut url="https://canvas.csuchico.edu"></Shortcut>
+        </Widget>
+
+        <Widget
+          size={{ width: 1, height: 1 }}
+          position={{ gridX: 11, gridY: 5 }}
+          resizeable={false}
+        >
+          <Shortcut url="https://outlook.com"></Shortcut>
+        </Widget>
+
+        <Widget
+          size={{ width: 1, height: 1 }}
+          position={{ gridX: 12, gridY: 5 }}
+          resizeable={false}
+        >
+          <Shortcut url="https://github.com"></Shortcut>
+        </Widget>
+
+        <Widget
+          size={{ width: 1, height: 1 }}
+          position={{ gridX: 13, gridY: 5 }}
+          resizeable={false}
+        >
+          <Shortcut url="https://stackoverflow.com"></Shortcut>
         </Widget>
       </Grid>
 
