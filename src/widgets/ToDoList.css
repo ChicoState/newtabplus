@@ -53,7 +53,7 @@
 /* Bullet point before task */
 .todo-list li span::before {
   content: "•";
-  color: #4CAF50;       /* green accent bullet */
+  color: #4CAF50;     
   display: inline-block;
   width: 1em;
   margin-right: 6px;
