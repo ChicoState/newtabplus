@@ -22,7 +22,7 @@ const App = () => {
 
   return (
     <div className={styles.content}>
-      <div className={[styles.container, styles.header].join(" ")}>
+      <div className={styles.header}>
         <div className={styles.row}>
           {editing && (
             <button
