@@ -3,6 +3,7 @@ import Widget from "./Widget";
 import Menu from "./Menu";
 import { Grid } from "./Grid";
 import { Clock } from "./widgets/Clock";
+import { Search } from "./widgets/Search";
 import styles from "./App.css";
 import {
   PencilSimpleIcon,
