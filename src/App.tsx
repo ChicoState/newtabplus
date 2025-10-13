@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Grid } from "./Grid";
 import Widget from "./Widget";
 import { Clock } from "./widgets/Clock";
+import { ToDoList } from "./widgets/ToDoList";
 import styles from "./App.css";
 
 const TestBox = () => {
@@ -29,6 +30,13 @@ const App = () => {
           position={{ gridX: 10, gridY: 1 }}
         >
           <Clock></Clock>
+        </Widget>
+
+        <Widget
+          size={{ width: 5, height: 5 }}
+          position={{ gridX: 18, gridY: 1 }}
+        >
+          <ToDoList></ToDoList>
         </Widget>
 
         <Widget
