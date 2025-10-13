@@ -8,6 +8,7 @@ import {
   CloudSunIcon,
   SunIcon,
 } from "@phosphor-icons/react";
+import globalStyles from "../App.css";
 import styles from "./Weather.css";
 
 interface DailyStats {
@@ -44,6 +45,7 @@ export function Weather() {
       const _stats = [];
 
       for (let i = 0; i < maxTemp.length; i++) {
+        console.log(cloudCover[i]);
         _stats.push({
           minTemp: minTemp[i],
           maxTemp: maxTemp[i],
@@ -56,9 +58,9 @@ export function Weather() {
   }, []);
 
   function getIcon(cloudCover: number, props?: IconProps): Icon {
-    return cloudCover <= 0.25 ? (
+    return cloudCover <= 100 * 0.25 ? (
       <SunIcon {...props}></SunIcon>
-    ) : cloudCover <= 0.625 ? (
+    ) : cloudCover <= 100 * 0.625 ? (
       <CloudSunIcon {...props}></CloudSunIcon>
     ) : (
       <CloudIcon {...props}></CloudIcon>
@@ -74,8 +76,15 @@ export function Weather() {
         {stats &&
           stats.map((t, i) => {
             return (
-              <div className={styles.day} key={i}>
-                {getIcon(t.cloudCover, { size: 16, weight: "fill" })}
+              <div
+                className={[globalStyles.container, styles.day].join(" ")}
+                key={i}
+              >
+                {getIcon(t.cloudCover, {
+                  size: 16,
+                  weight: "fill",
+                  color: "#fff8",
+                })}
                 <div className={styles.temp}>
                   <span className={styles.tempMin}>
                     {Math.round(t.minTemp)}

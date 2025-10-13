@@ -69,19 +69,15 @@ const App = () => {
         </Widget>
 
         <Widget
-          size={{ width: 10, height: 1 }}
-          position={{ gridX: 7, gridY: 3 }}
+          size={{ width: 8, height: 1 }}
+          position={{ gridX: 8, gridY: 3 }}
         >
           <Search></Search>
         </Widget>
 
-        <Widget position={{ gridX: 8, gridY: 5 }}>
-          <TestBox></TestBox>
-        </Widget>
-
         <Widget
-          size={{ width: 1, height: 4 }}
-          position={{ gridX: 15, gridY: 5 }}
+          size={{ width: 6, height: 1 }}
+          position={{ gridX: 9, gridY: 4 }}
         >
           <Weather></Weather>
         </Widget>
