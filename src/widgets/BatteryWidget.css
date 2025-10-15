@@ -1,0 +1,60 @@
+.row {
+  --ok: #34c759;
+  --low: #ff3b30;
+  --stroke: rgba(255, 255, 255, 0.35);
+  --level: rgba(255, 255, 255, 0.25);
+
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  height: 100%;
+  color: #fffc;
+  font-variant-numeric: tabular-nums;
+}
+
+@media (prefers-color-scheme: light) {
+  .row {
+    --stroke: rgba(232, 225, 225, 0.35);
+    color: #a9a9b8;
+  }
+}
+
+.value {
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+
+.icon {
+  width: 48px;
+  display: block;
+}
+
+.body {
+  fill: none;
+  stroke: var(--stroke);
+  stroke-width: 2;
+}
+
+.cap {
+  fill: var(--stroke);
+}
+
+.level {
+  fill: var(--level); /* overridden by state below */
+  transition: width 220ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.ok .level {
+  fill: var(--ok);
+} /* > 20% */
+.low .level {
+  fill: var(--low);
+} /* <= 20% */
+
+.neutral .level {
+  fill: var(--level);
+}
