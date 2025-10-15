@@ -3,6 +3,7 @@ import { Grid } from "./Grid";
 import Widget from "./Widget";
 import { Clock } from "./widgets/Clock";
 import { ToDoList } from "./widgets/ToDoList";
+import { Notepad } from "./widgets/Notepad";
 import styles from "./App.css";
 
 const TestBox = () => {
@@ -37,6 +38,13 @@ const App = () => {
           position={{ gridX: 18, gridY: 1 }}
         >
           <ToDoList></ToDoList>
+        </Widget>
+
+        <Widget
+          size={{ width: 5, height: 5 }}
+          position={{ gridX: 1, gridY: 1 }}
+        >
+          <Notepad></Notepad>
         </Widget>
 
         <Widget
