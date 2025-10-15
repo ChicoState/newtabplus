@@ -12,15 +12,28 @@ body {
   margin: 0;
   color: #fff;
   font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
-  background-image: linear-gradient(to bottom, #020917, #101725);
+  background-image: url(https://images.unsplash.com/photo-1507166763745-bfe008fbb831?q=80&w=960&auto=format);
+  background-size: cover;
   overflow: hidden;
 }
 
 .content {
+  width: 100svw;
+  height: 100svh;
   display: flex;
   flex-flow: column nowrap;
-  justify-content: center;
+  /*justify-content: center;*/
   align-items: center;
+}
+
+.content::before {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+  width: 100%;
+  height: 100%;
+  backdrop-filter: brightness(1.25) hue-rotate(15deg) saturate(0.5) blur(10px);
+  z-index: -1;
 }
 
 .content h1 {
@@ -34,20 +47,77 @@ body {
   opacity: 0.5;
 }
 
-.test-box {
+.container {
   width: 100%;
   height: 100%;
-  background-color: slategray;
+  background-color: #0002;
   border-radius: 8px;
-  border: 4px solid darkgray;
+  border: 1px solid #fff2;
+
+  backdrop-filter: blur(40px);
+  transform: translateZ(0);
+  backface-visibility: hidden;
 }
 
-.test-button {
-  width: 200px;
-  height: 40px;
-  color: white;
-  font-size: 1rem;
-  font-weight: 700;
+.container::before {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  image-rendering: pixelated;
+  background-image: url("assets/noise.webp");
+  background-size: 128px 128px;
+  border-radius: 8px;
+  opacity: 0.025;
+}
+
+.button {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+
+  padding: 0 12px;
+  width: min-content;
+
+  height: 24px;
+  color: #fffa;
+  font-size: 0.8rem;
   cursor: pointer;
   user-select: none;
+
+  transition:
+    border-color 0.15s,
+    color 0.15s;
+}
+
+.button:hover {
+  border-color: #fff4;
+  color: #fffc;
+
+  transition: 0.15s;
+}
+
+.header {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  justify-content: flex-end;
+
+  padding: 4px;
+
+  width: 100%;
+  height: min-content;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  border-radius: 0;
+}
+
+.row {
+  display: flex;
+  flex-flow: row nowrap;
+  gap: 4px;
 }

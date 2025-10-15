@@ -1,0 +1,27 @@
+.shortcut {
+  width: 60%;
+  height: 60%;
+  border-radius: 12px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  transition:
+    border-color 0.15s,
+    background-color 0.15s;
+}
+
+.shortcut:hover {
+  border-color: #fff4;
+  background-color: #fff2;
+  transition: 0.15s;
+}
+
+.icon {
+  width: 50%;
+  height: 50%;
+  fill: white;
+  filter: drop-shadow(0 0 4px #fff2);
+  /*filter: saturate(0) sepia(0.5) hue-rotate(160deg);*/
+}
