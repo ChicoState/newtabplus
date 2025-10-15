@@ -13,7 +13,7 @@ import {
   CheckIcon,
   XIcon,
   ListIcon,
-} from "@phosphor-icFons/react";
+} from "@phosphor-icons/react";
 
 const TestBox = () => {
   return <div className={styles.container}></div>;
@@ -47,7 +47,7 @@ const App = () => {
           >
             {editing && <CheckIcon weight="bold"></CheckIcon>}
             {!editing && <
-              SimpleIcon weight="bold"></PencilSimpleIcon>}
+              PencilSimpleIcon weight="bold"></PencilSimpleIcon>}
             {editing ? "Done" : "Edit"}
           </button>
 
