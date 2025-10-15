@@ -1,4 +1,3 @@
-// BatteryWidget.tsx (charging removed)
 import React, { useEffect, useState } from "react";
 import styles from "./BatteryWidget.css"; 
 

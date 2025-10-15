@@ -3,7 +3,7 @@ import { Grid } from "./Grid";
 import Widget from "./Widget";
 import { Clock } from "./widgets/Clock";
 import styles from "./App.css";
-import BatteryWidget from "./BatteryWidget";
+import BatteryWidget from "./widgets/BatteryWidget";
 
 const TestBox = () => {
   return <div className={styles.testBox}></div>;
