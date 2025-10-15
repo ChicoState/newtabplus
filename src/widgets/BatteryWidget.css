@@ -5,12 +5,12 @@
   --level: rgba(255, 255, 255, 0.25);
 
   display: flex;
+  flex-flow: row wrap;
   align-items: center;
-  justify-content: space-between;
-  gap: 12px;
+  justify-content: center;
+  gap: 4px;
   height: 100%;
-  color: #fff;
-  font-family: ui-sans-serif, -apple-system, system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  color: #fffc;
   font-variant-numeric: tabular-nums;
 }
 
@@ -22,15 +22,14 @@
 }
 
 .value {
-  font-size: 32px;
-  font-weight: 800;
+  font-size: 1rem;
+  font-weight: 600;
   letter-spacing: -0.02em;
   line-height: 1;
 }
 
 .icon {
-  width: 56px;
-  height: 24px;
+  width: 48px;
   display: block;
 }
 
@@ -46,10 +45,16 @@
 
 .level {
   fill: var(--level); /* overridden by state below */
-  transition: width 220ms cubic-bezier(.2,.8,.2,1);
+  transition: width 220ms cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
-.ok .level  { fill: var(--ok); }  /* > 20% */
-.low .level { fill: var(--low); } /* <= 20% */
+.ok .level {
+  fill: var(--ok);
+} /* > 20% */
+.low .level {
+  fill: var(--low);
+} /* <= 20% */
 
-.neutral .level { fill: var(--level); }
+.neutral .level {
+  fill: var(--level);
+}

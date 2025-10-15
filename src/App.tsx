@@ -46,8 +46,7 @@ const App = () => {
             }}
           >
             {editing && <CheckIcon weight="bold"></CheckIcon>}
-            {!editing && <
-              PencilSimpleIcon weight="bold"></PencilSimpleIcon>}
+            {!editing && <PencilSimpleIcon weight="bold"></PencilSimpleIcon>}
             {editing ? "Done" : "Edit"}
           </button>
 
@@ -117,10 +116,12 @@ const App = () => {
           <Shortcut url="https://stackoverflow.com"></Shortcut>
         </Widget>
 
-        <Widget size={{ width: 2, height: 1 }} position={{ gridX: 20, gridY: 0 }}>
+        <Widget
+          size={{ width: 2, height: 1 }}
+          position={{ gridX: 20, gridY: 0 }}
+        >
           <BatteryWidget />
         </Widget>
-
       </Grid>
 
       <Menu active={menuOpen}></Menu>
