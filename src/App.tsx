@@ -4,6 +4,8 @@ import Menu from "./Menu";
 import { Grid } from "./Grid";
 import { Weather } from "./widgets/Weather";
 import { Clock } from "./widgets/Clock";
+import { ToDoList } from "./widgets/ToDoList";
+import { Notepad } from "./widgets/Notepad";
 import { Search } from "./widgets/Search";
 import { Shortcut } from "./widgets/Shortcut";
 import styles from "./App.css";
@@ -67,6 +69,20 @@ const App = () => {
           position={{ gridX: 10, gridY: 1 }}
         >
           <Clock></Clock>
+        </Widget>
+
+        <Widget
+          size={{ width: 5, height: 5 }}
+          position={{ gridX: 18, gridY: 1 }}
+        >
+          <ToDoList></ToDoList>
+        </Widget>
+
+        <Widget
+          size={{ width: 5, height: 5 }}
+          position={{ gridX: 1, gridY: 1 }}
+        >
+          <Notepad></Notepad>
         </Widget>
 
         <Widget
