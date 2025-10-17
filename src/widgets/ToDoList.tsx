@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from "react";
+
+import globalStyles from "../App.css";
 import styles from "./ToDoList.css";
+import { XIcon } from "@phosphor-icons/react";
 
 interface Task {
   text: string;
@@ -40,10 +43,10 @@ export function ToDoList() {
   };
 
   return (
-    <div className={styles.body}>
+    <div className={[globalStyles.container, styles.body].join(" ")}>
       {/* Title at the top */}
       <h3 className={styles.title}>My To-Do List</h3>
-      
+
       <ul className={styles["todo-list"]}>
         {tasks.map((task, i) => (
           <li
@@ -59,7 +62,7 @@ export function ToDoList() {
                 deleteTask(i);
               }}
             >
-              ✓
+              <XIcon weight="bold"></XIcon>
             </button>
           </li>
         ))}
@@ -67,6 +70,7 @@ export function ToDoList() {
 
       <div className={styles["todo-input-container"]}>
         <input
+          className={globalStyles.container}
           value={input}
           onChange={(e) => setInput(e.target.value)}
           placeholder="Add a new task..."

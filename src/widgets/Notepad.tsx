@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import globalStyles from "../App.css";
 import styles from "./Notepad.css";
 
 export function Notepad() {
@@ -16,10 +17,10 @@ export function Notepad() {
   }, [note]);
 
   return (
-    <div className={styles.body}>
+    <div className={[globalStyles.container, styles.body].join(" ")}>
       <h3 className={styles.title}>My Notes</h3>
       <textarea
-        className={styles.textarea}
+        className={[globalStyles.container, styles.textarea].join(" ")}
         value={note}
         onChange={(e) => setNote(e.target.value)}
         placeholder="Type your notes here..."
