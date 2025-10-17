@@ -1,0 +1,86 @@
+.menu {
+  position: absolute;
+  top: calc(32px + 8px);
+  right: 8px;
+
+  display: flex;
+  flex-flow: column nowrap;
+  gap: 8px;
+
+  width: min(400px, max(300px, 25vw));
+  height: calc(100% - 32px - 16px);
+  padding: 8px;
+
+  opacity: 0;
+  transform: translateX(calc(100% + 16px));
+  transition:
+    transform 0.25s ease-in,
+    opacity 0.15s ease-in;
+}
+
+.menu.active {
+  opacity: 1;
+  transform: translateX(0%);
+  transition:
+    transform 0.25s ease-out,
+    opacity 0.25s ease-out;
+}
+
+.menu-item {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  justify-content: space-between;
+
+  height: auto;
+  padding: 6px;
+
+  transition: border-color 0.1s;
+}
+
+.menu-item:fir .menu-item:hover {
+  border-color: #fff8;
+  transition: border-color 0.1s;
+}
+
+.item-name {
+  color: #fffc;
+  font-weight: 700;
+  margin-left: 8px;
+}
+
+.item-input {
+  min-width: 25%;
+  min-height: 24px;
+  /*border: 1px solid #fff2;*/
+  border-radius: 4px;
+  background-color: #fff2;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.item-input:has(input[type="text"]) {
+  width: 50%;
+}
+
+.item-input:has(input[type="number"]) {
+  width: 25%;
+}
+
+.item-input input {
+  outline: none;
+}
+
+.item-input input[type="text"],
+.item-input input[type="number"] {
+  width: 100%;
+  padding: 4px;
+  color: #fffc;
+  font-size: 1rem;
+
+  background-color: transparent;
+  border: none;
+  text-align: center;
+}
