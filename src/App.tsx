@@ -9,6 +9,7 @@ import { Notepad } from "./widgets/Notepad";
 import { Search } from "./widgets/Search";
 import { Shortcut } from "./widgets/Shortcut";
 import styles from "./App.css";
+import BatteryWidget from "./widgets/BatteryWidget";
 import {
   PencilSimpleIcon,
   CheckIcon,
@@ -129,6 +130,13 @@ const App = () => {
           resizeable={false}
         >
           <Shortcut url="https://stackoverflow.com"></Shortcut>
+        </Widget>
+
+        <Widget
+          size={{ width: 2, height: 1 }}
+          position={{ gridX: 20, gridY: 0 }}
+        >
+          <BatteryWidget />
         </Widget>
       </Grid>
 
