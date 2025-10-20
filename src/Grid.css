@@ -92,6 +92,10 @@
   /*opacity var(--transition-time);*/
 }
 
+.grid-item.editing > div * {
+  pointer-events: none;
+}
+
 .grid-item.resizing,
 .grid-item.dragging {
   box-sizing: border-box;

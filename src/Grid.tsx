@@ -156,6 +156,7 @@ export function GridItem({
         styles.gridItem,
         dragging ? styles.dragging : "",
         resizing ? styles.resizing : "",
+        ctx.editing ? styles.editing : "",
         !isValid ? styles.invalid : "",
       ].join(" ")}
       style={{
