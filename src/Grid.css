@@ -92,7 +92,7 @@
   /*opacity var(--transition-time);*/
 }
 
-.grid-item.editing > div * {
+.grid-item.editing > div:not(.resize) * {
   pointer-events: none;
 }
 
