@@ -1,5 +1,5 @@
-import React, { useEffect, useReducer, useState } from "react";
-import Widget, { WidgetState } from "../Widget";
+import React, { useEffect, useState } from "react";
+import { WidgetState } from "../Widget";
 import styles from "./Clock.css";
 
 export interface ClockSettings {

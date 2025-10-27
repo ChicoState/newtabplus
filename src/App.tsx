@@ -14,7 +14,15 @@ import {
 
 interface AppContextType {
   widgets: WidgetState<any>[];
+  editing: boolean;
+  menuOpen: boolean;
+
   setWidgets: React.Dispatch<React.SetStateAction<WidgetState<any>[]>>;
+  setEditing: React.Dispatch<React.SetStateAction<boolean>>;
+  setMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
+
+  // addWidget: (type: string) => void;
+  // removeWidget: (id: string) => void;
 }
 
 export const AppContext = createContext<AppContextType>(null);
@@ -25,14 +33,14 @@ const TestData: WidgetState<any>[] = [
   {
     id: nanoid(6),
     type: "clock",
-    size: null,
+    size: WidgetMap["clock"].size,
     position: { gridX: 10, gridY: 1 },
     settings: WidgetMap["clock"].settings,
   },
   {
     id: nanoid(6),
     type: "search",
-    size: null,
+    size: WidgetMap["search"].size,
     position: { gridX: 8, gridY: 3 },
     settings: WidgetMap["search"].settings,
   },
@@ -45,7 +53,16 @@ const App = () => {
 
   return (
     <div className={styles.content}>
-      <AppContext.Provider value={{ widgets, setWidgets }}>
+      <AppContext.Provider
+        value={{
+          widgets,
+          setWidgets,
+          editing,
+          setEditing,
+          menuOpen,
+          setMenuOpen,
+        }}
+      >
         <div className={styles.header}>
           <div className={styles.row}>
             {editing && (

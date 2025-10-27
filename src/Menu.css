@@ -78,3 +78,24 @@
   border: none;
   text-align: center;
 }
+
+.widget-list {
+  display: flex;
+  flex-flow: row wrap;
+  gap: 4px;
+}
+
+.widget-thumb {
+  padding: 8px;
+  max-height: 96px !important;
+  zoom: 0.75;
+}
+
+.widget-thumb:hover {
+  border-color: #fff4;
+}
+
+.widget-thumb > div > * {
+  pointer-events: none;
+  user-select: none;
+}

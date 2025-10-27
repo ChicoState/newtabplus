@@ -3,6 +3,8 @@ import { Type } from "../node_modules/typescript/lib/typescript";
 import globalStyles from "./App.css";
 import styles from "./Menu.css";
 import { AppContext } from "./App";
+import { Draggable } from "./Drag";
+import { WidgetMap } from "./WidgetMap";
 
 const testSettings = {
   testNumber: 24,
@@ -65,18 +67,42 @@ function MenuItem<T>({
   );
 }
 
-export default function Menu({ active }: { active: boolean }) {
+function WidgetList() {
+  const appContext = useContext(AppContext);
+
+  return (
+    <div className={styles.widgetList}>
+      {Object.entries(WidgetMap).map(([key, value], i) => {
+        const Component = value.component;
+        return (
+          <div
+            key={i}
+            className={[globalStyles.container, styles.widgetThumb].join(" ")}
+            style={{
+              minHeight: value.size.height * 32 * 2 + "px",
+            }}
+          >
+            <Draggable
+              onDrag={() => {
+                appContext.setEditing(true);
+                appContext.setMenuOpen(false);
+              }}
+            >
+              <Component {...value}></Component>
+            </Draggable>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+function WidgetSettings() {
   const { widgets, setWidgets } = useContext(AppContext);
 
   return (
-    <div
-      className={[
-        globalStyles.container,
-        styles.menu,
-        active ? styles.active : "",
-      ].join(" ")}
-    >
-      {widgets.map((state, i) => {
+    <>
+      {widgets.map((state) => {
         return Object.entries(state.settings).map(([key, value], i) => {
           return (
             <MenuItem
@@ -95,6 +121,23 @@ export default function Menu({ active }: { active: boolean }) {
           );
         });
       })}
+    </>
+  );
+}
+
+export default function Menu({ active }: { active: boolean }) {
+  const appContext = useContext(AppContext);
+
+  return (
+    <div
+      className={[
+        globalStyles.container,
+        styles.menu,
+        active ? styles.active : "",
+      ].join(" ")}
+    >
+      {!appContext.editing && <WidgetList></WidgetList>}
+      {appContext.editing && <WidgetSettings></WidgetSettings>}
     </div>
   );
 }
