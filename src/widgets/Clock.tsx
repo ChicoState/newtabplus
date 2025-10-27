@@ -1,8 +1,14 @@
-import React, { useEffect, useState } from "react";
-import Widget from "../Widget";
+import React, { useEffect, useReducer, useState } from "react";
+import Widget, { WidgetState } from "../Widget";
 import styles from "./Clock.css";
 
-export function Clock() {
+export interface ClockSettings {
+  use24HourClock: boolean;
+  showDate: boolean;
+  showYear: boolean;
+}
+
+export function Clock({ settings }: WidgetState<ClockSettings>) {
   const [date, setDate] = useState(new Date());
 
   useEffect(() => {
@@ -18,16 +24,22 @@ export function Clock() {
   return (
     <div className={styles.body}>
       <span className={styles.clock}>
-        {date.getHours() + ":" + date.getMinutes().toString().padStart(2, "0")}
+        {(settings.use24HourClock
+          ? date.getHours()
+          : date.getHours() % 12 || 12) +
+          ":" +
+          date.getMinutes().toString().padStart(2, "0")}
       </span>
-      <span className={styles.date}>
-        {date.toLocaleDateString(undefined, {
-          weekday: "long",
-          year: "numeric",
-          month: "long",
-          day: "numeric",
-        })}
-      </span>
+      {settings.showDate && (
+        <span className={styles.date}>
+          {date.toLocaleDateString(undefined, {
+            weekday: "long",
+            year: settings.showYear ? "numeric" : undefined,
+            month: "long",
+            day: "numeric",
+          })}
+        </span>
+      )}
     </div>
   );
 }

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styles from "./BatteryWidget.css";
 
-export default function BatteryWidget() {
+export function BatteryWidget() {
   const [percent, setPercent] = useState<number | null>(null);
 
   useEffect(() => {

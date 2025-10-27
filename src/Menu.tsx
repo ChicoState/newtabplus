@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Type } from "../node_modules/typescript/lib/typescript";
 import globalStyles from "./App.css";
 import styles from "./Menu.css";
+import { AppContext } from "./App";
 
 const testSettings = {
   testNumber: 24,
@@ -13,11 +14,17 @@ const testSettings = {
 function MenuItem<T>({
   name,
   initialValue,
+  onChange,
 }: {
   name: String;
   initialValue: T;
+  onChange: (value: T) => void;
 }) {
   const [value, setValue] = useState<T>(initialValue);
+
+  useEffect(() => {
+    onChange(value);
+  }, [value]);
 
   return (
     <div className={[globalStyles.container, styles.menuItem].join(" ")}>
@@ -59,6 +66,8 @@ function MenuItem<T>({
 }
 
 export default function Menu({ active }: { active: boolean }) {
+  const { widgets, setWidgets } = useContext(AppContext);
+
   return (
     <div
       className={[
@@ -67,17 +76,24 @@ export default function Menu({ active }: { active: boolean }) {
         active ? styles.active : "",
       ].join(" ")}
     >
-      {Object.entries(testSettings).map(([key, value], i) => {
-        return (
-          <MenuItem
-            key={i}
-            name={key
-              .replace(/([A-Z])/g, (match) => ` ${match}`)
-              .replace(/^./, (match) => match.toUpperCase())
-              .trim()}
-            initialValue={value}
-          ></MenuItem>
-        );
+      {widgets.map((state, i) => {
+        return Object.entries(state.settings).map(([key, value], i) => {
+          return (
+            <MenuItem
+              key={i}
+              name={key
+                .replace(/([A-Z])/g, (match) => ` ${match}`)
+                .replace(/([A-Za-z])(?=\d)/g, "$1 ")
+                .replace(/^./, (match) => match.toUpperCase())
+                .trim()}
+              initialValue={value}
+              onChange={(v) => {
+                state.settings[key] = v;
+                setWidgets([...widgets]);
+              }}
+            ></MenuItem>
+          );
+        });
       })}
     </div>
   );

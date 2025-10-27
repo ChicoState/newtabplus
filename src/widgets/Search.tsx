@@ -1,10 +1,15 @@
 import React, { useEffect, useState } from "react";
-import Widget from "../Widget";
+import Widget, { WidgetState } from "../Widget";
 import styles from "./Search.css";
 import globalStyles from "../App.css";
 import { MagnifyingGlassIcon } from "@phosphor-icons/react";
 
-export function Search() {
+export interface SearchSettings {
+  showButton: boolean;
+  showIcon: boolean;
+}
+
+export function Search({ settings }: WidgetState<SearchSettings>) {
   return (
     <form
       method="get"
@@ -12,23 +17,27 @@ export function Search() {
       className={styles.body}
     >
       <div className={[globalStyles.container, styles.bar].join(" ")}>
-        <MagnifyingGlassIcon
-          size={24}
-          color={"#fff4"}
-          weight="bold"
-        ></MagnifyingGlassIcon>
+        {settings.showIcon && (
+          <MagnifyingGlassIcon
+            size={24}
+            color={"#fff4"}
+            weight="bold"
+          ></MagnifyingGlassIcon>
+        )}
         <input
           className={styles.searchInput}
           type="text"
           name="q"
           placeholder="Search for something"
         />
-        <button
-          className={[globalStyles.container, styles.searchButton].join(" ")}
-          type="submit"
-        >
-          Search
-        </button>
+        {settings.showButton && (
+          <button
+            className={[globalStyles.container, styles.searchButton].join(" ")}
+            type="submit"
+          >
+            Search
+          </button>
+        )}
       </div>
     </form>
   );

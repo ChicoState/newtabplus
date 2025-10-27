@@ -2,6 +2,7 @@ import React, {
   createContext,
   useContext,
   useEffect,
+  useMemo,
   useRef,
   useState,
 } from "react";
@@ -32,14 +33,16 @@ interface GridContextType {
 const GridContext = createContext<GridContextType>(null);
 
 export function GridItem({
+  id,
   initialSize,
   initialPosition,
-  resizeable = true,
+  resizeable,
   children,
 }: {
+  id: string;
   initialSize: GridSize;
   initialPosition: GridPosition;
-  resizeable?: boolean;
+  resizeable?: { x: boolean; y: boolean };
   children?: React.ReactNode;
 }) {
   const ref = useRef<HTMLDivElement>(null);
@@ -171,25 +174,25 @@ export function GridItem({
         {children}
       </Draggable>
 
-      {ctx.editing && resizeable && (
+      {ctx.editing && resizeable.x && (
         <div className={[styles.resize, styles.resizeLeft].join(" ")}>
           <Draggable onDrag={handleResizeLeft}></Draggable>
         </div>
       )}
 
-      {ctx.editing && resizeable && (
+      {ctx.editing && resizeable.x && (
         <div className={[styles.resize, styles.resizeRight].join(" ")}>
           <Draggable onDrag={handleResizeRight}></Draggable>
         </div>
       )}
 
-      {ctx.editing && resizeable && (
+      {ctx.editing && resizeable.y && (
         <div className={[styles.resize, styles.resizeUp].join(" ")}>
           <Draggable onDrag={handleResizeUp}></Draggable>
         </div>
       )}
 
-      {ctx.editing && resizeable && (
+      {ctx.editing && resizeable.y && (
         <div className={[styles.resize, styles.resizeDown].join(" ")}>
           <Draggable onDrag={handleResizeDown}></Draggable>
         </div>
@@ -238,12 +241,15 @@ export function Grid({
     };
   }, [width, height]);
 
-  const slots = [];
-  for (let y = 0; y < height; y++) {
-    for (let x = 0; x < width; x++) {
-      slots.push(<GridSlot key={x + y * width} index={x + y}></GridSlot>);
+  const slots = useMemo(() => {
+    const s = [];
+    for (let y = 0; y < height; y++) {
+      for (let x = 0; x < width; x++) {
+        s.push(<GridSlot key={x + y * width} index={x + y} />);
+      }
     }
-  }
+    return s;
+  }, [width, height]);
 
   return (
     <div className={styles.grid} ref={ref}>
@@ -259,7 +265,7 @@ export function Grid({
         </div>
       )}
       <div className={styles.gridItems}>
-        <GridContext
+        <GridContext.Provider
           value={{
             grid: ref.current,
             width: width,
@@ -270,7 +276,7 @@ export function Grid({
           }}
         >
           {children}
-        </GridContext>
+        </GridContext.Provider>
       </div>
     </div>
   );
