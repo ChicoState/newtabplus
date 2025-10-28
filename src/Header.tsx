@@ -3,12 +3,23 @@ import { AppContext } from "./App";
 import styles from "./App.css";
 
 import {
+  Icon,
   PencilSimpleIcon,
   CheckIcon,
   XIcon,
   ListIcon,
   WrenchIcon,
 } from "@phosphor-icons/react";
+
+function HeaderButton({
+  name,
+  icon,
+  onClick,
+}: {
+  name: string;
+  icon: Icon;
+  onClick: () => void;
+}) {}
 
 export default function Header() {
   const {
@@ -19,6 +30,7 @@ export default function Header() {
     setMenuOpen,
     saveTemplate,
     loadTemplate,
+    addWidget,
   } = useContext(AppContext);
 
   return (
@@ -28,6 +40,7 @@ export default function Header() {
           className={[styles.container, styles.button].join(" ")}
           onClick={() => {
             console.table(widgets);
+            addWidget("clock");
           }}
         >
           <WrenchIcon weight="bold"></WrenchIcon>

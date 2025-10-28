@@ -168,6 +168,7 @@ export function GridItem({
 
   return (
     <div
+      id={id}
       className={[
         styles.gridItem,
         dragging ? styles.dragging : "",

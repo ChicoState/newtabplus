@@ -19,8 +19,8 @@ interface AppContextType {
   saveTemplate: () => void;
   loadTemplate: () => boolean;
 
-  // addWidget: (type: string) => void;
-  // removeWidget: (id: string) => void;
+  addWidget: (type: string) => WidgetState<any>;
+  removeWidget: (id: string) => void;
 }
 
 export const AppContext = createContext<AppContextType>(null);
@@ -68,6 +68,28 @@ const App = () => {
     return true;
   }
 
+  function addWidget(type: string) {
+    if (!Object.keys(WidgetMap).includes(type)) {
+      console.error("Invalid widget type");
+      return;
+    }
+
+    const widget: WidgetState<any> = {
+      id: nanoid(6),
+      type: type,
+      size: { ...WidgetMap[type].size },
+      position: { gridX: 0, gridY: 0 },
+      settings: { ...WidgetMap[type].settings },
+    };
+
+    setWidgets([...widgets, widget]);
+    return widget;
+  }
+
+  function removeWidget(id: string) {
+    setWidgets(widgets.filter((w) => w.id !== id));
+  }
+
   useEffect(() => {
     if (!loadTemplate()) {
       setWidgets(FallbackTemplate);
@@ -75,7 +97,12 @@ const App = () => {
   }, []);
 
   return (
-    <div className={styles.content}>
+    <div
+      className={styles.content}
+      onClick={(e) => {
+        if (e.target === e.currentTarget) setMenuOpen(false);
+      }}
+    >
       <AppContext.Provider
         value={{
           widgets,
@@ -88,6 +115,9 @@ const App = () => {
 
           saveTemplate,
           loadTemplate,
+
+          addWidget,
+          removeWidget,
         }}
       >
         <Header></Header>
