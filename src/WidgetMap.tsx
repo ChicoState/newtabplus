@@ -31,7 +31,7 @@ export const WidgetMap = {
     component: Search,
     resizable: { x: true, y: false },
     size: { width: 8, height: 1 },
-    settings: { showButton: true, showIcon: true } satisfies SearchSettings,
+    settings: { showIcon: true, showButton: true } satisfies SearchSettings,
   },
 
   shortcut: {

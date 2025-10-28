@@ -136,7 +136,7 @@ export default function Menu({ active }: { active: boolean }) {
         active ? styles.active : "",
       ].join(" ")}
     >
-      {!appContext.editing && <WidgetList></WidgetList>}
+      {active && !appContext.editing && <WidgetList></WidgetList>}
       {appContext.editing && <WidgetSettings></WidgetSettings>}
     </div>
   );

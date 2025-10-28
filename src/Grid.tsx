@@ -8,6 +8,8 @@ import React, {
 } from "react";
 import { Draggable } from "./Drag";
 import styles from "./Grid.css";
+import { WidgetState } from "./Widget";
+import { AppContext } from "./App";
 
 export interface GridPosition {
   gridX: number;
@@ -27,7 +29,7 @@ interface GridContextType {
   height: number;
   cellSize: number;
   editing: boolean;
-  items: Map<HTMLElement, { position: GridPosition; size: GridSize }>;
+  items: Map<HTMLElement, WidgetState<any>>;
 }
 
 const GridContext = createContext<GridContextType>(null);
@@ -47,9 +49,12 @@ export function GridItem({
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const ctx = useContext(GridContext);
+  const { widgets, setWidgets } = useContext(AppContext);
+  const state = widgets.find((widget) => widget.id === id);
 
   const [position, setPosition] = useState<GridPosition>(initialPosition);
   const [size, setSize] = useState<GridSize>(initialSize);
+
   const [dragging, setDragging] = useState(false);
   const [resizing, setResizing] = useState(false);
 
@@ -58,8 +63,16 @@ export function GridItem({
   const [isValid, setIsValid] = useState(true);
 
   useEffect(() => {
-    ctx.items.set(ref.current, { position: position, size: size });
+    setSize(initialSize);
+    setPosition(initialPosition);
+  }, [initialSize, initialPosition]);
+
+  useEffect(() => {
+    ctx.items.set(ref.current, state);
     verifyPosition();
+
+    state.size = size;
+    state.position = position;
 
     return () => {
       ctx.items.delete(ref.current);
@@ -242,13 +255,13 @@ export function Grid({
   }, [width, height]);
 
   const slots = useMemo(() => {
-    const s = [];
+    const _slots = [];
     for (let y = 0; y < height; y++) {
       for (let x = 0; x < width; x++) {
-        s.push(<GridSlot key={x + y * width} index={x + y} />);
+        _slots.push(<GridSlot key={x + y * width} index={x + y} />);
       }
     }
-    return s;
+    return _slots;
   }, [width, height]);
 
   return (

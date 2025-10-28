@@ -45,7 +45,6 @@ export function Weather() {
       const _stats = [];
 
       for (let i = 0; i < maxTemp.length; i++) {
-        console.log(cloudCover[i]);
         _stats.push({
           minTemp: minTemp[i],
           maxTemp: maxTemp[i],
@@ -72,7 +71,9 @@ export function Weather() {
       {!stats && <span style={{ position: "absolute" }}>Loading...</span>}
       <div className={styles.forecast}>
         {!stats &&
-          Array.from(Array(7)).map(() => <div className={styles.day}></div>)}
+          Array.from(Array(7)).map((_, i) => (
+            <div className={styles.day} key={i}></div>
+          ))}
         {stats &&
           stats.map((t, i) => {
             return (

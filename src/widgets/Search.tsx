@@ -2,11 +2,11 @@ import React, { useEffect, useState } from "react";
 import Widget, { WidgetState } from "../Widget";
 import styles from "./Search.css";
 import globalStyles from "../App.css";
-import { MagnifyingGlassIcon } from "@phosphor-icons/react";
+import { MagnifyingGlassIcon, ArrowRightIcon } from "@phosphor-icons/react";
 
 export interface SearchSettings {
-  showButton: boolean;
   showIcon: boolean;
+  showButton: boolean;
 }
 
 export function Search({ settings }: WidgetState<SearchSettings>) {
@@ -19,7 +19,7 @@ export function Search({ settings }: WidgetState<SearchSettings>) {
       <div className={[globalStyles.container, styles.bar].join(" ")}>
         {settings.showIcon && (
           <MagnifyingGlassIcon
-            size={24}
+            size={18}
             color={"#fff4"}
             weight="bold"
           ></MagnifyingGlassIcon>
@@ -35,7 +35,11 @@ export function Search({ settings }: WidgetState<SearchSettings>) {
             className={[globalStyles.container, styles.searchButton].join(" ")}
             type="submit"
           >
-            Search
+            <ArrowRightIcon
+              size={18}
+              color={"#fff8"}
+              weight="bold"
+            ></ArrowRightIcon>
           </button>
         )}
       </div>
