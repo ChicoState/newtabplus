@@ -25,9 +25,7 @@
   color: #fffc;
   background-color: #fff0;
   outline: none;
-  transition:
-    border-color 0.2s,
-    background-color 0.2s;
+  transition: border-color 0.2s, background-color 0.2s;
 }
 
 .textarea::placeholder {
@@ -37,4 +35,111 @@
 .textarea:focus {
   border-color: #fff4;
   background-color: #0002;
+}
+
+/* Tabs container */
+.tabs {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #ffffff33;
+  margin-bottom: 10px;
+  overflow: hidden; 
+  flex-wrap: nowrap;
+}
+
+/* Individual tabs */
+.tab {
+  flex: 1 1 auto; 
+  min-width: 80px; 
+  max-width: 200px; 
+  padding: 6px 8px;
+  margin-right: 4px;
+  border-radius: 8px 8px 0 0;
+  background-color: #2226;
+  color: #fffc;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: flex 0.2s ease, background-color 0.2s;
+}
+
+.tab:hover {
+  background-color: #3339;
+}
+
+.activeTab {
+  background-color: #0008;
+  font-weight: 600;
+  flex: 1.1 1 auto; 
+}
+
+/* Close button inside tabs */
+.closeBtn {
+  border: none;
+  background: none;
+  color: #fff9;
+  cursor: pointer;
+  font-size: 0.9rem;
+  flex-shrink: 0; 
+}
+
+.closeBtn:hover {
+  color: #fff;
+}
+
+/* Add button */
+.addBtn {
+  flex-shrink: 0; 
+  padding: 4px 10px;
+  margin-left: 6px;
+  border: none;
+  border-radius: 6px;
+  background-color: #4448;
+  color: #fff;
+  cursor: pointer;
+  font-size: 1.1rem;
+  transition: background-color 0.2s;
+}
+
+.addBtn:hover {
+  background-color: #666c;
+}
+
+/* Inline rename input */
+.renameInput {
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #fff;
+  font-weight: 600;
+  font-family: "Inter", sans-serif;
+  font-size: 0.95rem;
+  width: 100px;
+  background-color: #0004;
+  border-radius: 4px;
+  padding: 2px 4px;
+}
+
+.renameInput:focus {
+  background-color: #0006;
+}
+
+.pinBtn {
+  border: none;
+  background: none;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  transition: transform 0.2s ease;
+}
+
+.pinBtn:hover {
+  transform: scale(1.2);
 }
