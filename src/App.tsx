@@ -1,18 +1,11 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, { createContext, useEffect, useState } from "react";
 import Widget, { WidgetState } from "./Widget";
-import { WidgetMap } from "./WidgetMap";
+import WidgetMap from "./WidgetMap";
+import Header from "./Header";
 import Menu from "./Menu";
 import { Grid } from "./Grid";
 import { nanoid } from "nanoid";
 import styles from "./App.css";
-
-import {
-  PencilSimpleIcon,
-  CheckIcon,
-  XIcon,
-  ListIcon,
-  WrenchIcon,
-} from "@phosphor-icons/react";
 
 interface AppContextType {
   widgets: WidgetState<any>[];
@@ -22,6 +15,9 @@ interface AppContextType {
   setWidgets: React.Dispatch<React.SetStateAction<WidgetState<any>[]>>;
   setEditing: React.Dispatch<React.SetStateAction<boolean>>;
   setMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
+
+  saveTemplate: () => void;
+  loadTemplate: () => boolean;
 
   // addWidget: (type: string) => void;
   // removeWidget: (id: string) => void;
@@ -83,75 +79,18 @@ const App = () => {
       <AppContext.Provider
         value={{
           widgets,
-          setWidgets,
           editing,
-          setEditing,
           menuOpen,
+
+          setWidgets,
+          setEditing,
           setMenuOpen,
+
+          saveTemplate,
+          loadTemplate,
         }}
       >
-        <div className={styles.header}>
-          <div className={styles.row}>
-            <button
-              className={[styles.container, styles.button].join(" ")}
-              onClick={() => {
-                console.table(widgets);
-              }}
-            >
-              <WrenchIcon weight="bold"></WrenchIcon>
-              Debug
-            </button>
-
-            {!editing && (
-              <button
-                className={[styles.container, styles.button].join(" ")}
-                onClick={() => {
-                  setEditing(true);
-                }}
-              >
-                <PencilSimpleIcon weight="bold"></PencilSimpleIcon>
-                Edit
-              </button>
-            )}
-
-            {editing && (
-              <button
-                className={[styles.container, styles.button].join(" ")}
-                onClick={() => {
-                  setEditing(false);
-                  loadTemplate();
-                }}
-              >
-                <XIcon weight="bold"></XIcon>
-                Cancel
-              </button>
-            )}
-
-            {editing && (
-              <button
-                className={[styles.container, styles.button].join(" ")}
-                onClick={() => {
-                  setEditing(false);
-                  saveTemplate();
-                }}
-              >
-                <CheckIcon weight="bold"></CheckIcon>
-                Done
-              </button>
-            )}
-
-            <button
-              className={[styles.container, styles.button].join(" ")}
-              onClick={() => {
-                setMenuOpen(!menuOpen);
-              }}
-            >
-              <ListIcon weight="bold"></ListIcon>
-              Settings
-            </button>
-          </div>
-        </div>
-
+        <Header></Header>
         <Grid width={24} height={12} editing={editing}>
           {widgets.map((state) => {
             const map = WidgetMap[state.type];

@@ -6,7 +6,7 @@ import React, {
   useRef,
   useState,
 } from "react";
-import { Draggable } from "./Drag";
+import Draggable from "./Drag";
 import styles from "./Grid.css";
 import { WidgetState } from "./Widget";
 import { AppContext } from "./App";

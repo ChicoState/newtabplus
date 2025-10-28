@@ -1,10 +1,9 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Type } from "../node_modules/typescript/lib/typescript";
+import Draggable from "./Drag";
+import WidgetMap from "./WidgetMap";
+import { AppContext } from "./App";
 import globalStyles from "./App.css";
 import styles from "./Menu.css";
-import { AppContext } from "./App";
-import { Draggable } from "./Drag";
-import { WidgetMap } from "./WidgetMap";
 
 const testSettings = {
   testNumber: 24,

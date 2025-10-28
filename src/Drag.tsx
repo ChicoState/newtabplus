@@ -20,7 +20,7 @@ const DragContext = createContext<DragContextType>({
   dragStart: { x: 0, y: 0 },
 });
 
-export function Draggable({
+export default function Draggable({
   enabled = true,
   onDrag = () => {},
   onDragRelative = () => {},

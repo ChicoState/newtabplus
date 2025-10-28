@@ -6,7 +6,7 @@ import { Shortcut } from "./widgets/Shortcut";
 import { ToDoList } from "./widgets/ToDoList";
 import { Weather } from "./widgets/Weather";
 
-export const WidgetMap = {
+const WidgetMap = {
   battery: {
     component: BatteryWidget,
     size: { width: 2, height: 1 },
@@ -50,3 +50,5 @@ export const WidgetMap = {
     size: { width: 6, height: 1 },
   },
 };
+
+export default WidgetMap;
