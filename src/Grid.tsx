@@ -2,11 +2,14 @@ import React, {
   createContext,
   useContext,
   useEffect,
+  useMemo,
   useRef,
   useState,
 } from "react";
-import { Draggable } from "./Drag";
+import Draggable from "./Drag";
 import styles from "./Grid.css";
+import { WidgetState } from "./Widget";
+import { AppContext } from "./App";
 
 export interface GridPosition {
   gridX: number;
@@ -25,28 +28,31 @@ interface GridContextType {
   width: number;
   height: number;
   cellSize: number;
-  editing: boolean;
-  items: Map<HTMLElement, { position: GridPosition; size: GridSize }>;
+  items: Map<HTMLElement, WidgetState<any>>;
 }
 
 const GridContext = createContext<GridContextType>(null);
 
 export function GridItem({
+  id,
   initialSize,
   initialPosition,
-  resizeable = true,
+  resizeable,
   children,
 }: {
+  id: string;
   initialSize: GridSize;
   initialPosition: GridPosition;
-  resizeable?: boolean;
+  resizeable?: { x: boolean; y: boolean };
   children?: React.ReactNode;
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const ctx = useContext(GridContext);
-
+  const { widgets, removeWidget, editing, deleting } = useContext(AppContext);
+  const state = widgets.find((widget) => widget.id === id);
   const [position, setPosition] = useState<GridPosition>(initialPosition);
   const [size, setSize] = useState<GridSize>(initialSize);
+
   const [dragging, setDragging] = useState(false);
   const [resizing, setResizing] = useState(false);
 
@@ -55,13 +61,21 @@ export function GridItem({
   const [isValid, setIsValid] = useState(true);
 
   useEffect(() => {
-    ctx.items.set(ref.current, { position: position, size: size });
+    setSize(initialSize);
+    setPosition(initialPosition);
+  }, [initialSize, initialPosition]);
+
+  useEffect(() => {
+    ctx.items.set(ref.current, state);
     verifyPosition();
+
+    state.size = size;
+    state.position = position;
 
     return () => {
       ctx.items.delete(ref.current);
     };
-  }, [size, position, ref.current, ctx.editing]);
+  }, [size, position, ref.current]);
 
   function pixelToGrid(x: number, y: number): [number, number] {
     x -= ctx.grid.offsetLeft;
@@ -152,10 +166,13 @@ export function GridItem({
 
   return (
     <div
+      id={id}
       className={[
         styles.gridItem,
         dragging ? styles.dragging : "",
         resizing ? styles.resizing : "",
+        editing ? styles.editing : "",
+        deleting ? styles.deleting : "",
         !isValid ? styles.invalid : "",
       ].join(" ")}
       style={{
@@ -165,30 +182,33 @@ export function GridItem({
         height: size.height * ctx.cellSize,
       }}
       ref={ref}
+      onClick={() => {
+        if (editing && deleting) removeWidget(id);
+      }}
     >
-      <Draggable enabled={ctx.editing} onDrag={handleDrag}>
+      <Draggable enabled={editing} onDrag={handleDrag}>
         {children}
       </Draggable>
 
-      {ctx.editing && resizeable && (
+      {editing && !deleting && resizeable.x && (
         <div className={[styles.resize, styles.resizeLeft].join(" ")}>
           <Draggable onDrag={handleResizeLeft}></Draggable>
         </div>
       )}
 
-      {ctx.editing && resizeable && (
+      {editing && !deleting && resizeable.x && (
         <div className={[styles.resize, styles.resizeRight].join(" ")}>
           <Draggable onDrag={handleResizeRight}></Draggable>
         </div>
       )}
 
-      {ctx.editing && resizeable && (
+      {editing && !deleting && resizeable.y && (
         <div className={[styles.resize, styles.resizeUp].join(" ")}>
           <Draggable onDrag={handleResizeUp}></Draggable>
         </div>
       )}
 
-      {ctx.editing && resizeable && (
+      {editing && !deleting && resizeable.y && (
         <div className={[styles.resize, styles.resizeDown].join(" ")}>
           <Draggable onDrag={handleResizeDown}></Draggable>
         </div>
@@ -197,10 +217,13 @@ export function GridItem({
   );
 }
 
-function GridSlot() {
+function GridSlot({ index }: { index: number }) {
   return (
     <div className={styles.gridSlot}>
-      <div className={styles.gridSlotInner}></div>
+      <div
+        className={styles.gridSlotInner}
+        style={{ animationDelay: 10 * index + "ms" }}
+      ></div>
     </div>
   );
 }
@@ -208,16 +231,15 @@ function GridSlot() {
 export function Grid({
   width = 16,
   height = 8,
-  editing = false,
   children,
 }: {
   width: number;
   height: number;
-  editing?: boolean;
   children?: React.ReactNode;
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const [cellSize, setCellSize] = useState(0);
+  const { editing, deleting } = useContext(AppContext);
 
   useEffect(() => {
     if (!ref.current) return;
@@ -234,10 +256,15 @@ export function Grid({
     };
   }, [width, height]);
 
-  const slots = [];
-  for (let i = 0; i < width * height; i++) {
-    slots.push(<GridSlot key={i}></GridSlot>);
-  }
+  const slots = useMemo(() => {
+    const _slots = [];
+    for (let y = 0; y < height; y++) {
+      for (let x = 0; x < width; x++) {
+        _slots.push(<GridSlot key={x + y * width} index={x + y} />);
+      }
+    }
+    return _slots;
+  }, [width, height]);
 
   return (
     <div className={styles.grid} ref={ref}>
@@ -253,18 +280,17 @@ export function Grid({
         </div>
       )}
       <div className={styles.gridItems}>
-        <GridContext
+        <GridContext.Provider
           value={{
             grid: ref.current,
             width: width,
             height: height,
             cellSize: cellSize,
-            editing: editing,
             items: new Map(),
           }}
         >
           {children}
-        </GridContext>
+        </GridContext.Provider>
       </div>
     </div>
   );

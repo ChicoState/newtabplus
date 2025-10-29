@@ -20,7 +20,7 @@ const DragContext = createContext<DragContextType>({
   dragStart: { x: 0, y: 0 },
 });
 
-export function Draggable({
+export default function Draggable({
   enabled = true,
   onDrag = () => {},
   onDragRelative = () => {},
@@ -36,7 +36,7 @@ export function Draggable({
 
   const [position, setPosition] = useState({ x: 0, y: 0 });
 
-  function handleMouseDown(e: React.MouseEvent) {
+  function handleMouseDown(e: React.MouseEvent | MouseEvent) {
     if (!enabled || ctx.isDragging) return;
     e.preventDefault();
 
@@ -50,7 +50,7 @@ export function Draggable({
     onDragRelative(0, 0, true);
   }
 
-  function handleMouseUp(e: React.MouseEvent) {
+  function handleMouseUp(e: React.MouseEvent | MouseEvent) {
     if (!ctx.isDragging || ctx.activeItem !== ref.current) return;
     e.preventDefault();
 
@@ -61,7 +61,7 @@ export function Draggable({
     onDragRelative(0, 0, false);
   }
 
-  function handleMouseMove(e: React.MouseEvent) {
+  function handleMouseMove(e: React.MouseEvent | MouseEvent) {
     if (!ctx.isDragging || ctx.activeItem !== ref.current) return;
     e.preventDefault();
     setPosition({ x: position.x + e.movementX, y: position.y + e.movementY });
