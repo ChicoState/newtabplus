@@ -77,7 +77,7 @@ export function GridItem({
     return () => {
       ctx.items.delete(ref.current);
     };
-  }, [size, position, ref.current, ctx.editing]);
+  }, [size, position, ref.current]);
 
   function pixelToGrid(x: number, y: number): [number, number] {
     x -= ctx.grid.offsetLeft;
