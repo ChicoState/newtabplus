@@ -7,7 +7,8 @@
   flex-flow: column nowrap;
   gap: 4px;
 
-  width: min(400px, max(300px, 25vw));
+  width: min-content;
+  /*max-width: max(400px, 25vw);*/
   height: calc(100% - 32px - 16px);
   padding: 8px;
 
@@ -31,6 +32,35 @@
   color: #fff8;
   font-weight: 500;
   text-align: center;
+}
+
+.header {
+  height: fit-content;
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-evenly;
+  padding: 4px;
+}
+
+.header-tab {
+  background-color: transparent;
+  border: none;
+  border-radius: 4px;
+  font-weight: 700;
+  color: #fffc;
+  padding: 4px 12px;
+  transition: back;
+  cursor: pointer;
+
+  transition: 0.15s background-color;
+}
+
+.header-tab.active,
+.header-tab:hover {
+  color: #fffe;
+  background-color: #fff2;
+
+  transition: 0.15s background-color;
 }
 
 .menu-item {

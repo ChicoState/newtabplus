@@ -5,13 +5,6 @@ import { AppContext } from "./App";
 import globalStyles from "./App.css";
 import styles from "./Menu.css";
 
-const testSettings = {
-  testNumber: 24,
-  testString: "Placeholder",
-  testBool: true,
-  testColor: "#8000ff",
-};
-
 function MenuItem<T>({
   name,
   initialValue,
@@ -97,42 +90,49 @@ function WidgetList() {
 }
 
 function WidgetSettings() {
-  const { widgets, setWidgets } = useContext(AppContext);
+  const { editing, widgets, setWidgets, saveTemplate } = useContext(AppContext);
 
   return (
     <>
-      {widgets.map((state) => {
-        return (
-          <>
-            <span>
-              {state.type.replace(/^./, (match) => match.toUpperCase())}
-            </span>
-            {Object.entries(state.settings).map(([key, value], i) => {
-              return (
-                <MenuItem
-                  key={i}
-                  name={key
-                    .replace(/([A-Z])/g, (match) => ` ${match}`)
-                    .replace(/([A-Za-z])(?=\d)/g, "$1 ")
-                    .replace(/^./, (match) => match.toUpperCase())
-                    .trim()}
-                  initialValue={value}
-                  onChange={(v) => {
-                    state.settings[key] = v;
-                    setWidgets([...widgets]);
-                  }}
-                ></MenuItem>
-              );
-            })}
-          </>
-        );
-      })}
+      {widgets.map((state, i) => (
+        <React.Fragment key={i}>
+          <span>
+            {state.type.replace(/^./, (match) => match.toUpperCase())}
+          </span>
+          {Object.entries(state.settings).map(([key, value], i) => (
+            <MenuItem
+              key={i}
+              name={key
+                .replace(/([A-Z])/g, (match) => ` ${match}`)
+                .replace(/([A-Za-z])(?=\d)/g, "$1 ")
+                .replace(/^./, (match) => match.toUpperCase())
+                .trim()}
+              initialValue={value}
+              onChange={(v) => {
+                state.settings[key] = v;
+                setWidgets([...widgets]);
+
+                if (!editing) saveTemplate();
+              }}
+            />
+          ))}
+        </React.Fragment>
+      ))}
     </>
   );
 }
 
+enum MenuTab {
+  Widget,
+  Add,
+  General,
+  Theme,
+  Template,
+}
+
 export default function Menu({ active }: { active: boolean }) {
   const appContext = useContext(AppContext);
+  const [activeTab, setActiveTab] = useState<MenuTab>(MenuTab.Widget);
 
   return (
     <div
@@ -142,8 +142,29 @@ export default function Menu({ active }: { active: boolean }) {
         active ? styles.active : "",
       ].join(" ")}
     >
-      {active && appContext.editing && <WidgetList></WidgetList>}
-      {!appContext.editing && <WidgetSettings></WidgetSettings>}
+      <div className={[globalStyles.container, styles.header].join(" ")}>
+        {Object.entries(MenuTab)
+          .filter(([k, v]) => isNaN(Number(k)))
+          .map(([key, value], i) => {
+            return (
+              <button
+                key={i}
+                className={[
+                  styles.headerTab,
+                  activeTab === (value as MenuTab) ? styles.active : "",
+                ].join(" ")}
+                onClick={() => setActiveTab(value as MenuTab)}
+              >
+                {key}
+              </button>
+            );
+          })}
+      </div>
+      {activeTab === MenuTab.Widget && <WidgetSettings></WidgetSettings>}
+      {activeTab === MenuTab.Add && active && <WidgetList></WidgetList>}
+      {![MenuTab.Widget, MenuTab.Add].includes(activeTab) && (
+        <span>No Settings Available</span>
+      )}
     </div>
   );
 }
