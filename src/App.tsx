@@ -2,6 +2,10 @@ import React, { useState } from "react";
 import { Grid } from "./Grid";
 import Widget from "./Widget";
 import styles from "./App.css";
+import { MyCalendar, MyCalendar2 } from "./widgets/calanderwidget";
+import { MySamCal } from "./widgets/calandersample";
+import { NoteForm } from "./widgets/notepadwidget"
+import { MyCalendar3 } from "./widgets/calander5";
 
 const TestBox = () => {
   return <div className={styles.testBox}></div>;
@@ -41,6 +45,15 @@ const App = () => {
         >
           <TestBox></TestBox>
         </Widget>
+        
+
+        <Widget>
+          <MyCalendar3>
+
+          </MyCalendar3>
+        </Widget>
+
+        
       </Grid>
     </div>
   );

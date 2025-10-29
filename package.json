@@ -9,10 +9,13 @@
     "preview": "rsbuild preview"
   },
   "dependencies": {
+    "@emotion/react": "^11.14.0",
     "@phosphor-icons/react": "^2.1.10",
     "@rsbuild/plugin-typed-css-modules": "^1.1.1",
-    "react": "^19.1.1",
-    "react-dom": "^19.1.1",
+    "react": "^19.2.0",
+    "react-calendar": "^6.0.0",
+    "react-date-picker": "^12.0.1",
+    "react-dom": "^19.2.0",
     "typescript": "^5.9.2"
   },
   "devDependencies": {
