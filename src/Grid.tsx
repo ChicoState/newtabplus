@@ -190,25 +190,25 @@ export function GridItem({
         {children}
       </Draggable>
 
-      {editing && resizeable.x && (
+      {editing && !deleting && resizeable.x && (
         <div className={[styles.resize, styles.resizeLeft].join(" ")}>
           <Draggable onDrag={handleResizeLeft}></Draggable>
         </div>
       )}
 
-      {editing && resizeable.x && (
+      {editing && !deleting && resizeable.x && (
         <div className={[styles.resize, styles.resizeRight].join(" ")}>
           <Draggable onDrag={handleResizeRight}></Draggable>
         </div>
       )}
 
-      {editing && resizeable.y && (
+      {editing && !deleting && resizeable.y && (
         <div className={[styles.resize, styles.resizeUp].join(" ")}>
           <Draggable onDrag={handleResizeUp}></Draggable>
         </div>
       )}
 
-      {editing && resizeable.y && (
+      {editing && !deleting && resizeable.y && (
         <div className={[styles.resize, styles.resizeDown].join(" ")}>
           <Draggable onDrag={handleResizeDown}></Draggable>
         </div>
