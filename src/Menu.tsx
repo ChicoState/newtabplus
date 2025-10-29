@@ -102,30 +102,23 @@ function WidgetSettings() {
   return (
     <>
       {widgets.map((state) => {
-        return (
-          <>
-            <span>
-              {state.type.replace(/^./, (match) => match.toUpperCase())}
-            </span>
-            {Object.entries(state.settings).map(([key, value], i) => {
-              return (
-                <MenuItem
-                  key={i}
-                  name={key
-                    .replace(/([A-Z])/g, (match) => ` ${match}`)
-                    .replace(/([A-Za-z])(?=\d)/g, "$1 ")
-                    .replace(/^./, (match) => match.toUpperCase())
-                    .trim()}
-                  initialValue={value}
-                  onChange={(v) => {
-                    state.settings[key] = v;
-                    setWidgets([...widgets]);
-                  }}
-                ></MenuItem>
-              );
-            })}
-          </>
-        );
+        return Object.entries(state.settings).map(([key, value], i) => {
+          return (
+            <MenuItem
+              key={i}
+              name={key
+                .replace(/([A-Z])/g, (match) => ` ${match}`)
+                .replace(/([A-Za-z])(?=\d)/g, "$1 ")
+                .replace(/^./, (match) => match.toUpperCase())
+                .trim()}
+              initialValue={value}
+              onChange={(v) => {
+                state.settings[key] = v;
+                setWidgets([...widgets]);
+              }}
+            ></MenuItem>
+          );
+        });
       })}
     </>
   );
