@@ -79,14 +79,7 @@ function WidgetList() {
               addWidget(key);
             }}
           >
-            {/*<Draggable
-              onDrag={() => {
-                setEditing(true);
-                setMenuOpen(false);
-              }}
-            >*/}
             <Component {...value}></Component>
-            {/*</Draggable>*/}
           </div>
         );
       })}

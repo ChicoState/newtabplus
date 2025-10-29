@@ -100,6 +100,8 @@ export function GridItem({
   }
 
   function handleDrag(x: number, y: number, drag: boolean) {
+    if (deleting) return;
+
     let [gridX, gridY] = pixelToGrid(x, y);
     gridX = Math.min(ctx.width - size.width, Math.max(0, gridX));
     gridY = Math.min(ctx.height - size.height, Math.max(0, gridY));

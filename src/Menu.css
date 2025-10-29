@@ -31,6 +31,7 @@
 .menu > span {
   color: #fff8;
   font-weight: 500;
+  font-size: 0.9rem;
   text-align: center;
 }
 
@@ -76,7 +77,7 @@
 .item-name {
   color: #fffa;
   font-weight: 500;
-  font-size: 0.8rem;
+  font-size: 0.9rem;
   margin-left: 8px;
 }
 
@@ -132,7 +133,7 @@
   border-color: #fff4;
 }
 
-.widget-thumb > div > * {
+.widget-thumb > * {
   pointer-events: none;
   user-select: none;
 }
