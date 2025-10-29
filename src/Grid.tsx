@@ -28,7 +28,6 @@ interface GridContextType {
   width: number;
   height: number;
   cellSize: number;
-  editing: boolean;
   items: Map<HTMLElement, WidgetState<any>>;
 }
 
@@ -49,9 +48,8 @@ export function GridItem({
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const ctx = useContext(GridContext);
-  const { widgets, setWidgets } = useContext(AppContext);
+  const { widgets, removeWidget, editing, deleting } = useContext(AppContext);
   const state = widgets.find((widget) => widget.id === id);
-
   const [position, setPosition] = useState<GridPosition>(initialPosition);
   const [size, setSize] = useState<GridSize>(initialSize);
 
@@ -173,7 +171,8 @@ export function GridItem({
         styles.gridItem,
         dragging ? styles.dragging : "",
         resizing ? styles.resizing : "",
-        ctx.editing ? styles.editing : "",
+        editing ? styles.editing : "",
+        deleting ? styles.deleting : "",
         !isValid ? styles.invalid : "",
       ].join(" ")}
       style={{
@@ -183,30 +182,33 @@ export function GridItem({
         height: size.height * ctx.cellSize,
       }}
       ref={ref}
+      onClick={() => {
+        if (editing && deleting) removeWidget(id);
+      }}
     >
-      <Draggable enabled={ctx.editing} onDrag={handleDrag}>
+      <Draggable enabled={editing} onDrag={handleDrag}>
         {children}
       </Draggable>
 
-      {ctx.editing && resizeable.x && (
+      {editing && resizeable.x && (
         <div className={[styles.resize, styles.resizeLeft].join(" ")}>
           <Draggable onDrag={handleResizeLeft}></Draggable>
         </div>
       )}
 
-      {ctx.editing && resizeable.x && (
+      {editing && resizeable.x && (
         <div className={[styles.resize, styles.resizeRight].join(" ")}>
           <Draggable onDrag={handleResizeRight}></Draggable>
         </div>
       )}
 
-      {ctx.editing && resizeable.y && (
+      {editing && resizeable.y && (
         <div className={[styles.resize, styles.resizeUp].join(" ")}>
           <Draggable onDrag={handleResizeUp}></Draggable>
         </div>
       )}
 
-      {ctx.editing && resizeable.y && (
+      {editing && resizeable.y && (
         <div className={[styles.resize, styles.resizeDown].join(" ")}>
           <Draggable onDrag={handleResizeDown}></Draggable>
         </div>
@@ -229,16 +231,15 @@ function GridSlot({ index }: { index: number }) {
 export function Grid({
   width = 16,
   height = 8,
-  editing = false,
   children,
 }: {
   width: number;
   height: number;
-  editing?: boolean;
   children?: React.ReactNode;
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const [cellSize, setCellSize] = useState(0);
+  const { editing, deleting } = useContext(AppContext);
 
   useEffect(() => {
     if (!ref.current) return;
@@ -285,7 +286,6 @@ export function Grid({
             width: width,
             height: height,
             cellSize: cellSize,
-            editing: editing,
             items: new Map(),
           }}
         >

@@ -60,7 +60,7 @@ function MenuItem<T>({
 }
 
 function WidgetList() {
-  const appContext = useContext(AppContext);
+  const { setEditing, setMenuOpen, addWidget } = useContext(AppContext);
 
   return (
     <div className={styles.widgetList}>
@@ -73,15 +73,20 @@ function WidgetList() {
             style={{
               minHeight: value.size.height * 32 * 2 + "px",
             }}
+            onClick={() => {
+              setEditing(true);
+              setMenuOpen(false);
+              addWidget(key);
+            }}
           >
-            <Draggable
+            {/*<Draggable
               onDrag={() => {
-                appContext.setEditing(true);
-                appContext.setMenuOpen(false);
+                setEditing(true);
+                setMenuOpen(false);
               }}
-            >
-              <Component {...value}></Component>
-            </Draggable>
+            >*/}
+            <Component {...value}></Component>
+            {/*</Draggable>*/}
           </div>
         );
       })}

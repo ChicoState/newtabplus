@@ -10,10 +10,12 @@ import styles from "./App.css";
 interface AppContextType {
   widgets: WidgetState<any>[];
   editing: boolean;
+  deleting: boolean;
   menuOpen: boolean;
 
   setWidgets: React.Dispatch<React.SetStateAction<WidgetState<any>[]>>;
   setEditing: React.Dispatch<React.SetStateAction<boolean>>;
+  setDeleting: React.Dispatch<React.SetStateAction<boolean>>;
   setMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
 
   saveTemplate: () => void;
@@ -44,6 +46,7 @@ const FallbackTemplate: WidgetState<any>[] = [
 
 const App = () => {
   const [editing, setEditing] = useState(false);
+  const [deleting, setDeleting] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [widgets, setWidgets] = useState<WidgetState<any>[]>([]);
 
@@ -107,10 +110,12 @@ const App = () => {
         value={{
           widgets,
           editing,
+          deleting,
           menuOpen,
 
           setWidgets,
           setEditing,
+          setDeleting,
           setMenuOpen,
 
           saveTemplate,
@@ -121,7 +126,7 @@ const App = () => {
         }}
       >
         <Header></Header>
-        <Grid width={24} height={12} editing={editing}>
+        <Grid width={24} height={12}>
           {widgets.map((state) => {
             const map = WidgetMap[state.type];
             const Component = map.component;

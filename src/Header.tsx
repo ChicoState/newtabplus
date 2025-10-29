@@ -9,6 +9,8 @@ import {
   XIcon,
   ListIcon,
   WrenchIcon,
+  EraserIcon,
+  ArrowsOutCardinalIcon,
 } from "@phosphor-icons/react";
 
 function HeaderButton({
@@ -23,30 +25,19 @@ function HeaderButton({
 
 export default function Header() {
   const {
-    widgets,
     editing,
+    deleting,
     setEditing,
+    setDeleting,
     menuOpen,
     setMenuOpen,
     saveTemplate,
     loadTemplate,
-    addWidget,
   } = useContext(AppContext);
 
   return (
     <div className={styles.header}>
       <div className={styles.row}>
-        <button
-          className={[styles.container, styles.button].join(" ")}
-          onClick={() => {
-            console.table(widgets);
-            addWidget("clock");
-          }}
-        >
-          <WrenchIcon weight="bold"></WrenchIcon>
-          Debug
-        </button>
-
         {!editing && (
           <button
             className={[styles.container, styles.button].join(" ")}
@@ -63,8 +54,25 @@ export default function Header() {
           <button
             className={[styles.container, styles.button].join(" ")}
             onClick={() => {
-              setEditing(false);
+              setDeleting(!deleting);
+            }}
+          >
+            {deleting ? (
+              <ArrowsOutCardinalIcon weight="bold"></ArrowsOutCardinalIcon>
+            ) : (
+              <EraserIcon weight="bold"></EraserIcon>
+            )}
+            {deleting ? "Move" : "Delete"}
+          </button>
+        )}
+
+        {editing && (
+          <button
+            className={[styles.container, styles.button].join(" ")}
+            onClick={() => {
               loadTemplate();
+              setEditing(false);
+              setDeleting(false);
             }}
           >
             <XIcon weight="bold"></XIcon>
@@ -76,8 +84,9 @@ export default function Header() {
           <button
             className={[styles.container, styles.button].join(" ")}
             onClick={() => {
-              setEditing(false);
               saveTemplate();
+              setEditing(false);
+              setDeleting(false);
             }}
           >
             <CheckIcon weight="bold"></CheckIcon>

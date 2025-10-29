@@ -123,6 +123,7 @@
   transition-timing-function: var(--bounce);
 }
 
+.grid-item.deleting::after,
 .grid-item.invalid::after {
   content: "";
   position: absolute;
@@ -131,6 +132,28 @@
   background-color: #f004;
   border-radius: 8px;
   pointer-events: none;
+}
+
+@keyframes shaking {
+  0% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(1deg);
+  }
+  50% {
+    transform: rotate(0eg);
+  }
+  75% {
+    transform: rotate(-1deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+.grid-item.deleting {
+  animation: shaking 0.25s infinite;
 }
 
 .resize {
