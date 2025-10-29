@@ -26,6 +26,13 @@
     opacity 0.25s ease-out;
 }
 
+/* Temporary */
+.menu > span {
+  color: #fff8;
+  font-weight: 500;
+  text-align: center;
+}
+
 .menu-item {
   display: flex;
   flex-flow: row nowrap;
