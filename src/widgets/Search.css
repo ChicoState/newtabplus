@@ -21,6 +21,10 @@
   gap: 8px;
 }
 
+.bar svg {
+  flex-shrink: 0;
+}
+
 .search-input {
   height: 100%;
   width: 100%;
@@ -31,6 +35,7 @@
   padding: 4px;
   border-radius: 16px;
   border: none;
+  text-overflow: ellipsis;
 }
 
 .search-input::placeholder {
@@ -39,8 +44,13 @@
 }
 
 .search-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
   cursor: pointer;
-  width: 80px;
+  flex-shrink: 0;
+  width: 60px;
   height: 100%;
   min-height: 16px;
   border-radius: 16px;

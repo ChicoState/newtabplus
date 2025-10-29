@@ -1,146 +1,151 @@
-import React, { useState } from "react";
-import Widget from "./Widget";
+import React, { createContext, useEffect, useState } from "react";
+import Widget, { WidgetState } from "./Widget";
+import WidgetMap from "./WidgetMap";
+import Header from "./Header";
 import Menu from "./Menu";
 import { Grid } from "./Grid";
-import { Weather } from "./widgets/Weather";
-import { Clock } from "./widgets/Clock";
-import { ToDoList } from "./widgets/ToDoList";
-import { Notepad } from "./widgets/Notepad";
-import { Search } from "./widgets/Search";
-import { Shortcut } from "./widgets/Shortcut";
+import { nanoid } from "nanoid";
 import styles from "./App.css";
-import BatteryWidget from "./widgets/BatteryWidget";
-import {
-  PencilSimpleIcon,
-  CheckIcon,
-  XIcon,
-  ListIcon,
-} from "@phosphor-icons/react";
 
-const TestBox = () => {
-  return <div className={styles.container}></div>;
-};
+interface AppContextType {
+  widgets: WidgetState<any>[];
+  editing: boolean;
+  deleting: boolean;
+  menuOpen: boolean;
+
+  setWidgets: React.Dispatch<React.SetStateAction<WidgetState<any>[]>>;
+  setEditing: React.Dispatch<React.SetStateAction<boolean>>;
+  setDeleting: React.Dispatch<React.SetStateAction<boolean>>;
+  setMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
+
+  saveTemplate: () => void;
+  loadTemplate: () => boolean;
+
+  addWidget: (type: string) => WidgetState<any>;
+  removeWidget: (id: string) => void;
+}
+
+export const AppContext = createContext<AppContextType>(null);
+
+const FallbackTemplate: WidgetState<any>[] = [
+  {
+    id: nanoid(6),
+    type: "clock",
+    size: { ...WidgetMap["clock"].size },
+    position: { gridX: 10, gridY: 1 },
+    settings: { ...WidgetMap["clock"].settings },
+  },
+  {
+    id: nanoid(6),
+    type: "search",
+    size: { ...WidgetMap["search"].size },
+    position: { gridX: 8, gridY: 3 },
+    settings: { ...WidgetMap["search"].settings },
+  },
+];
 
 const App = () => {
   const [editing, setEditing] = useState(false);
+  const [deleting, setDeleting] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [widgets, setWidgets] = useState<WidgetState<any>[]>([]);
+
+  // TODO: This system will eventually keep an
+  // array of templates and store the index of
+  // the active template. For the time being,
+  // this uses a single template structure.
+
+  function saveTemplate() {
+    localStorage.setItem("template", JSON.stringify(widgets));
+  }
+
+  function loadTemplate(): boolean {
+    const template = localStorage.getItem("template");
+
+    if (template === null) {
+      console.warn("No template stored");
+      return false;
+    }
+
+    setWidgets(JSON.parse(template) as WidgetState<any>[]);
+    return true;
+  }
+
+  function addWidget(type: string) {
+    if (!Object.keys(WidgetMap).includes(type)) {
+      console.error("Invalid widget type");
+      return;
+    }
+
+    const widget: WidgetState<any> = {
+      id: nanoid(6),
+      type: type,
+      size: { ...WidgetMap[type].size },
+      position: { gridX: 0, gridY: 0 },
+      settings: { ...WidgetMap[type].settings },
+    };
+
+    setWidgets([...widgets, widget]);
+    return widget;
+  }
+
+  function removeWidget(id: string) {
+    setWidgets(widgets.filter((w) => w.id !== id));
+  }
+
+  useEffect(() => {
+    if (!loadTemplate()) {
+      setWidgets(FallbackTemplate);
+    }
+  }, []);
 
   return (
-    <div className={styles.content}>
-      <div className={styles.header}>
-        <div className={styles.row}>
-          {editing && (
-            <button
-              className={[styles.container, styles.button].join(" ")}
-              onClick={() => {
-                setEditing(!editing);
-              }}
-            >
-              <XIcon weight="bold"></XIcon>
-              Cancel
-            </button>
-          )}
+    <div
+      className={styles.content}
+      onClick={(e) => {
+        if (e.target === e.currentTarget) setMenuOpen(false);
+      }}
+    >
+      <AppContext.Provider
+        value={{
+          widgets,
+          editing,
+          deleting,
+          menuOpen,
 
-          <button
-            className={[styles.container, styles.button].join(" ")}
-            onClick={() => {
-              setEditing(!editing);
-            }}
-          >
-            {editing && <CheckIcon weight="bold"></CheckIcon>}
-            {!editing && <PencilSimpleIcon weight="bold"></PencilSimpleIcon>}
-            {editing ? "Done" : "Edit"}
-          </button>
+          setWidgets,
+          setEditing,
+          setDeleting,
+          setMenuOpen,
 
-          <button
-            className={[styles.container, styles.button].join(" ")}
-            onClick={() => {
-              setMenuOpen(!menuOpen);
-            }}
-          >
-            <ListIcon weight="bold"></ListIcon>
-            Settings
-          </button>
-        </div>
-      </div>
+          saveTemplate,
+          loadTemplate,
 
-      <Grid width={24} height={12} editing={editing}>
-        <Widget
-          size={{ width: 4, height: 2 }}
-          position={{ gridX: 10, gridY: 1 }}
-        >
-          <Clock></Clock>
-        </Widget>
+          addWidget,
+          removeWidget,
+        }}
+      >
+        <Header></Header>
+        <Grid width={24} height={12}>
+          {widgets.map((state) => {
+            const map = WidgetMap[state.type];
+            const Component = map.component;
+            return (
+              <Widget
+                size={state.size || map.size}
+                position={state.position}
+                resizeable={map.resizable}
+                id={state.id}
+                key={state.id}
+              >
+                <Component {...state}></Component>
+              </Widget>
+            );
+          })}
+        </Grid>
 
-        <Widget
-          size={{ width: 5, height: 5 }}
-          position={{ gridX: 18, gridY: 1 }}
-        >
-          <ToDoList></ToDoList>
-        </Widget>
-
-        <Widget
-          size={{ width: 5, height: 5 }}
-          position={{ gridX: 1, gridY: 1 }}
-        >
-          <Notepad></Notepad>
-        </Widget>
-
-        <Widget
-          size={{ width: 8, height: 1 }}
-          position={{ gridX: 8, gridY: 3 }}
-        >
-          <Search></Search>
-        </Widget>
-
-        <Widget
-          size={{ width: 6, height: 1 }}
-          position={{ gridX: 9, gridY: 4 }}
-        >
-          <Weather></Weather>
-        </Widget>
-
-        <Widget
-          size={{ width: 1, height: 1 }}
-          position={{ gridX: 10, gridY: 5 }}
-          resizeable={false}
-        >
-          <Shortcut url="https://canvas.csuchico.edu"></Shortcut>
-        </Widget>
-
-        <Widget
-          size={{ width: 1, height: 1 }}
-          position={{ gridX: 11, gridY: 5 }}
-          resizeable={false}
-        >
-          <Shortcut url="https://outlook.com"></Shortcut>
-        </Widget>
-
-        <Widget
-          size={{ width: 1, height: 1 }}
-          position={{ gridX: 12, gridY: 5 }}
-          resizeable={false}
-        >
-          <Shortcut url="https://github.com"></Shortcut>
-        </Widget>
-
-        <Widget
-          size={{ width: 1, height: 1 }}
-          position={{ gridX: 13, gridY: 5 }}
-          resizeable={false}
-        >
-          <Shortcut url="https://stackoverflow.com"></Shortcut>
-        </Widget>
-
-        <Widget
-          size={{ width: 2, height: 1 }}
-          position={{ gridX: 20, gridY: 0 }}
-        >
-          <BatteryWidget />
-        </Widget>
-      </Grid>
-
-      <Menu active={menuOpen}></Menu>
+        <Menu active={menuOpen}></Menu>
+      </AppContext.Provider>
     </div>
   );
 };
