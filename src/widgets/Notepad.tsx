@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import globalStyles from "../App.css";
 import styles from "./Notepad.css";
-import { PushPin } from "@phosphor-icons/react";
+import { PushPinIcon } from "@phosphor-icons/react";
 
 interface NoteState {
   id: string;
@@ -122,22 +122,6 @@ export function Notepad() {
               </span>
             )}
 
-            {/* Pin button using Phosphor PinIcon */}
-            <button
-              className={styles.pinBtn}
-              onClick={(e) => {
-                e.stopPropagation();
-                togglePin(note.id);
-              }}
-              title={note.pinned ? "Unpin note" : "Pin note"}
-            >
-              <PushPin
-                size={16}
-                weight={note.pinned ? "fill" : "regular"}
-                color={note.pinned ? "#ffd700" : "#fff9"}
-              />
-            </button>
-
             {/* Close button */}
             <button
               className={styles.closeBtn}
@@ -158,7 +142,25 @@ export function Notepad() {
       {/* Note editor */}
       {activeNote && (
         <>
-          <h3 className={styles.title}>{activeNote.title}</h3>
+          <h3 className={styles.title}>
+            {activeNote.title}
+
+            {/* Pin button using Phosphor PinIcon */}
+            <button
+              className={styles.pinBtn}
+              onClick={(e) => {
+                e.stopPropagation();
+                togglePin(activeNote.id);
+              }}
+              title={activeNote.pinned ? "Unpin note" : "Pin note"}
+            >
+              <PushPinIcon
+                size={16}
+                weight={activeNote.pinned ? "fill" : "regular"}
+                color={activeNote.pinned ? "#ffd700" : "#fff9"}
+              />
+            </button>
+          </h3>
           <textarea
             className={[globalStyles.container, styles.textarea].join(" ")}
             value={activeNote.content}
