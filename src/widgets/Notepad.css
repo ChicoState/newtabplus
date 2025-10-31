@@ -3,13 +3,17 @@
   height: 100%;
   display: flex;
   flex-direction: column;
-  padding: 12px;
+  padding: 8px;
 }
 
 .title {
-  font-size: 1.2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  font-size: 1rem;
   font-weight: 700;
-  margin-bottom: 10px;
+  padding: 4px;
   color: #fffc;
   text-align: center;
 }
@@ -37,4 +41,118 @@
 .textarea:focus {
   border-color: #fff4;
   background-color: #0002;
+}
+
+/* Tabs container */
+.tabs {
+  display: flex;
+  border-bottom: 1px solid #fff3;
+  overflow: hidden;
+  flex-wrap: wrap;
+}
+
+/* Individual tabs */
+.tab {
+  flex: 0 1 auto;
+  min-width: 40px;
+  max-width: 200px;
+  padding: 4px 8px;
+  margin-right: 4px;
+  border-radius: 8px 8px 0 0;
+  background-color: transparent;
+  color: #fffc;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  font-size: 0.8rem;
+  transition:
+    flex 0.2s ease,
+    background-color 0.2s;
+}
+
+.tab:hover {
+  background-color: #fff1;
+}
+
+.activeTab {
+  background-color: #fff2;
+  font-weight: 600;
+  flex: 1 0 auto;
+}
+
+.tab span {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex-shrink: 1;
+}
+
+/* Close button inside tabs */
+.closeBtn {
+  border: none;
+  background: none;
+  color: #fff9;
+  cursor: pointer;
+  font-size: 0.9rem;
+  flex-shrink: 0;
+}
+
+.closeBtn:hover {
+  color: #fff;
+}
+
+/* Add button */
+.addBtn {
+  flex-shrink: 0;
+  /*height: 100%;*/
+  padding: 4px 8px;
+  margin-left: 6px;
+  border: none;
+  border-radius: 8px 8px 0 0;
+  background-color: #fff1;
+  color: #fff;
+  cursor: pointer;
+  font-size: 1.1rem;
+  transition: background-color 0.2s;
+}
+
+.addBtn:hover {
+  background-color: #fff2;
+}
+
+/* Inline rename input */
+.renameInput {
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #fff;
+  font-weight: 600;
+  font-family: "Inter", sans-serif;
+  font-size: 0.95rem;
+  width: 100px;
+  font-size: 0.8rem;
+  background-color: #0004;
+  border-radius: 4px;
+  padding: 2px 4px;
+}
+
+.renameInput:focus {
+  background-color: #0006;
+}
+
+.pinBtn {
+  border: none;
+  background: none;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  transition: transform 0.2s ease;
+}
+
+.pinBtn:hover {
+  transform: scale(1.2);
 }

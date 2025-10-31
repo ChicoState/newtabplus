@@ -6,14 +6,14 @@
   flex-direction: column;
   align-items: stretch; /* stretch title and list to full width */
   justify-content: flex-start;
-  padding: 12px;
+  padding: 8px;
   box-sizing: border-box;
   overflow: hidden;
 }
 
 /* Title at the top */
 .title {
-  font-size: 1.2rem;
+  font-size: 1rem;
   font-weight: 700;
   margin-bottom: 10px;
   color: #fffc;
@@ -106,26 +106,35 @@
   padding: 6px 8px;
   border-radius: 6px;
   font-size: 0.95rem;
+  background-color: #fff0;
   color: #fffc;
   outline: none;
-  transition: border-color 0.2s;
+  transition:
+    border-color 0.2s,
+    background-color 0.2s;
 }
 
 .todo-input-container input:focus {
-  border-color: #fff4; /* green accent on focus */
+  border-color: #fff4;
+  background-color: #0002;
+}
+
+.todo-input-container input::placeholder {
+  color: #fff6;
 }
 
 .todo-input-container button {
   padding: 6px 12px;
   border: 1px solid #fff2;
   border-radius: 6px;
-  background-color: #fff4;
-  color: #fff;
+  background-color: #fff2;
+  color: #fffa;
   font-weight: 600;
   cursor: pointer;
-  transition: background 0.2s;
+  transition: background-color 0.2s;
 }
 
 .todo-input-container button:hover {
-  background-color: #fff6;
+  background-color: #fff4;
+  transition: background-color 0.2s;
 }
