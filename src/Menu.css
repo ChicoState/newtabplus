@@ -124,6 +124,9 @@
 }
 
 .widget-thumb {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   padding: 8px;
   max-height: 96px !important;
   zoom: 0.75;
