@@ -33,6 +33,7 @@ export default function Header() {
     setMenuOpen,
     saveTemplate,
     loadTemplate,
+    templates,
   } = useContext(AppContext);
 
   return (
@@ -102,6 +103,16 @@ export default function Header() {
         >
           <ListIcon weight="bold"></ListIcon>
           Settings
+        </button>
+
+        <button
+          className={[styles.container, styles.button].join(" ")}
+          onClick={() => {
+            console.log(templates);
+          }}
+        >
+          <WrenchIcon weight="bold"></WrenchIcon>
+          Debug
         </button>
       </div>
     </div>

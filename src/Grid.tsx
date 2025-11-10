@@ -1,5 +1,6 @@
 import React, {
   createContext,
+  RefObject,
   useContext,
   useEffect,
   useMemo,
@@ -234,12 +235,13 @@ export function Grid({
   width = 16,
   height = 8,
   children,
+  ref,
 }: {
   width: number;
   height: number;
   children?: React.ReactNode;
+  ref?: React.RefObject<HTMLDivElement>;
 }) {
-  const ref = useRef<HTMLDivElement>(null);
   const [cellSize, setCellSize] = useState(0);
   const { editing, deleting } = useContext(AppContext);
 

@@ -1,9 +1,10 @@
 import React, { useContext, useEffect, useState } from "react";
 import Draggable from "./Drag";
 import WidgetMap from "./WidgetMap";
-import { AppContext } from "./App";
+import { Template, AppContext } from "./App";
 import globalStyles from "./App.css";
 import styles from "./Menu.css";
+import { XIcon, EyeIcon, EyeClosedIcon } from "@phosphor-icons/react";
 
 function MenuItem<T>({
   name,
@@ -70,6 +71,7 @@ function WidgetList() {
           <div
             key={i}
             className={[globalStyles.container, styles.widgetThumb].join(" ")}
+            title={toReadableString(key)}
             style={{
               minHeight: value.size.height * 32 * 2 + "px",
             }}
@@ -103,11 +105,7 @@ function WidgetSettings() {
             {Object.entries(state.settings).map(([key, value], i) => (
               <MenuItem
                 key={i}
-                name={key
-                  .replace(/([A-Z])/g, (match) => ` ${match}`)
-                  .replace(/([A-Za-z])(?=\d)/g, "$1 ")
-                  .replace(/^./, (match) => match.toUpperCase())
-                  .trim()}
+                name={toReadableString(key)}
                 initialValue={value}
                 onChange={(v) => {
                   state.settings[key] = v;
@@ -118,6 +116,71 @@ function WidgetSettings() {
               />
             ))}
           </React.Fragment>
+        );
+      })}
+    </>
+  );
+}
+
+function TemplateList() {
+  const { templates, activeTemplate, loadTemplate } = useContext(AppContext);
+  const [visibleImage, setVisibleImage] = useState(null);
+
+  return (
+    <>
+      {templates.map((template, i) => {
+        const isActive = i === activeTemplate;
+        const showImage = i === visibleImage;
+
+        return (
+          <div
+            className={[
+              globalStyles.container,
+              styles.templateItem,
+              isActive ? styles.active : "",
+            ].join(" ")}
+            onClick={() => {
+              console.log(`Loading template ${template.name}`);
+              loadTemplate(i);
+            }}
+            key={i}
+          >
+            <div
+              className={[
+                showImage ? globalStyles.container : "",
+                styles.templateHeader,
+              ].join(" ")}
+            >
+              <span className={styles.itemName}>
+                {template.name || "Untitled"}
+              </span>
+              <div style={{ display: "flex", gap: "4px" }}>
+                <button
+                  className={[globalStyles.container, globalStyles.button].join(
+                    " ",
+                  )}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    if (showImage) setVisibleImage(null);
+                    else setVisibleImage(i);
+                  }}
+                >
+                  <EyeIcon size={14} weight={"bold"}></EyeIcon>
+                </button>
+
+                <button
+                  className={[globalStyles.container, globalStyles.button].join(
+                    " ",
+                  )}
+                >
+                  <XIcon size={14} weight={"bold"}></XIcon>
+                </button>
+              </div>
+            </div>
+            {showImage && (
+              <img src={template.image} style={{ zoom: 0.5 }}></img>
+            )}
+          </div>
         );
       })}
     </>
@@ -164,9 +227,18 @@ export default function Menu({ active }: { active: boolean }) {
       </div>
       {activeTab === MenuTab.Widget && <WidgetSettings></WidgetSettings>}
       {activeTab === MenuTab.Add && active && <WidgetList></WidgetList>}
-      {![MenuTab.Widget, MenuTab.Add].includes(activeTab) && (
+      {activeTab === MenuTab.Template && <TemplateList></TemplateList>}
+      {![MenuTab.Widget, MenuTab.Add, MenuTab.Template].includes(activeTab) && (
         <span>No Settings Available</span>
       )}
     </div>
   );
+}
+
+function toReadableString(str: string) {
+  return str
+    .replace(/([A-Z])/g, (match) => ` ${match}`)
+    .replace(/([A-Za-z])(?=\d)/g, "$1 ")
+    .replace(/^./, (match) => match.toUpperCase())
+    .trim();
 }
