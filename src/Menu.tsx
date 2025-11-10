@@ -61,7 +61,8 @@ function MenuItem<T>({
 }
 
 function WidgetList() {
-  const { setEditing, setMenuOpen, addWidget } = useContext(AppContext);
+  const { setEditing, setDeleting, setMenuOpen, addWidget } =
+    useContext(AppContext);
 
   return (
     <div className={styles.widgetList}>
@@ -77,6 +78,7 @@ function WidgetList() {
             }}
             onClick={() => {
               setEditing(true);
+              setDeleting(false);
               setMenuOpen(false);
               addWidget(key);
             }}
