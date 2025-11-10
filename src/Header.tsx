@@ -33,6 +33,7 @@ export default function Header() {
     setMenuOpen,
     saveTemplate,
     loadTemplate,
+    templates,
   } = useContext(AppContext);
 
   return (

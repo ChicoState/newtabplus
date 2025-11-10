@@ -1,25 +1,37 @@
-import React, { createContext, useEffect, useState } from "react";
+import React, { createContext, useEffect, useRef, useState } from "react";
 import Widget, { WidgetState } from "./Widget";
 import WidgetMap from "./WidgetMap";
 import Header from "./Header";
 import Menu from "./Menu";
 import { Grid } from "./Grid";
 import { nanoid } from "nanoid";
+import { toPng } from "html-to-image";
 import styles from "./App.css";
+
+export interface Template {
+  name: string;
+  image: string;
+  widgets: WidgetState<any>[];
+  // settings:
+  // theme:
+}
 
 interface AppContextType {
   widgets: WidgetState<any>[];
+  templates: Template[];
+  activeTemplate: number;
   editing: boolean;
   deleting: boolean;
   menuOpen: boolean;
 
   setWidgets: React.Dispatch<React.SetStateAction<WidgetState<any>[]>>;
+  setTemplates: React.Dispatch<React.SetStateAction<Template[]>>;
   setEditing: React.Dispatch<React.SetStateAction<boolean>>;
   setDeleting: React.Dispatch<React.SetStateAction<boolean>>;
   setMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
 
-  saveTemplate: () => void;
-  loadTemplate: () => boolean;
+  saveTemplate: (name?: string) => void;
+  loadTemplate: (index?: number) => void;
 
   addWidget: (type: string) => WidgetState<any>;
   removeWidget: (id: string) => void;
@@ -49,26 +61,64 @@ const App = () => {
   const [deleting, setDeleting] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [widgets, setWidgets] = useState<WidgetState<any>[]>([]);
+  const [templates, setTemplates] = useState<Template[]>([]);
+  const [activeTemplate, setActiveTemplate] = useState(0);
 
-  // TODO: This system will eventually keep an
-  // array of templates and store the index of
-  // the active template. For the time being,
-  // this uses a single template structure.
+  const gridRef = useRef(null);
 
-  function saveTemplate() {
-    localStorage.setItem("template", JSON.stringify(widgets));
-  }
+  async function saveTemplate(name?: string) {
+    const template = {
+      name: name ?? templates[activeTemplate]?.name ?? "Default",
+      image: await toPng(gridRef.current, {
+        canvasWidth: 240,
+        canvasHeight: 135,
+      }),
+      widgets: structuredClone(widgets),
+    };
 
-  function loadTemplate(): boolean {
-    const template = localStorage.getItem("template");
-
-    if (template === null) {
-      console.warn("No template stored");
-      return false;
+    if (name === null || name === undefined) {
+      const _templates = [...templates];
+      _templates[activeTemplate] = template;
+      setTemplates([..._templates]);
+    } else {
+      setTemplates([...templates, template]);
+      setActiveTemplate(templates.length);
     }
 
-    setWidgets(JSON.parse(template) as WidgetState<any>[]);
-    return true;
+    writeTemplates();
+  }
+
+  function loadTemplate(index?: number) {
+    const i = index ?? activeTemplate;
+    if (i >= templates.length) return;
+    setWidgets(templates[i].widgets);
+    setActiveTemplate(i);
+    localStorage.setItem("activeTemplate", JSON.stringify(i));
+  }
+
+  function readTemplates() {
+    const _templates: Template[] =
+      JSON.parse(localStorage.getItem("templates")) ?? [];
+    const _activeTemplate: number =
+      JSON.parse(localStorage.getItem("activeTemplate")) ?? 0;
+
+    if (_templates.length === 0) {
+      _templates.push({
+        name: "Default",
+        image: null,
+        widgets: structuredClone(FallbackTemplate),
+      });
+    }
+
+    setTemplates(_templates);
+    setActiveTemplate(_activeTemplate);
+
+    setWidgets(_templates[_activeTemplate].widgets);
+  }
+
+  function writeTemplates() {
+    localStorage.setItem("templates", JSON.stringify(templates));
+    localStorage.setItem("activeTemplate", JSON.stringify(activeTemplate));
   }
 
   function addWidget(type: string) {
@@ -94,9 +144,7 @@ const App = () => {
   }
 
   useEffect(() => {
-    if (!loadTemplate()) {
-      setWidgets(FallbackTemplate);
-    }
+    readTemplates();
   }, []);
 
   return (
@@ -109,11 +157,14 @@ const App = () => {
       <AppContext.Provider
         value={{
           widgets,
+          templates,
+          activeTemplate,
           editing,
           deleting,
           menuOpen,
 
           setWidgets,
+          setTemplates,
           setEditing,
           setDeleting,
           setMenuOpen,
@@ -126,7 +177,7 @@ const App = () => {
         }}
       >
         <Header></Header>
-        <Grid width={24} height={12}>
+        <Grid width={24} height={12} ref={gridRef}>
           {widgets.map((state) => {
             const map = WidgetMap[state.type];
             const Component = map.component;

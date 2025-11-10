@@ -1,5 +1,6 @@
 import React, {
   createContext,
+  RefObject,
   useContext,
   useEffect,
   useMemo,
@@ -100,6 +101,8 @@ export function GridItem({
   }
 
   function handleDrag(x: number, y: number, drag: boolean) {
+    if (deleting) return;
+
     let [gridX, gridY] = pixelToGrid(x, y);
     gridX = Math.min(ctx.width - size.width, Math.max(0, gridX));
     gridY = Math.min(ctx.height - size.height, Math.max(0, gridY));
@@ -232,12 +235,13 @@ export function Grid({
   width = 16,
   height = 8,
   children,
+  ref,
 }: {
   width: number;
   height: number;
   children?: React.ReactNode;
+  ref?: React.RefObject<HTMLDivElement>;
 }) {
-  const ref = useRef<HTMLDivElement>(null);
   const [cellSize, setCellSize] = useState(0);
   const { editing, deleting } = useContext(AppContext);
 
