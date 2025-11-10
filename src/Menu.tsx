@@ -92,30 +92,34 @@ function WidgetSettings() {
 
   return (
     <>
-      {widgets.map((state, i) => (
-        <React.Fragment key={i}>
-          <span>
-            {state.type.replace(/^./, (match) => match.toUpperCase())}
-          </span>
-          {Object.entries(state.settings).map(([key, value], i) => (
-            <MenuItem
-              key={i}
-              name={key
-                .replace(/([A-Z])/g, (match) => ` ${match}`)
-                .replace(/([A-Za-z])(?=\d)/g, "$1 ")
-                .replace(/^./, (match) => match.toUpperCase())
-                .trim()}
-              initialValue={value}
-              onChange={(v) => {
-                state.settings[key] = v;
-                setWidgets([...widgets]);
+      {widgets.map((state, i) => {
+        if (Object.keys(state.settings).length === 0) return;
 
-                if (!editing) saveTemplate();
-              }}
-            />
-          ))}
-        </React.Fragment>
-      ))}
+        return (
+          <React.Fragment key={i}>
+            <span>
+              {state.type.replace(/^./, (match) => match.toUpperCase())}
+            </span>
+            {Object.entries(state.settings).map(([key, value], i) => (
+              <MenuItem
+                key={i}
+                name={key
+                  .replace(/([A-Z])/g, (match) => ` ${match}`)
+                  .replace(/([A-Za-z])(?=\d)/g, "$1 ")
+                  .replace(/^./, (match) => match.toUpperCase())
+                  .trim()}
+                initialValue={value}
+                onChange={(v) => {
+                  state.settings[key] = v;
+                  setWidgets([...widgets]);
+
+                  if (!editing) saveTemplate();
+                }}
+              />
+            ))}
+          </React.Fragment>
+        );
+      })}
     </>
   );
 }
