@@ -243,7 +243,7 @@ export function Grid({
   ref?: React.RefObject<HTMLDivElement>;
 }) {
   const [cellSize, setCellSize] = useState(0);
-  const { editing, deleting } = useContext(AppContext);
+  const { editing, deleting, hidden } = useContext(AppContext);
 
   useEffect(() => {
     if (!ref.current) return;
@@ -271,7 +271,10 @@ export function Grid({
   }, [width, height]);
 
   return (
-    <div className={styles.grid} ref={ref}>
+    <div
+      className={[styles.grid, hidden ? styles.hidden : ""].join(" ")}
+      ref={ref}
+    >
       {editing && (
         <div
           className={styles.gridSlots}

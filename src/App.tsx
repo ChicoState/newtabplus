@@ -22,12 +22,14 @@ interface AppContextType {
   activeTemplate: number;
   editing: boolean;
   deleting: boolean;
+  hidden: boolean;
   menuOpen: boolean;
 
   setWidgets: React.Dispatch<React.SetStateAction<WidgetState<any>[]>>;
   setTemplates: React.Dispatch<React.SetStateAction<Template[]>>;
   setEditing: React.Dispatch<React.SetStateAction<boolean>>;
   setDeleting: React.Dispatch<React.SetStateAction<boolean>>;
+  setHidden: React.Dispatch<React.SetStateAction<boolean>>;
   setMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
 
   saveTemplate: (name?: string) => void;
@@ -59,6 +61,7 @@ const FallbackTemplate: WidgetState<any>[] = [
 const App = () => {
   const [editing, setEditing] = useState(false);
   const [deleting, setDeleting] = useState(false);
+  const [hidden, setHidden] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [widgets, setWidgets] = useState<WidgetState<any>[]>([]);
   const [templates, setTemplates] = useState<Template[]>([]);
@@ -161,12 +164,14 @@ const App = () => {
           activeTemplate,
           editing,
           deleting,
+          hidden,
           menuOpen,
 
           setWidgets,
           setTemplates,
           setEditing,
           setDeleting,
+          setHidden,
           setMenuOpen,
 
           saveTemplate,

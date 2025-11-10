@@ -8,6 +8,17 @@
   position: relative;
   width: 100%;
   height: 100%;
+  opacity: 1;
+  transition: opacity 0.25s;
+}
+
+.grid.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.grid.hidden * {
+  pointer-events: none;
 }
 
 .grid-slots {
