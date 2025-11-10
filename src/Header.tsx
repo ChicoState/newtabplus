@@ -104,16 +104,6 @@ export default function Header() {
           <ListIcon weight="bold"></ListIcon>
           Settings
         </button>
-
-        <button
-          className={[styles.container, styles.button].join(" ")}
-          onClick={() => {
-            console.log(templates);
-          }}
-        >
-          <WrenchIcon weight="bold"></WrenchIcon>
-          Debug
-        </button>
       </div>
     </div>
   );
