@@ -82,6 +82,7 @@ const App = () => {
       setTemplates([..._templates]);
     } else {
       setTemplates([...templates, template]);
+      setActiveTemplate(templates.length);
     }
 
     writeTemplates();
@@ -92,6 +93,7 @@ const App = () => {
     if (i >= templates.length) return;
     setWidgets(templates[i].widgets);
     setActiveTemplate(i);
+    localStorage.setItem("activeTemplate", JSON.stringify(i));
   }
 
   function readTemplates() {

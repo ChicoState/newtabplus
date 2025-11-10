@@ -123,7 +123,8 @@ function WidgetSettings() {
 }
 
 function TemplateList() {
-  const { templates, activeTemplate, loadTemplate } = useContext(AppContext);
+  const { templates, activeTemplate, saveTemplate, loadTemplate } =
+    useContext(AppContext);
   const [visibleImage, setVisibleImage] = useState(null);
 
   return (
@@ -183,6 +184,18 @@ function TemplateList() {
           </div>
         );
       })}
+      <button
+        className={[
+          globalStyles.container,
+          globalStyles.button,
+          styles.saveButton,
+        ].join(" ")}
+        onClick={() => {
+          saveTemplate("New Template");
+        }}
+      >
+        Save Template
+      </button>
     </>
   );
 }

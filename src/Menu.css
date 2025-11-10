@@ -159,12 +159,9 @@
     border-color 0.15s;
 }
 
-.template-item:hover {
-  background-color: transparent;
-  border-color: #fff4;
-}
-
+.template-item:hover,
 .template-item.active {
+  background-color: transparent;
   border-color: #fff4;
 }
 
@@ -180,4 +177,10 @@
   align-items: center;
   justify-content: space-between;
   height: min-content;
+}
+
+.save-button {
+  font-size: 0.9rem;
+  margin: 0 auto;
+  height: 32px;
 }
