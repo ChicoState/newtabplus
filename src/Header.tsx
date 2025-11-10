@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { AppContext } from "./App";
 import styles from "./App.css";
 
@@ -10,6 +10,8 @@ import {
   ListIcon,
   WrenchIcon,
   EraserIcon,
+  EyeIcon,
+  EyeClosedIcon,
   ArrowsOutCardinalIcon,
 } from "@phosphor-icons/react";
 
@@ -27,8 +29,10 @@ export default function Header() {
   const {
     editing,
     deleting,
+    hidden,
     setEditing,
     setDeleting,
+    setHidden,
     menuOpen,
     setMenuOpen,
     saveTemplate,
@@ -43,6 +47,7 @@ export default function Header() {
           <button
             className={[styles.container, styles.button].join(" ")}
             onClick={() => {
+              setHidden(false);
               setEditing(true);
             }}
           >
@@ -103,6 +108,20 @@ export default function Header() {
         >
           <ListIcon weight="bold"></ListIcon>
           Settings
+        </button>
+
+        <button
+          className={[styles.container, styles.button].join(" ")}
+          style={{ padding: "6px" }}
+          onClick={() => {
+            setHidden(!hidden);
+          }}
+        >
+          {hidden ? (
+            <EyeClosedIcon weight="bold"></EyeClosedIcon>
+          ) : (
+            <EyeIcon weight="bold"></EyeIcon>
+          )}
         </button>
       </div>
     </div>
