@@ -31,6 +31,7 @@
 .menu > span {
   color: #fff8;
   font-weight: 500;
+  font-size: 0.9rem;
   text-align: center;
 }
 
@@ -76,7 +77,7 @@
 .item-name {
   color: #fffa;
   font-weight: 500;
-  font-size: 0.8rem;
+  font-size: 0.9rem;
   margin-left: 8px;
 }
 
@@ -123,16 +124,63 @@
 }
 
 .widget-thumb {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   padding: 8px;
   max-height: 96px !important;
   zoom: 0.75;
+  cursor: pointer;
+
+  transition:
+    background-color 0.15s,
+    border-color 0.15s;
 }
 
 .widget-thumb:hover {
+  background-color: transparent;
   border-color: #fff4;
 }
 
-.widget-thumb > div > * {
+.widget-thumb > * {
   pointer-events: none;
   user-select: none;
+}
+
+.template-item {
+  display: flex;
+  flex-flow: column nowrap;
+  height: min-content;
+  /*padding: 4px;*/
+  cursor: pointer;
+
+  transition:
+    background-color 0.15s,
+    border-color 0.15s;
+}
+
+.template-item:hover,
+.template-item.active {
+  background-color: transparent;
+  border-color: #fff4;
+}
+
+.template-item.active span {
+  font-weight: 500;
+  color: #fffc;
+}
+
+.template-header {
+  display: flex;
+  flex-flow: row nowrap;
+  padding: 4px;
+  align-items: center;
+  justify-content: space-between;
+  height: min-content;
+}
+
+.save-button {
+  font-size: 0.9rem;
+  margin: 0 auto;
+  height: 32px;
 }
