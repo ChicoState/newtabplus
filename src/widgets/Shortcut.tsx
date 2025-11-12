@@ -1,10 +1,15 @@
 import React, { useEffect, useState } from "react";
-import Widget from "../Widget";
+import { WidgetState } from "../Widget";
 import { LinkIcon } from "@phosphor-icons/react";
 import globalStyles from "../App.css";
 import styles from "./Shortcut.css";
 
-export function Shortcut({ url = "" }: { url?: string }) {
+export interface ShortcutSettings {
+  website: string;
+  openInNewTab: boolean;
+}
+
+export function Shortcut({ settings }: WidgetState<ShortcutSettings>) {
   const [loaded, setLoaded] = useState(false);
 
   // useEffect(() => {
@@ -14,13 +19,14 @@ export function Shortcut({ url = "" }: { url?: string }) {
   return (
     <a
       className={[globalStyles.container, styles.shortcut].join(" ")}
-      href={url}
-      title={url}
+      href={settings.website}
+      title={settings.website}
+      target={settings.openInNewTab ? "_blank" : "_self"}
     >
       {!loaded && <LinkIcon className={styles.icon} weight="bold"></LinkIcon>}
       <img
         className={styles.icon}
-        src={url + "/favicon.ico"}
+        src={settings.website + "/favicon.ico"}
         style={{
           display: loaded ? "initial" : "none",
         }}
