@@ -2,7 +2,7 @@ import { BatteryWidget } from "./widgets/BatteryWidget";
 import { Clock, ClockSettings } from "./widgets/Clock";
 import { Notepad } from "./widgets/Notepad";
 import { Search, SearchSettings } from "./widgets/Search";
-import { Shortcut } from "./widgets/Shortcut";
+import { Shortcut, ShortcutSettings } from "./widgets/Shortcut";
 import { ToDoList } from "./widgets/ToDoList";
 import { Weather } from "./widgets/Weather";
 
@@ -38,6 +38,10 @@ const WidgetMap = {
     component: Shortcut,
     resizable: { x: false, y: false },
     size: { width: 1, height: 1 },
+    settings: {
+      website: "",
+      openInNewTab: false,
+    } satisfies ShortcutSettings,
   },
 
   todo: {
