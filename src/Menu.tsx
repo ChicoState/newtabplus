@@ -4,7 +4,7 @@ import WidgetMap from "./WidgetMap";
 import { Template, AppContext } from "./App";
 import globalStyles from "./App.css";
 import styles from "./Menu.css";
-import { XIcon, EyeIcon, EyeClosedIcon } from "@phosphor-icons/react";
+import { XIcon, EyeIcon, PushPinIcon } from "@phosphor-icons/react";
 
 function MenuItem<T>({
   name,
@@ -125,8 +125,13 @@ function WidgetSettings() {
 }
 
 function TemplateList() {
-  const { templates, activeTemplate, saveTemplate, loadTemplate } =
-    useContext(AppContext);
+  const {
+    templates,
+    activeTemplate,
+    saveTemplate,
+    loadTemplate,
+    setTemplates,
+  } = useContext(AppContext);
   const [visibleImage, setVisibleImage] = useState(null);
 
   return (
@@ -169,6 +174,23 @@ function TemplateList() {
                   }}
                 >
                   <EyeIcon size={14} weight={"bold"}></EyeIcon>
+                </button>
+
+                <button
+                  className={[globalStyles.container, globalStyles.button].join(
+                    " ",
+                  )}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    template.pinned = !template.pinned;
+                    setTemplates([...templates]);
+                  }}
+                >
+                  {template.pinned ? (
+                    <PushPinIcon size={14} weight={"fill"}></PushPinIcon>
+                  ) : (
+                    <PushPinIcon size={14} weight={"bold"}></PushPinIcon>
+                  )}
                 </button>
 
                 <button

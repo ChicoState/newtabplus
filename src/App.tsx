@@ -12,6 +12,7 @@ export interface Template {
   name: string;
   image: string;
   widgets: WidgetState<any>[];
+  pinned: boolean;
   // settings:
   // theme:
 }
@@ -77,6 +78,7 @@ const App = () => {
         canvasHeight: 135,
       }),
       widgets: structuredClone(widgets),
+      pinned: false,
     };
 
     if (name === null || name === undefined) {
@@ -110,6 +112,7 @@ const App = () => {
         name: "Default",
         image: null,
         widgets: structuredClone(FallbackTemplate),
+        pinned: false,
       });
     }
 
