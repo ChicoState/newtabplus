@@ -15,6 +15,7 @@
     "nanoid": "^5.1.6",
     "openmeteo": "^1.2.1",
     "react": "^19.1.1",
+    "react-calendar": "^6.0.0",
     "react-dom": "^19.1.1",
     "typescript": "^5.9.2"
   },
