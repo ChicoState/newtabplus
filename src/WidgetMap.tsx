@@ -5,6 +5,8 @@ import { Search, SearchSettings } from "./widgets/Search";
 import { Shortcut, ShortcutSettings } from "./widgets/Shortcut";
 import { ToDoList } from "./widgets/ToDoList";
 import { Weather } from "./widgets/Weather";
+//import { CountdownTimer } from "./widgets/TimerW";
+import { TimerWidget } from "./widgets/TimerW2";
 
 const WidgetMap = {
   battery: {
@@ -24,7 +26,7 @@ const WidgetMap = {
 
   notepad: {
     component: Notepad,
-    size: { width: 4, height: 4 },
+    size: { width: 4, height: 2 },
   },
 
   search: {
@@ -46,12 +48,18 @@ const WidgetMap = {
 
   todo: {
     component: ToDoList,
-    size: { width: 4, height: 4 },
+    size: { width: 4, height: 2 },
   },
 
   weather: {
     component: Weather,
     size: { width: 6, height: 1 },
+  },
+
+  timer: {
+    component: TimerWidget,
+    //component: CountdownTimer,
+    size: { width: 4, height: 1 },
   },
 };
 
