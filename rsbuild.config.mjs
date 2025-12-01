@@ -5,7 +5,7 @@ import { pluginTypedCSSModules } from "@rsbuild/plugin-typed-css-modules";
 export default defineConfig({
   plugins: [pluginReact(), pluginTypedCSSModules()],
   output: {
-    assetPrefix: "/newtabplus/",
+    assetPrefix: ".",
     cssModules: {
       auto: (resource) => {
         return resource.includes("") || resource.includes(".module.");
