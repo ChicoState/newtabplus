@@ -1,8 +1,0 @@
-{
-  "compilerOptions": {
-    // "verbatimModuleSyntax": true,
-    "jsx": "react",
-    "esModuleInterop": true,
-    "target": "ES2017"
-  }
-}
