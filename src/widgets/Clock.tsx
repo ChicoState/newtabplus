@@ -4,6 +4,7 @@ import styles from "./Clock.css";
 
 export interface ClockSettings {
   use24HourClock: boolean;
+  showAMPM: boolean;
   showDate: boolean;
   showYear: boolean;
 }
@@ -28,7 +29,12 @@ export function Clock({ settings }: WidgetState<ClockSettings>) {
           ? date.getHours()
           : date.getHours() % 12 || 12) +
           ":" +
-          date.getMinutes().toString().padStart(2, "0") + (date.getHours() > 11 ? " PM" : " AM")}
+          date.getMinutes().toString().padStart(2, "0") +
+          (!settings.use24HourClock && settings.showAMPM
+            ? date.getHours() > 11
+              ? " PM"
+              : " AM"
+            : "")}
       </span>
       {settings.showDate && (
         <span className={styles.date}>
