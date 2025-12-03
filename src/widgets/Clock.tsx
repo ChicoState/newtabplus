@@ -28,7 +28,7 @@ export function Clock({ settings }: WidgetState<ClockSettings>) {
           ? date.getHours()
           : date.getHours() % 12 || 12) +
           ":" +
-          date.getMinutes().toString().padStart(2, "0")}
+          date.getMinutes().toString().padStart(2, "0") + (date.getHours() > 11 ? " PM" : " AM")}
       </span>
       {settings.showDate && (
         <span className={styles.date}>
