@@ -12,11 +12,27 @@
   height: calc(100% - 32px - 16px);
   padding: 8px;
 
+  overflow-y: auto;
+
   opacity: 0;
   transform: translateX(calc(100% + 16px));
   transition:
     transform 0.25s ease-in,
     opacity 0.15s ease-in;
+}
+
+::-webkit-scrollbar {
+  width: 4px;
+  background-color: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 2px;
+  background-color: #fff4;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #fff6;
 }
 
 .menu.active {

@@ -43,6 +43,22 @@ export default function Header() {
   return (
     <div className={styles.header}>
       <div className={styles.row}>
+        {templates.map((template, i) => {
+          if (template.pinned) {
+            return (
+              <button
+                className={[styles.container, styles.button].join(" ")}
+                onClick={() => {
+                  loadTemplate(i);
+                }}
+              >
+                {template.name}
+              </button>
+            );
+          }
+        })}
+      </div>
+      <div className={styles.row}>
         {!editing && (
           <button
             className={[styles.container, styles.button].join(" ")}
