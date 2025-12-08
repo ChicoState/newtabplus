@@ -1,9 +1,10 @@
 import React, { useContext, useEffect, useState } from "react";
 import Draggable from "./Drag";
 import WidgetMap from "./WidgetMap";
-import { AppContext } from "./App";
+import { Template, AppContext } from "./App";
 import globalStyles from "./App.css";
 import styles from "./Menu.css";
+import { XIcon, EyeIcon, PushPinIcon } from "@phosphor-icons/react";
 
 function MenuItem<T>({
   name,
@@ -60,7 +61,8 @@ function MenuItem<T>({
 }
 
 function WidgetList() {
-  const { setEditing, setMenuOpen, addWidget } = useContext(AppContext);
+  const { setEditing, setDeleting, setMenuOpen, addWidget } =
+    useContext(AppContext);
 
   return (
     <div className={styles.widgetList}>
@@ -70,23 +72,18 @@ function WidgetList() {
           <div
             key={i}
             className={[globalStyles.container, styles.widgetThumb].join(" ")}
+            title={toReadableString(key)}
             style={{
               minHeight: value.size.height * 32 * 2 + "px",
             }}
             onClick={() => {
               setEditing(true);
+              setDeleting(false);
               setMenuOpen(false);
               addWidget(key);
             }}
           >
-            {/*<Draggable
-              onDrag={() => {
-                setEditing(true);
-                setMenuOpen(false);
-              }}
-            >*/}
             <Component {...value}></Component>
-            {/*</Draggable>*/}
           </div>
         );
       })}
@@ -99,30 +96,130 @@ function WidgetSettings() {
 
   return (
     <>
-      {widgets.map((state, i) => (
-        <React.Fragment key={i}>
-          <span>
-            {state.type.replace(/^./, (match) => match.toUpperCase())}
-          </span>
-          {Object.entries(state.settings).map(([key, value], i) => (
-            <MenuItem
-              key={i}
-              name={key
-                .replace(/([A-Z])/g, (match) => ` ${match}`)
-                .replace(/([A-Za-z])(?=\d)/g, "$1 ")
-                .replace(/^./, (match) => match.toUpperCase())
-                .trim()}
-              initialValue={value}
-              onChange={(v) => {
-                state.settings[key] = v;
-                setWidgets([...widgets]);
+      {widgets.map((state, i) => {
+        if (Object.keys(state.settings).length === 0) return;
 
-                if (!editing) saveTemplate();
-              }}
-            />
-          ))}
-        </React.Fragment>
-      ))}
+        return (
+          <React.Fragment key={i}>
+            <span>
+              {state.type.replace(/^./, (match) => match.toUpperCase())}
+            </span>
+            {Object.entries(state.settings).map(([key, value], i) => (
+              <MenuItem
+                key={i}
+                name={toReadableString(key)}
+                initialValue={value}
+                onChange={(v) => {
+                  state.settings[key] = v;
+                  setWidgets([...widgets]);
+
+                  if (!editing) saveTemplate();
+                }}
+              />
+            ))}
+          </React.Fragment>
+        );
+      })}
+    </>
+  );
+}
+
+function TemplateList() {
+  const {
+    templates,
+    activeTemplate,
+    saveTemplate,
+    loadTemplate,
+    setTemplates,
+  } = useContext(AppContext);
+  const [visibleImage, setVisibleImage] = useState(null);
+
+  return (
+    <>
+      {templates.map((template, i) => {
+        const isActive = i === activeTemplate;
+        const showImage = i === visibleImage;
+
+        return (
+          <div
+            className={[
+              globalStyles.container,
+              styles.templateItem,
+              isActive ? styles.active : "",
+            ].join(" ")}
+            onClick={() => {
+              console.log(`Loading template ${template.name}`);
+              loadTemplate(i);
+            }}
+            key={i}
+          >
+            <div
+              className={[
+                showImage ? globalStyles.container : "",
+                styles.templateHeader,
+              ].join(" ")}
+            >
+              <span className={styles.itemName}>
+                {template.name || "Untitled"}
+              </span>
+              <div style={{ display: "flex", gap: "4px" }}>
+                <button
+                  className={[globalStyles.container, globalStyles.button].join(
+                    " ",
+                  )}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    if (showImage) setVisibleImage(null);
+                    else setVisibleImage(i);
+                  }}
+                >
+                  <EyeIcon size={14} weight={"bold"}></EyeIcon>
+                </button>
+
+                <button
+                  className={[globalStyles.container, globalStyles.button].join(
+                    " ",
+                  )}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    template.pinned = !template.pinned;
+                    setTemplates([...templates]);
+                  }}
+                >
+                  {template.pinned ? (
+                    <PushPinIcon size={14} weight={"fill"}></PushPinIcon>
+                  ) : (
+                    <PushPinIcon size={14} weight={"bold"}></PushPinIcon>
+                  )}
+                </button>
+
+                <button
+                  className={[globalStyles.container, globalStyles.button].join(
+                    " ",
+                  )}
+                >
+                  <XIcon size={14} weight={"bold"}></XIcon>
+                </button>
+              </div>
+            </div>
+            {showImage && (
+              <img src={template.image} style={{ zoom: 0.5 }}></img>
+            )}
+          </div>
+        );
+      })}
+      <button
+        className={[
+          globalStyles.container,
+          globalStyles.button,
+          styles.saveButton,
+        ].join(" ")}
+        onClick={() => {
+          saveTemplate("New Template");
+        }}
+      >
+        Save Template
+      </button>
     </>
   );
 }
@@ -167,9 +264,18 @@ export default function Menu({ active }: { active: boolean }) {
       </div>
       {activeTab === MenuTab.Widget && <WidgetSettings></WidgetSettings>}
       {activeTab === MenuTab.Add && active && <WidgetList></WidgetList>}
-      {![MenuTab.Widget, MenuTab.Add].includes(activeTab) && (
+      {activeTab === MenuTab.Template && <TemplateList></TemplateList>}
+      {![MenuTab.Widget, MenuTab.Add, MenuTab.Template].includes(activeTab) && (
         <span>No Settings Available</span>
       )}
     </div>
   );
+}
+
+function toReadableString(str: string) {
+  return str
+    .replace(/([A-Z])/g, (match) => ` ${match}`)
+    .replace(/([A-Za-z])(?=\d)/g, "$1 ")
+    .replace(/^./, (match) => match.toUpperCase())
+    .trim();
 }
