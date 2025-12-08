@@ -36,11 +36,11 @@ jobs:
       - name: Install dependencies
         run: npm i
 
-      - name: Test
-        run: npm run test
-
       - name: Build
         run: npm run build
+
+      - name: Test
+        run: npm run test
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
