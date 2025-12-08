@@ -1,4 +1,5 @@
 import { BatteryWidget } from "./widgets/BatteryWidget";
+import { Calendar, CalendarSettings } from "./widgets/Calendar";
 import { Clock, ClockSettings } from "./widgets/Clock";
 import { Notepad } from "./widgets/Notepad";
 import { Search, SearchSettings } from "./widgets/Search";
@@ -10,6 +11,11 @@ const WidgetMap = {
   battery: {
     component: BatteryWidget,
     size: { width: 2, height: 1 },
+  },
+
+  calendar: {
+    component: Calendar,
+    size: { width: 6, height: 6 },
   },
 
   clock: {
