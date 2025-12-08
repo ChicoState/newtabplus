@@ -15,6 +15,7 @@
 }
 
 .clock {
+  text-wrap-mode: nowrap;
   font-size: 4rem;
   font-weight: 700;
 }

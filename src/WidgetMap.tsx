@@ -17,6 +17,7 @@ const WidgetMap = {
     size: { width: 4, height: 2 },
     settings: {
       use24HourClock: false,
+      showAMPM: false,
       showDate: true,
       showYear: true,
     } satisfies ClockSettings,
