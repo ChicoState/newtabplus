@@ -56,7 +56,7 @@ export function Weather() {
     });
   }, []);
 
-  function getIcon(cloudCover: number, props?: IconProps): Icon {
+  function getIcon(cloudCover: number, props?: IconProps): React.ReactElement {
     return cloudCover <= 100 * 0.25 ? (
       <SunIcon {...props}></SunIcon>
     ) : cloudCover <= 100 * 0.625 ? (
