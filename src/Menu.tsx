@@ -183,7 +183,7 @@ function TemplateList() {
                   onClick={(e) => {
                     e.stopPropagation();
                     template.pinned = !template.pinned;
-                    setTemplates([...templates]);
+                    setTemplates(structuredClone(templates));
                   }}
                 >
                   {template.pinned ? (
@@ -193,13 +193,13 @@ function TemplateList() {
                   )}
                 </button>
 
-                <button
+                {/*<button
                   className={[globalStyles.container, globalStyles.button].join(
                     " ",
                   )}
                 >
                   <XIcon size={14} weight={"bold"}></XIcon>
-                </button>
+                </button>*/}
               </div>
             </div>
             {showImage && (
@@ -229,7 +229,7 @@ enum MenuTab {
   Add,
   General,
   Theme,
-  Template,
+  Templates,
 }
 
 export default function Menu({ active }: { active: boolean }) {
@@ -264,10 +264,10 @@ export default function Menu({ active }: { active: boolean }) {
       </div>
       {activeTab === MenuTab.Widget && <WidgetSettings></WidgetSettings>}
       {activeTab === MenuTab.Add && active && <WidgetList></WidgetList>}
-      {activeTab === MenuTab.Template && <TemplateList></TemplateList>}
-      {![MenuTab.Widget, MenuTab.Add, MenuTab.Template].includes(activeTab) && (
-        <span>No Settings Available</span>
-      )}
+      {activeTab === MenuTab.Templates && <TemplateList></TemplateList>}
+      {![MenuTab.Widget, MenuTab.Add, MenuTab.Templates].includes(
+        activeTab,
+      ) && <span>No Settings Available</span>}
     </div>
   );
 }

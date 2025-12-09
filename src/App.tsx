@@ -167,7 +167,10 @@ const App = () => {
     <div
       className={styles.content}
       onClick={(e) => {
-        if (e.target === e.currentTarget) setMenuOpen(false);
+        if (e.target === e.currentTarget) {
+          setMenuOpen(false);
+          setHidden(false);
+        }
       }}
     >
       <AppContext.Provider
