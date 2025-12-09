@@ -64,9 +64,9 @@ const App = () => {
   const [deleting, setDeleting] = useState(false);
   const [hidden, setHidden] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
-  const [widgets, setWidgets] = useState<WidgetState<any>[]>([]);
-  const [templates, setTemplates] = useState<Template[]>([]);
-  const [activeTemplate, setActiveTemplate] = useState(0);
+  let [widgets, setWidgets] = useState<WidgetState<any>[]>([]);
+  let [templates, setTemplates] = useState<Template[]>([]);
+  let [activeTemplate, setActiveTemplate] = useState(0);
 
   const gridRef = useRef(null);
 
@@ -84,10 +84,14 @@ const App = () => {
     if (name === null || name === undefined) {
       const _templates = [...templates];
       _templates[activeTemplate] = template;
-      setTemplates([..._templates]);
+
+      templates = [..._templates];
+      setTemplates(templates);
     } else {
-      setTemplates([...templates, template]);
-      setActiveTemplate(templates.length);
+      templates = [...templates, template];
+      activeTemplate = templates.length;
+      setTemplates(templates);
+      setActiveTemplate(activeTemplate);
     }
 
     writeTemplates();
@@ -96,8 +100,11 @@ const App = () => {
   function loadTemplate(index?: number) {
     const i = index ?? activeTemplate;
     if (i >= templates.length) return;
-    setWidgets(templates[i].widgets);
-    setActiveTemplate(i);
+
+    widgets = structuredClone(templates[i].widgets);
+    activeTemplate = i;
+    setWidgets(widgets);
+    setActiveTemplate(activeTemplate);
     localStorage.setItem("activeTemplate", JSON.stringify(i));
   }
 
@@ -116,10 +123,13 @@ const App = () => {
       });
     }
 
-    setTemplates(_templates);
-    setActiveTemplate(_activeTemplate);
+    templates = _templates;
+    activeTemplate = _activeTemplate;
+    setTemplates(templates);
+    setActiveTemplate(activeTemplate);
 
-    setWidgets(_templates[_activeTemplate].widgets);
+    widgets = _templates[_activeTemplate].widgets;
+    setWidgets(widgets);
   }
 
   function writeTemplates() {
