@@ -163,6 +163,15 @@ const App = () => {
     readTemplates();
   }, []);
 
+  useEffect(() => {
+    window.addEventListener("keydown", (e) => {
+      if (e.ctrlKey && e.altKey && e.key === "Backspace") {
+        localStorage.clear();
+        location.reload();
+      }
+    });
+  }, []);
+
   return (
     <div
       className={styles.content}
