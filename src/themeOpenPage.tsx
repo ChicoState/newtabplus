@@ -7,13 +7,15 @@ type Props = {
 };
 
 function OpeningTheme({ onContinue }: Props) {
-    const themes = ["Blur","Color background","Premade Layout","Light/Dark mode"];
+    const themes = ["Blur","Color background","Fonts","Light/Dark mode"];
+    const fontOptions = ["Arial", "Times New Roman", "Georgia", "Courier New", "Verdana"];
     const [index, setIndex] = React.useState(0);
     const n = themes.length;
     const left  = (index - 1 + n) % n;
     const right = (index + 1) % n;
     const [selected, setSelected] = useState<Set<number>>(new Set());
     const [lightDarkMode, setLightDarkMode] = useState<Map<number, 'light' | 'dark' | null>>(new Map());
+    const [selectedFont, setSelectedFont] = useState<string | null>(null);
     const [showError, setShowError] = useState(false);
     const isSelected = (i: number) => selected.has(i);
 
@@ -42,6 +44,20 @@ function OpeningTheme({ onContinue }: Props) {
         });
     };
 
+    const toggleFont = (i: number, font: string) => {
+        if (selectedFont === font) {
+            setSelectedFont(null);
+            setSelected(prev => {
+                const nextSelected = new Set(prev);
+                nextSelected.delete(i);
+                return nextSelected;
+            });
+        } else {
+            setSelectedFont(font);
+            setSelected(prev => new Set(prev).add(i));
+        }
+    };
+
     const handleContinue = () => {
         if (selected.size === 0) {
             setShowError(true);
@@ -55,9 +71,38 @@ function OpeningTheme({ onContinue }: Props) {
     const tileClass = (i: number, extra = "") =>[styles.themeOptions,extra,
         themes[i] === "Color background" ? styles.colorBg : "",
         themes[i] === "Blur" ? styles.blurTile : "",
+        themes[i] === "Fonts" ? styles.fontsTile : "",
         themes[i] === "Light/Dark mode" ? styles.lightDarkSplit : "",
-        isSelected(i) && themes[i] !== "Light/Dark mode" ? styles.selected : "",
-        themes[i] === "Light/Dark mode" && lightDarkMode.has(i) ? styles.lightDarkSelected : "",].join(" ").trim();
+        isSelected(i) && themes[i] !== "Light/Dark mode" && themes[i] !== "Fonts" ? styles.selected : "",
+        themes[i] === "Light/Dark mode" && lightDarkMode.has(i) ? styles.lightDarkSelected : "",
+        themes[i] === "Fonts" && selectedFont ? styles.fontSelected : "",].join(" ").trim();
+
+    // Render the Fonts theme
+    const renderFontsTheme = (i: number) => {
+        return (
+            <div className={styles.fontsContainer}>
+                <div className={styles.fontsLabel}>Select Font:</div>
+                <select
+                    className={styles.fontDropdown}
+                    value={selectedFont || ""}
+                    onChange={(e) => {
+                        e.stopPropagation();
+                        if (e.target.value) {
+                            toggleFont(i, e.target.value);
+                        }
+                    }}
+                    onClick={(e) => e.stopPropagation()}
+                >
+                    <option value="">Choose a font...</option>
+                    {fontOptions.map((font) => (
+                        <option key={font} value={font} style={{ fontFamily: font }}>
+                            {font}
+                        </option>
+                    ))}
+                </select>
+            </div>
+        );
+    };
 
     // Render the Light/Dark mode split theme
     const renderLightDarkTheme = (i: number) => {
@@ -97,6 +142,9 @@ function OpeningTheme({ onContinue }: Props) {
         if (themes[i] === "Light/Dark mode") {
             return renderLightDarkTheme(i);
         }
+        if (themes[i] === "Fonts") {
+            return renderFontsTheme(i);
+        }
         return themes[i];
     };
 
@@ -107,9 +155,9 @@ function OpeningTheme({ onContinue }: Props) {
 
             <div className={styles.optionsRow}>
                 <button className={`${styles.navButton} ${styles.navPrev}`} aria-label="Previous theme" onClick={() => setIndex(left)}><CaretLeftIcon weight="bold" size={20} /> </button>
-                <button className={tileClass(left, styles.side)} onClick={() => themes[left] !== "Light/Dark mode" && toggle(left)} aria-pressed={isSelected(left)}>{renderThemeContent(left)}</button>
-                <button className={tileClass(index)} onClick={() => themes[index] !== "Light/Dark mode" && toggle(index)} aria-pressed={isSelected(index)}>{renderThemeContent(index)}</button>
-                <button className={tileClass(right, styles.side)} onClick={() => themes[right] !== "Light/Dark mode" && toggle(right)} aria-pressed={isSelected(right)}>{renderThemeContent(right)}</button>
+                <button className={tileClass(left, styles.side)} onClick={() => themes[left] !== "Light/Dark mode" && themes[left] !== "Fonts" && toggle(left)} aria-pressed={isSelected(left)}>{renderThemeContent(left)}</button>
+                <button className={tileClass(index)} onClick={() => themes[index] !== "Light/Dark mode" && themes[index] !== "Fonts" && toggle(index)} aria-pressed={isSelected(index)}>{renderThemeContent(index)}</button>
+                <button className={tileClass(right, styles.side)} onClick={() => themes[right] !== "Light/Dark mode" && themes[right] !== "Fonts" && toggle(right)} aria-pressed={isSelected(right)}>{renderThemeContent(right)}</button>
                 <button className={`${styles.navButton} ${styles.navNext}`} aria-label="Next theme" onClick={() => setIndex(right)}><CaretRightIcon weight="bold" size={20} /></button>
             </div>
 
