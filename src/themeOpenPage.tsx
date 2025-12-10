@@ -16,14 +16,29 @@ function OpeningTheme({ onContinue }: Props) {
     const [selected, setSelected] = useState<Set<number>>(new Set());
     const [lightDarkMode, setLightDarkMode] = useState<Map<number, 'light' | 'dark' | null>>(new Map());
     const [selectedFont, setSelectedFont] = useState<string | null>(null);
+    const [blurAmount, setBlurAmount] = useState(50);
+    const [backgroundColor, setBackgroundColor] = useState("#ffffff");
     const [showError, setShowError] = useState(false);
     const isSelected = (i: number) => selected.has(i);
 
-    const toggle = (i: number) => setSelected(prev => {
-        const next = new Set(prev);
-        next.has(i) ? next.delete(i) : next.add(i);
-        return next;
+    const toggle = (i: number) => {
+        setSelected(prev => {
+            const next = new Set(prev);
+            const wasSelected = next.has(i);
+            next.has(i) ? next.delete(i) : next.add(i);
+
+            // Save blur setting when toggled
+            if (themes[i] === "Blur") {
+                if (!wasSelected) {
+                    localStorage.setItem("theme_blurAmount", blurAmount.toString());
+                } else {
+                    localStorage.setItem("theme_blurAmount", "0");
+                }
+            }
+
+            return next;
         });
+    };
 
     const toggleLightDark = (i: number, mode: 'light' | 'dark') => {
         setLightDarkMode(prev => {
@@ -36,9 +51,20 @@ function OpeningTheme({ onContinue }: Props) {
                     nextSelected.delete(i);
                     return nextSelected;
                 });
+                // Clear both mode settings
+                localStorage.setItem("theme_lightMode", "false");
+                localStorage.setItem("theme_darkMode", "false");
             } else {
                 next.set(i, mode);
                 setSelected(prev => new Set(prev).add(i));
+                // Save the selected mode
+                if (mode === 'light') {
+                    localStorage.setItem("theme_lightMode", "true");
+                    localStorage.setItem("theme_darkMode", "false");
+                } else {
+                    localStorage.setItem("theme_darkMode", "true");
+                    localStorage.setItem("theme_lightMode", "false");
+                }
             }
             return next;
         });
@@ -52,9 +78,11 @@ function OpeningTheme({ onContinue }: Props) {
                 nextSelected.delete(i);
                 return nextSelected;
             });
+            localStorage.setItem("theme_font", "");
         } else {
             setSelectedFont(font);
             setSelected(prev => new Set(prev).add(i));
+            localStorage.setItem("theme_font", font);
         }
     };
 
@@ -70,12 +98,71 @@ function OpeningTheme({ onContinue }: Props) {
     // helper to build the class string for each tile
     const tileClass = (i: number, extra = "") =>[styles.themeOptions,extra,
         themes[i] === "Color background" ? styles.colorBg : "",
-        themes[i] === "Blur" ? styles.blurTile : "",
+        themes[i] === "Blur" ? styles.blurTileBg : "",
         themes[i] === "Fonts" ? styles.fontsTile : "",
         themes[i] === "Light/Dark mode" ? styles.lightDarkSplit : "",
-        isSelected(i) && themes[i] !== "Light/Dark mode" && themes[i] !== "Fonts" ? styles.selected : "",
+        isSelected(i) && themes[i] === "Blur" ? styles.selected : "",
+        isSelected(i) && themes[i] === "Color background" ? styles.selected : "",
         themes[i] === "Light/Dark mode" && lightDarkMode.has(i) ? styles.lightDarkSelected : "",
         themes[i] === "Fonts" && selectedFont ? styles.fontSelected : "",].join(" ").trim();
+
+    // Render the Blur theme with slider
+    const renderBlurTheme = (i: number) => {
+        return (
+            <div className={styles.blurContainer}>
+                <div className={styles.blurLabel}>Blur Amount: {blurAmount}%</div>
+                <input
+                    type="range"
+                    min="0"
+                    max="100"
+                    value={blurAmount}
+                    className={styles.blurSlider}
+                    onChange={(e) => {
+                        e.stopPropagation();
+                        setBlurAmount(Number(e.target.value));
+                    }}
+                    onClick={(e) => e.stopPropagation()}
+                />
+                <button
+                    className={styles.selectButton}
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        toggle(i);
+                    }}
+                >
+                    {isSelected(i) ? "Selected" : "Select"}
+                </button>
+            </div>
+        );
+    };
+
+    // Render the Color Background theme with color picker
+    const renderColorBackgroundTheme = (i: number) => {
+        return (
+            <div className={styles.colorPickerContainer}>
+                <div className={styles.colorLabel}>Choose Color:</div>
+                <input
+                    type="color"
+                    value={backgroundColor}
+                    className={styles.colorPicker}
+                    onChange={(e) => {
+                        e.stopPropagation();
+                        setBackgroundColor(e.target.value);
+                        localStorage.setItem("theme_backgroundColor", e.target.value);
+                        if (!isSelected(i)) {
+                            setSelected(prev => new Set(prev).add(i));
+                        }
+                    }}
+                    onClick={(e) => e.stopPropagation()}
+                />
+                <div
+                    className={styles.colorPreview}
+                    style={{ backgroundColor: backgroundColor }}
+                    onClick={(e) => e.stopPropagation()}
+                ></div>
+            </div>
+        );
+    };
 
     // Render the Fonts theme
     const renderFontsTheme = (i: number) => {
@@ -139,11 +226,17 @@ function OpeningTheme({ onContinue }: Props) {
 
     // Helper to render theme content
     const renderThemeContent = (i: number) => {
-        if (themes[i] === "Light/Dark mode") {
-            return renderLightDarkTheme(i);
+        if (themes[i] === "Blur") {
+            return renderBlurTheme(i);
+        }
+        if (themes[i] === "Color background") {
+            return renderColorBackgroundTheme(i);
         }
         if (themes[i] === "Fonts") {
             return renderFontsTheme(i);
+        }
+        if (themes[i] === "Light/Dark mode") {
+            return renderLightDarkTheme(i);
         }
         return themes[i];
     };
@@ -155,9 +248,9 @@ function OpeningTheme({ onContinue }: Props) {
 
             <div className={styles.optionsRow}>
                 <button className={`${styles.navButton} ${styles.navPrev}`} aria-label="Previous theme" onClick={() => setIndex(left)}><CaretLeftIcon weight="bold" size={20} /> </button>
-                <button className={tileClass(left, styles.side)} onClick={() => themes[left] !== "Light/Dark mode" && themes[left] !== "Fonts" && toggle(left)} aria-pressed={isSelected(left)}>{renderThemeContent(left)}</button>
-                <button className={tileClass(index)} onClick={() => themes[index] !== "Light/Dark mode" && themes[index] !== "Fonts" && toggle(index)} aria-pressed={isSelected(index)}>{renderThemeContent(index)}</button>
-                <button className={tileClass(right, styles.side)} onClick={() => themes[right] !== "Light/Dark mode" && themes[right] !== "Fonts" && toggle(right)} aria-pressed={isSelected(right)}>{renderThemeContent(right)}</button>
+                <button className={tileClass(left, styles.side)} onClick={() => {}} aria-pressed={isSelected(left)}>{renderThemeContent(left)}</button>
+                <button className={tileClass(index)} onClick={() => {}} aria-pressed={isSelected(index)}>{renderThemeContent(index)}</button>
+                <button className={tileClass(right, styles.side)} onClick={() => {}} aria-pressed={isSelected(right)}>{renderThemeContent(right)}</button>
                 <button className={`${styles.navButton} ${styles.navNext}`} aria-label="Next theme" onClick={() => setIndex(right)}><CaretRightIcon weight="bold" size={20} /></button>
             </div>
 
