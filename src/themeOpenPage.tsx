@@ -7,7 +7,7 @@ type Props = {
 };
 
 function OpeningTheme({ onContinue }: Props) {
-    const themes = ["Blur","Color background","Fonts","Light/Dark mode"];
+    const themes = ["Blur","Fonts","Light/Dark mode"];
     const fontOptions = ["Arial", "Times New Roman", "Georgia", "Courier New", "Verdana"];
     const [index, setIndex] = React.useState(0);
     const n = themes.length;
@@ -17,7 +17,6 @@ function OpeningTheme({ onContinue }: Props) {
     const [lightDarkMode, setLightDarkMode] = useState<Map<number, 'light' | 'dark' | null>>(new Map());
     const [selectedFont, setSelectedFont] = useState<string | null>(null);
     const [blurAmount, setBlurAmount] = useState(50);
-    const [backgroundColor, setBackgroundColor] = useState("#ffffff");
     const [showError, setShowError] = useState(false);
     const isSelected = (i: number) => selected.has(i);
 
@@ -97,12 +96,10 @@ function OpeningTheme({ onContinue }: Props) {
 
     // helper to build the class string for each tile
     const tileClass = (i: number, extra = "") =>[styles.themeOptions,extra,
-        themes[i] === "Color background" ? styles.colorBg : "",
         themes[i] === "Blur" ? styles.blurTileBg : "",
         themes[i] === "Fonts" ? styles.fontsTile : "",
         themes[i] === "Light/Dark mode" ? styles.lightDarkSplit : "",
         isSelected(i) && themes[i] === "Blur" ? styles.selected : "",
-        isSelected(i) && themes[i] === "Color background" ? styles.selected : "",
         themes[i] === "Light/Dark mode" && lightDarkMode.has(i) ? styles.lightDarkSelected : "",
         themes[i] === "Fonts" && selectedFont ? styles.fontSelected : "",].join(" ").trim();
 
@@ -132,34 +129,6 @@ function OpeningTheme({ onContinue }: Props) {
                 >
                     {isSelected(i) ? "Selected" : "Select"}
                 </button>
-            </div>
-        );
-    };
-
-    // Render the Color Background theme with color picker
-    const renderColorBackgroundTheme = (i: number) => {
-        return (
-            <div className={styles.colorPickerContainer}>
-                <div className={styles.colorLabel}>Choose Color:</div>
-                <input
-                    type="color"
-                    value={backgroundColor}
-                    className={styles.colorPicker}
-                    onChange={(e) => {
-                        e.stopPropagation();
-                        setBackgroundColor(e.target.value);
-                        localStorage.setItem("theme_backgroundColor", e.target.value);
-                        if (!isSelected(i)) {
-                            setSelected(prev => new Set(prev).add(i));
-                        }
-                    }}
-                    onClick={(e) => e.stopPropagation()}
-                />
-                <div
-                    className={styles.colorPreview}
-                    style={{ backgroundColor: backgroundColor }}
-                    onClick={(e) => e.stopPropagation()}
-                ></div>
             </div>
         );
     };
@@ -229,9 +198,6 @@ function OpeningTheme({ onContinue }: Props) {
         if (themes[i] === "Blur") {
             return renderBlurTheme(i);
         }
-        if (themes[i] === "Color background") {
-            return renderColorBackgroundTheme(i);
-        }
         if (themes[i] === "Fonts") {
             return renderFontsTheme(i);
         }
@@ -244,7 +210,7 @@ function OpeningTheme({ onContinue }: Props) {
     return (
         <div className={styles.openingTheme}>
             <p className={styles.welcome}>Welcome</p>
-            <p className={styles.chooseTheme}>Choose a theme</p>
+            <p className={styles.chooseTheme}>Choose your themes!</p>
 
             <div className={styles.optionsRow}>
                 <button className={`${styles.navButton} ${styles.navPrev}`} aria-label="Previous theme" onClick={() => setIndex(left)}><CaretLeftIcon weight="bold" size={20} /> </button>

@@ -128,9 +128,6 @@ function ThemeSettings() {
   const [blurAmount, setBlurAmount] = useState(() => {
     return Number(localStorage.getItem("theme_blurAmount")) || 0;
   });
-  const [backgroundColor, setBackgroundColor] = useState(() => {
-    return localStorage.getItem("theme_backgroundColor") || "#ffffff";
-  });
   const [selectedFont, setSelectedFont] = useState(() => {
     return localStorage.getItem("theme_font") || "";
   });
@@ -156,11 +153,6 @@ function ThemeSettings() {
   const handleBlurChange = (value: number) => {
     setBlurAmount(value);
     localStorage.setItem("theme_blurAmount", value.toString());
-  };
-
-  const handleBackgroundColorChange = (value: string) => {
-    setBackgroundColor(value);
-    localStorage.setItem("theme_backgroundColor", value);
   };
 
   const handleFontChange = (value: string) => {
@@ -205,17 +197,6 @@ function ThemeSettings() {
             max="100"
             value={blurAmount}
             onChange={(e) => handleBlurChange(Number(e.target.value))}
-          />
-        </div>
-      </div>
-
-      <div className={[globalStyles.container, styles.menuItem].join(" ")}>
-        <span className={styles.itemName}>Background Color</span>
-        <div className={styles.itemInput}>
-          <input
-            type="color"
-            value={backgroundColor}
-            onChange={(e) => handleBackgroundColorChange(e.target.value)}
           />
         </div>
       </div>
