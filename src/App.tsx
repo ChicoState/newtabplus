@@ -7,6 +7,7 @@ import { Grid } from "./Grid";
 import { nanoid } from "nanoid";
 import { toPng } from "html-to-image";
 import styles from "./App.css";
+import OpeningTheme from "./themeOpenPage";
 
 export interface Template {
   name: string;
@@ -67,6 +68,7 @@ const App = () => {
   const [widgets, setWidgets] = useState<WidgetState<any>[]>([]);
   const [templates, setTemplates] = useState<Template[]>([]);
   const [activeTemplate, setActiveTemplate] = useState(0);
+  const [openingTheme, setOpeningTheme] = useState(true);
 
   const gridRef = useRef(null);
 
@@ -152,6 +154,10 @@ const App = () => {
   useEffect(() => {
     readTemplates();
   }, []);
+
+  if (openingTheme) {
+    return <OpeningTheme onContinue={() => setOpeningTheme(false)} />;
+  }
 
   return (
     <div

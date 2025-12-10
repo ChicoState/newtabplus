@@ -1,0 +1,399 @@
+.openingTheme {
+    background:
+        radial-gradient(circle at 20% 50%, rgba(120, 150, 220, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(150, 120, 220, 0.08) 0%, transparent 50%),
+        linear-gradient(135deg, #f5f7fa 0%, #e4e9f2 100%);
+    min-height: 100vh;
+    display: grid;
+    place-items: center;
+    margin: 0;
+    position: relative;
+}
+
+.blurTile {
+  position: relative;
+  overflow: hidden;         
+  color: #111;
+}
+
+.blurTile::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(120px 80px at 30% 30%, #dfe6f1, transparent 60%),
+    radial-gradient(120px 80px at 70% 60%, #e6dff1, transparent 60%),
+    linear-gradient(135deg, #fafafa, #eaeaea 60%, #f2f2f2);
+  filter: blur(75px);         /* the blur effect */
+  transform: scale(1.1);     /* avoid sharp edges after blur */
+  z-index: 0;
+}
+
+.blurTile > * { position: relative; z-index: 1; }
+
+.themeOptions {
+  width: 220px;
+  height: 165px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 2px solid rgba(0, 0, 0, 0.1);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(10px);
+  cursor: pointer;
+  font-size: 18px;
+  font-weight: 500;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  box-sizing: border-box;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.themeOptions:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  border-color: rgba(0, 0, 0, 0.2);
+}
+
+.colorBg {
+  background-image: url(https://images.unsplash.com/photo-1507166763745-bfe008fbb831?q=80&w=960&auto=format);
+  color: white;
+}
+
+.side {
+  opacity: 0.5;
+  transform: scale(0.95);
+}
+
+.navButton { /* These are the Xs that allow you to move left and right on the themes*/
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  padding: 10px 14px;
+  border: 2px solid rgba(0, 0, 0, 0.15);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(10px);
+  cursor: pointer;
+  font-size: 18px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  z-index: 1;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: all 0.2s ease;
+}
+
+.navButton:hover {
+  background: rgba(255, 255, 255, 0.95);
+  transform: translateY(-50%) scale(1.05);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  border-color: rgba(0, 0, 0, 0.25);
+}
+
+.navPrev { left: -55px; }
+.navNext { right: -55px; }
+
+.selected {
+  border: 2px solid #5b7ec6;
+  opacity: 1;
+  transform: scale(1);
+  box-shadow: 0 0 0 4px rgba(91, 126, 198, 0.2), 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+.selected:hover {
+  border: 2px solid #5b7ec6;
+  box-shadow: 0 0 0 4px rgba(107, 137, 196, 0.3), 0 8px 24px rgba(0, 0, 0, 0.15);
+  transform: translateY(-4px);
+}
+
+.optionsRow {
+  position: absolute;       
+  top: 250px;                
+  left: 50%;
+  transform: translateX(-50%);
+  display:flex;            
+  gap: 24px;                 
+  align-items: center;
+  justify-content: center;
+  width: 720px;
+  
+}
+
+.bottomRow {
+    display: flex;
+    position: absolute;
+    gap: 16px;
+    top: 470px;
+    left: 50%;
+    transform: translateX(-50%);
+    justify-content: center;
+}
+
+.actionButton {
+    padding: 12px 32px;
+    border: 2px solid rgba(0, 0, 0, 0.15);
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(10px);
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 500;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    transition: all 0.2s ease;
+}
+
+.actionButton:hover {
+    background: rgba(255, 255, 255, 0.95);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+    border-color: rgba(0, 0, 0, 0.25);
+}
+
+.actionButton:first-child {
+    background: linear-gradient(135deg, #4a90e2 0%, #357abd 100%);
+    color: white;
+    border-color: transparent;
+}
+
+.actionButton:first-child:hover {
+    background: linear-gradient(135deg, #357abd 0%, #2868a8 100%);
+    box-shadow: 0 4px 16px rgba(74, 144, 226, 0.4);
+}
+
+
+.welcome{
+    color: #1a1a2e;
+    font-size: 56px;
+    font-weight: 700;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    letter-spacing: -1.5px;
+    vertical-align: top;
+    position: absolute;
+    top: 44px;
+    left: 50%;
+    transform: translateX(-50%);
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.chooseTheme {
+    color: #4a4a68;
+    font-size: 36px;
+    font-weight: 400;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    letter-spacing: -0.5px;
+    vertical-align: top;
+    position: absolute;
+    top: 120px;
+    left: 50%;
+    transform: translateX(-50%);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+}
+
+.progressDots {
+    position: absolute;
+    top: 425px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+}
+
+.dotActive {
+    width: 10px;
+    height: 10px;
+    background: #5b7ec6;
+    box-shadow: 0 0 0 3px rgba(91, 126, 198, 0.2);
+}
+
+.errorMessage {
+    position: absolute;
+    top: 520px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 10px 20px;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    color: #8b5a5a;
+    border: 1px solid rgba(139, 90, 90, 0.2);
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 500;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(-50%) translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
+}
+
+.lightDarkSplit {
+    position: relative;
+    overflow: hidden;
+    padding: 0;
+    border-radius: 16px;
+}
+
+.lightDarkSelected {
+    box-shadow: 0 0 0 4px rgba(91, 126, 198, 0.2), 0 8px 24px rgba(0, 0, 0, 0.12);
+    transform: scale(1);
+    opacity: 1;
+}
+
+.lightDarkSplit .splitContainer {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    position: relative;
+}
+
+.lightDarkSplit .lightSide,
+.lightDarkSplit .darkSide {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    position: absolute;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.lightDarkSplit .lightSide {
+    background: linear-gradient(135deg, #ffffff 0%, #f0f4f8 100%);
+    clip-path: polygon(0 0, 0 100%, 100% 100%);
+    color: #333;
+    left: 0;
+    top: 0;
+    align-items: flex-start;
+    justify-content: flex-end;
+}
+
+.lightDarkSplit .darkSide {
+    background: linear-gradient(135deg, #1c1c31 0%, #2c2c3f 100%);
+    clip-path: polygon(0 0, 100% 0, 100% 100%);
+    color: #fff;
+    right: 0;
+    top: 0;
+    align-items: flex-end;
+    justify-content: flex-start;
+}
+
+.lightDarkSplit .iconWrapper {
+    font-size: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    z-index: 2;
+    transition: transform 0.2s ease;
+}
+
+.lightDarkSplit .lightSide .iconWrapper {
+    color: #fbbf24;
+}
+
+.lightDarkSplit .darkSide .iconWrapper {
+    color: #ddd;
+}
+
+.lightDarkSplit .modeLabel {
+    font-size: 14px;
+    font-weight: 500;
+    z-index: 2;
+    transition: transform 0.2s ease;
+    position: relative;
+}
+
+.lightDarkSplit .lightSide:hover .iconWrapper,
+.lightDarkSplit .lightSide:hover .modeLabel,
+.lightDarkSplit .darkSide:hover .iconWrapper,
+.lightDarkSplit .darkSide:hover .modeLabel {
+    transform: scale(1.1);
+}
+
+.lightDarkSplit .lightSide.selectedSide,
+.lightDarkSplit .darkSide.selectedSide {
+    z-index: 3;
+}
+
+.lightDarkSplit .lightSide.selectedSide,
+.lightDarkSplit .darkSide.selectedSide {
+    /* Box-shadow is now on parent .lightDarkSelected class */
+}
+
+.lightDarkSplit .lightSide.selectedSide::before {
+    content: "";
+    position: absolute;
+    left: -1px;
+    bottom: -1px;
+    width: calc(100% + 1px);
+    height: calc(100% + 1px);
+    border-left: 4.5px solid #5b7ec6;
+    border-bottom: 4.5px solid #5b7ec6;
+    border-bottom-left-radius: 16px;
+    pointer-events: none;
+    z-index: 1;
+    clip-path: polygon(0 0, 0 100%, 100% 100%);
+}
+
+.lightDarkSplit .darkSide.selectedSide::before {
+    content: "";
+    position: absolute;
+    top: -1px;
+    right: -1px;
+    width: calc(100% + 1px);
+    height: calc(100% + 1px);
+    border-top: 4px solid #5b7ec6;
+    border-right: 4px solid #5b7ec6;
+    border-top-right-radius: 16px;
+    pointer-events: none;
+    z-index: 1;
+    clip-path: polygon(0 0, 100% 0, 100% 100%);
+}
+
+.lightDarkSplit .lightSide.selectedSide::after,
+.lightDarkSplit .darkSide.selectedSide::after {
+    content: "";
+    position: absolute;
+    width: 141.42%;
+    height: 6.5px;
+    background: #5b7ec6;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(36.5deg);
+    pointer-events: none;
+    z-index: 10;
+}
+
+.lightDarkSplit .lightSide.selectedSide .iconWrapper,
+.lightDarkSplit .lightSide.selectedSide .modeLabel {
+    transform: scale(1.1);
+}
+
+.lightDarkSplit .darkSide.selectedSide .iconWrapper,
+.lightDarkSplit .darkSide.selectedSide .modeLabel {
+    transform: scale(1.1);
+}
