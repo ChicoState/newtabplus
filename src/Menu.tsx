@@ -124,6 +124,124 @@ function WidgetSettings() {
   );
 }
 
+function ThemeSettings() {
+  const [blurAmount, setBlurAmount] = useState(() => {
+    return Number(localStorage.getItem("theme_blurAmount")) || 0;
+  });
+  const [backgroundColor, setBackgroundColor] = useState(() => {
+    return localStorage.getItem("theme_backgroundColor") || "#ffffff";
+  });
+  const [selectedFont, setSelectedFont] = useState(() => {
+    return localStorage.getItem("theme_font") || "";
+  });
+  const [lightMode, setLightMode] = useState(() => {
+    return localStorage.getItem("theme_lightMode") === "true";
+  });
+  const [darkMode, setDarkMode] = useState(() => {
+    return localStorage.getItem("theme_darkMode") === "true";
+  });
+
+  const fontOptions = ["Arial", "Times New Roman", "Georgia", "Courier New", "Verdana"];
+
+  const handleBlurChange = (value: number) => {
+    setBlurAmount(value);
+    localStorage.setItem("theme_blurAmount", value.toString());
+  };
+
+  const handleBackgroundColorChange = (value: string) => {
+    setBackgroundColor(value);
+    localStorage.setItem("theme_backgroundColor", value);
+  };
+
+  const handleFontChange = (value: string) => {
+    setSelectedFont(value);
+    localStorage.setItem("theme_font", value);
+  };
+
+  const handleLightModeChange = (value: boolean) => {
+    if (value) {
+      setLightMode(true);
+      setDarkMode(false);
+      localStorage.setItem("theme_lightMode", "true");
+      localStorage.setItem("theme_darkMode", "false");
+    } else {
+      setLightMode(false);
+      localStorage.setItem("theme_lightMode", "false");
+    }
+  };
+
+  const handleDarkModeChange = (value: boolean) => {
+    if (value) {
+      setDarkMode(true);
+      setLightMode(false);
+      localStorage.setItem("theme_darkMode", "true");
+      localStorage.setItem("theme_lightMode", "false");
+    } else {
+      setDarkMode(false);
+      localStorage.setItem("theme_darkMode", "false");
+    }
+  };
+
+  return (
+    <>
+      <span>Themes</span>
+
+      <div className={[globalStyles.container, styles.menuItem].join(" ")}>
+        <span className={styles.itemName}>Blur ({blurAmount}%)</span>
+        <div className={styles.itemInput}>
+          <input
+            type="range"
+            min="0"
+            max="100"
+            value={blurAmount}
+            onChange={(e) => handleBlurChange(Number(e.target.value))}
+          />
+        </div>
+      </div>
+
+      <div className={[globalStyles.container, styles.menuItem].join(" ")}>
+        <span className={styles.itemName}>Background Color</span>
+        <div className={styles.itemInput}>
+          <input
+            type="color"
+            value={backgroundColor}
+            onChange={(e) => handleBackgroundColorChange(e.target.value)}
+          />
+        </div>
+      </div>
+
+      <div className={[globalStyles.container, styles.menuItem].join(" ")}>
+        <span className={styles.itemName}>Fonts</span>
+        <div className={styles.itemInput}>
+          <select
+            value={selectedFont}
+            onChange={(e) => handleFontChange(e.target.value)}
+            style={{ fontFamily: selectedFont || "inherit" }}
+          >
+            <option value="">None</option>
+            {fontOptions.map((font) => (
+              <option key={font} value={font} style={{ fontFamily: font }}>
+                {font}
+              </option>
+            ))}
+          </select>
+        </div>
+      </div>
+
+      <MenuItem
+        name="Light Mode"
+        initialValue={lightMode}
+        onChange={handleLightModeChange}
+      />
+      <MenuItem
+        name="Dark Mode"
+        initialValue={darkMode}
+        onChange={handleDarkModeChange}
+      />
+    </>
+  );
+}
+
 function TemplateList() {
   const {
     templates,
@@ -264,8 +382,9 @@ export default function Menu({ active }: { active: boolean }) {
       </div>
       {activeTab === MenuTab.Widget && <WidgetSettings></WidgetSettings>}
       {activeTab === MenuTab.Add && active && <WidgetList></WidgetList>}
+      {activeTab === MenuTab.Theme && <ThemeSettings></ThemeSettings>}
       {activeTab === MenuTab.Template && <TemplateList></TemplateList>}
-      {![MenuTab.Widget, MenuTab.Add, MenuTab.Template].includes(activeTab) && (
+      {![MenuTab.Widget, MenuTab.Add, MenuTab.Theme, MenuTab.Template].includes(activeTab) && (
         <span>No Settings Available</span>
       )}
     </div>
