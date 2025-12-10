@@ -161,27 +161,39 @@ function ThemeSettings() {
   };
 
   const handleLightModeChange = (value: boolean) => {
-    if (value) {
+    // Always keep one mode selected - if trying to uncheck, keep it checked
+    if (!value && lightMode) {
+      // User is trying to uncheck light mode, switch to dark mode instead
+      setLightMode(false);
+      setDarkMode(true);
+      localStorage.setItem("theme_lightMode", "false");
+      localStorage.setItem("theme_darkMode", "true");
+    } else if (value && !lightMode) {
+      // User is checking light mode, uncheck dark mode
       setLightMode(true);
       setDarkMode(false);
       localStorage.setItem("theme_lightMode", "true");
       localStorage.setItem("theme_darkMode", "false");
-    } else {
-      setLightMode(false);
-      localStorage.setItem("theme_lightMode", "false");
     }
+    // If trying to check when already checked, do nothing
   };
 
   const handleDarkModeChange = (value: boolean) => {
-    if (value) {
+    // Always keep one mode selected - if trying to uncheck, keep it checked
+    if (!value && darkMode) {
+      // User is trying to uncheck dark mode, switch to light mode instead
+      setDarkMode(false);
+      setLightMode(true);
+      localStorage.setItem("theme_darkMode", "false");
+      localStorage.setItem("theme_lightMode", "true");
+    } else if (value && !darkMode) {
+      // User is checking dark mode, uncheck light mode
       setDarkMode(true);
       setLightMode(false);
       localStorage.setItem("theme_darkMode", "true");
       localStorage.setItem("theme_lightMode", "false");
-    } else {
-      setDarkMode(false);
-      localStorage.setItem("theme_darkMode", "false");
     }
+    // If trying to check when already checked, do nothing
   };
 
   return (
@@ -219,16 +231,27 @@ function ThemeSettings() {
         </div>
       </div>
 
-      <MenuItem
-        name="Light Mode"
-        initialValue={lightMode}
-        onChange={handleLightModeChange}
-      />
-      <MenuItem
-        name="Dark Mode"
-        initialValue={darkMode}
-        onChange={handleDarkModeChange}
-      />
+      <div className={[globalStyles.container, styles.menuItem].join(" ")}>
+        <span className={styles.itemName}>Light Mode</span>
+        <div className={styles.itemInput}>
+          <input
+            type="checkbox"
+            checked={lightMode}
+            onChange={(e) => handleLightModeChange(e.target.checked)}
+          />
+        </div>
+      </div>
+
+      <div className={[globalStyles.container, styles.menuItem].join(" ")}>
+        <span className={styles.itemName}>Dark Mode</span>
+        <div className={styles.itemInput}>
+          <input
+            type="checkbox"
+            checked={darkMode}
+            onChange={(e) => handleDarkModeChange(e.target.checked)}
+          />
+        </div>
+      </div>
     </>
   );
 }
