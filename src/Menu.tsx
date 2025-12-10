@@ -135,10 +135,20 @@ function ThemeSettings() {
     return localStorage.getItem("theme_font") || "";
   });
   const [lightMode, setLightMode] = useState(() => {
-    return localStorage.getItem("theme_lightMode") === "true";
+    const lightModeStored = localStorage.getItem("theme_lightMode");
+    const darkModeStored = localStorage.getItem("theme_darkMode");
+
+    // If neither mode has been set, default to light mode
+    if (lightModeStored === null && darkModeStored === null) {
+      localStorage.setItem("theme_lightMode", "true");
+      return true;
+    }
+    return lightModeStored === "true";
   });
   const [darkMode, setDarkMode] = useState(() => {
-    return localStorage.getItem("theme_darkMode") === "true";
+    const darkModeStored = localStorage.getItem("theme_darkMode");
+    // Only return true if explicitly set to true
+    return darkModeStored === "true";
   });
 
   const fontOptions = ["Arial", "Times New Roman", "Georgia", "Courier New", "Verdana"];
