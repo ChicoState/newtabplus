@@ -94,8 +94,6 @@ const App = () => {
       setTemplates([...templates, template]);
       setActiveTemplate(templates.length);
     }
-
-    writeTemplates();
   }
 
   function loadTemplate(index?: number) {
@@ -177,6 +175,18 @@ const App = () => {
       setTheme('dark');
     }
   }, []);
+
+  // Write templates to localStorage whenever they change
+  useEffect(() => {
+    if (templates.length > 0) {
+      localStorage.setItem("templates", JSON.stringify(templates));
+    }
+  }, [templates]);
+
+  // Write active template to localStorage whenever it changes
+  useEffect(() => {
+    localStorage.setItem("activeTemplate", JSON.stringify(activeTemplate));
+  }, [activeTemplate]);
 
   if (openingTheme) {
     return <OpeningTheme onContinue={() => {

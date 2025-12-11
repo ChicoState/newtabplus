@@ -133,6 +133,20 @@
   text-align: center;
 }
 
+.item-input select {
+  color: #fff;
+  background-color: #fff2;
+  border: 1px solid #fff2;
+  border-radius: 4px;
+  outline: none;
+  cursor: pointer;
+}
+
+.item-input select option {
+  background-color: rgba(60, 60, 60, 0.95);
+  color: #fff;
+}
+
 .widget-list {
   display: flex;
   flex-flow: row wrap;

@@ -10,7 +10,7 @@
 
 /* Light mode - white background with blur */
 :global(.lightMode) .body {
-  background-color: rgba(255, 255, 255, 0.90) !important;
+  background-color: rgba(255, 255, 255, 0.55) !important;
   border: 1px solid rgba(0, 0, 0, 0.15) !important;
   -webkit-backdrop-filter: blur(var(--blur-amount)) !important;
   backdrop-filter: blur(var(--blur-amount)) !important;
