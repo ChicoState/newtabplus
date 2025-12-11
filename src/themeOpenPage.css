@@ -407,47 +407,48 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    background: rgba(255, 255, 255, 0.85);
 }
 
 .fontsContainer {
     width: 100%;
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 14px;
     align-items: center;
     justify-content: center;
 }
 
 .fontsLabel {
-    font-size: 16px;
+    font-size: 15px;
     font-weight: 600;
-    color: #1a1a2e;
+    color: #4a4a68;
     text-align: center;
 }
 
 .fontDropdown {
     width: 100%;
     max-width: 180px;
-    padding: 10px 12px;
-    border: 2px solid rgba(0, 0, 0, 0.15);
+    padding: 10px 14px;
+    border: 2px solid #e0e0e0;
     border-radius: 8px;
-    background: rgba(255, 255, 255, 0.9);
+    background: #ffffff;
     font-size: 14px;
     font-weight: 500;
     cursor: pointer;
     transition: all 0.2s ease;
     text-align: center;
+    color: #4a4a68;
 }
 
 .fontDropdown:hover {
-    border-color: rgba(0, 0, 0, 0.25);
-    background: rgba(255, 255, 255, 1);
+    border-color: #5b7ec6;
 }
 
 .fontDropdown:focus {
     outline: none;
     border-color: #5b7ec6;
-    box-shadow: 0 0 0 3px rgba(91, 126, 198, 0.2);
+    box-shadow: 0 0 0 3px rgba(91, 126, 198, 0.15);
 }
 
 .fontSelected {
@@ -467,6 +468,7 @@
 .blurTileBg {
     position: relative;
     overflow: hidden;
+    background: rgba(255, 255, 255, 0.85);
 }
 
 .blurContainer {
@@ -474,41 +476,77 @@
     height: 100%;
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 14px;
     align-items: center;
     justify-content: center;
     padding: 20px;
 }
 
 .blurLabel {
-    font-size: 14px;
+    font-size: 15px;
     font-weight: 600;
-    color: #1a1a2e;
+    color: #4a4a68;
     text-align: center;
 }
 
 .blurSlider {
     width: 100%;
-    max-width: 160px;
+    max-width: 170px;
+    height: 5px;
     cursor: pointer;
+    -webkit-appearance: none;
+    appearance: none;
+    background: #e0e0e0;
+    border-radius: 10px;
+    outline: none;
+}
+
+.blurSlider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: #5b7ec6;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+    transition: all 0.2s ease;
+}
+
+.blurSlider::-webkit-slider-thumb:hover {
+    transform: scale(1.1);
+}
+
+.blurSlider::-moz-range-thumb {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: #5b7ec6;
+    cursor: pointer;
+    border: none;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+    transition: all 0.2s ease;
+}
+
+.blurSlider::-moz-range-thumb:hover {
+    transform: scale(1.1);
 }
 
 .selectButton {
-    padding: 8px 20px;
-    border: 2px solid rgba(0, 0, 0, 0.15);
+    padding: 9px 24px;
+    border: 2px solid #5b7ec6;
     border-radius: 8px;
-    background: rgba(255, 255, 255, 0.9);
+    background: #ffffff;
     font-size: 13px;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.2s ease;
-    color: #1a1a2e;
+    color: #5b7ec6;
 }
 
 .selectButton:hover {
-    background: rgba(255, 255, 255, 1);
-    border-color: #5b7ec6;
-    transform: scale(1.05);
+    background: #5b7ec6;
+    color: #ffffff;
 }
 
 /* Color picker theme components */
