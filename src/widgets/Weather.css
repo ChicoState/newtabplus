@@ -28,6 +28,21 @@
   padding: 6px;
 }
 
+/* Light mode - white background with blur on individual days */
+:global(.lightMode) .day {
+  background-color: rgba(255, 255, 255, 0.90) !important;
+  border: 1px solid rgba(0, 0, 0, 0.1) !important;
+  -webkit-backdrop-filter: blur(var(--blur-amount)) !important;
+  backdrop-filter: blur(var(--blur-amount)) !important;
+  border-radius: 8px;
+  color: #000;
+}
+
+/* Light mode - dark weather icons */
+:global(.lightMode) .day svg {
+  color: #333;
+}
+
 .temp {
   display: flex;
   flex-flow: row wrap;
@@ -43,4 +58,14 @@
 
 .temp-min {
   opacity: 0.75;
+}
+
+/* Light mode text styling */
+:global(.lightMode) .temp-min,
+:global(.lightMode) .temp-max {
+  color: #000;
+}
+
+:global(.lightMode) .temp-min {
+  opacity: 0.6;
 }

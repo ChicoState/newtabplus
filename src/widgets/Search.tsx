@@ -20,7 +20,6 @@ export function Search({ settings }: WidgetState<SearchSettings>) {
         {settings.showIcon && (
           <MagnifyingGlassIcon
             size={18}
-            color={"#fff4"}
             weight="bold"
           ></MagnifyingGlassIcon>
         )}
@@ -37,7 +36,6 @@ export function Search({ settings }: WidgetState<SearchSettings>) {
           >
             <ArrowRightIcon
               size={18}
-              color={"#fff8"}
               weight="bold"
             ></ArrowRightIcon>
           </button>

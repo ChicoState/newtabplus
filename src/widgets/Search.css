@@ -21,8 +21,21 @@
   gap: 8px;
 }
 
+/* Light mode - white background with blur on the bar only */
+:global(.lightMode) .bar {
+  background-color: rgba(255, 255, 255, 0.90) !important;
+  border: 1px solid rgba(0, 0, 0, 0.15) !important;
+  -webkit-backdrop-filter: blur(var(--blur-amount)) !important;
+  backdrop-filter: blur(var(--blur-amount)) !important;
+}
+
 .bar svg {
   flex-shrink: 0;
+  color: #fff;
+}
+
+:global(.lightMode) .bar svg {
+  color: #000;
 }
 
 .search-input {
@@ -41,6 +54,15 @@
 .search-input::placeholder {
   color: #fff4;
   user-select: none;
+}
+
+:global(.lightMode) .search-input {
+  color: #000;
+  font-weight: 500;
+}
+
+:global(.lightMode) .search-input::placeholder {
+  color: #666;
 }
 
 .search-button {
@@ -63,4 +85,15 @@
   border-color: #fff4;
   background-color: #fff4;
   transition: 0.15s;
+}
+
+:global(.lightMode) .search-button {
+  background-color: rgba(0, 0, 0, 0.2);
+  color: #000;
+}
+
+:global(.lightMode) .search-button:hover {
+  background-color: rgba(0, 0, 0, 0.3);
+  border-color: rgba(0, 0, 0, 0.3);
+  color: #000;
 }
