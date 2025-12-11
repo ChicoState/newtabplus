@@ -26,6 +26,7 @@ interface AppContextType {
   deleting: boolean;
   hidden: boolean;
   menuOpen: boolean;
+  theme: 'light' | 'dark';
 
   setWidgets: React.Dispatch<React.SetStateAction<WidgetState<any>[]>>;
   setTemplates: React.Dispatch<React.SetStateAction<Template[]>>;
@@ -33,6 +34,7 @@ interface AppContextType {
   setDeleting: React.Dispatch<React.SetStateAction<boolean>>;
   setHidden: React.Dispatch<React.SetStateAction<boolean>>;
   setMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setTheme: React.Dispatch<React.SetStateAction<'light' | 'dark'>>;
 
   saveTemplate: (name?: string) => void;
   loadTemplate: (index?: number) => void;
@@ -69,6 +71,7 @@ const App = () => {
   const [templates, setTemplates] = useState<Template[]>([]);
   const [activeTemplate, setActiveTemplate] = useState(0);
   const [openingTheme, setOpeningTheme] = useState(true);
+  const [theme, setTheme] = useState<'light' | 'dark'>('dark');
 
   const gridRef = useRef(null);
 
@@ -165,15 +168,32 @@ const App = () => {
     if (selectedFont && selectedFont !== "") {
       document.documentElement.style.setProperty('--app-font', selectedFont);
     }
+
+    // Apply theme from localStorage on initial load
+    const lightMode = localStorage.getItem("theme_lightMode");
+    if (lightMode === "true") {
+      setTheme('light');
+    } else {
+      setTheme('dark');
+    }
   }, []);
 
   if (openingTheme) {
-    return <OpeningTheme onContinue={() => setOpeningTheme(false)} />;
+    return <OpeningTheme onContinue={() => {
+      setOpeningTheme(false);
+      // Re-read theme from localStorage after opening theme page
+      const lightMode = localStorage.getItem("theme_lightMode");
+      if (lightMode === "true") {
+        setTheme('light');
+      } else {
+        setTheme('dark');
+      }
+    }} />;
   }
 
   return (
     <div
-      className={styles.content}
+      className={`${styles.content} ${theme === 'light' ? 'lightMode' : ''}`}
       onClick={(e) => {
         if (e.target === e.currentTarget) setMenuOpen(false);
       }}
@@ -187,6 +207,7 @@ const App = () => {
           deleting,
           hidden,
           menuOpen,
+          theme,
 
           setWidgets,
           setTemplates,
@@ -194,6 +215,7 @@ const App = () => {
           setDeleting,
           setHidden,
           setMenuOpen,
+          setTheme,
 
           saveTemplate,
           loadTemplate,

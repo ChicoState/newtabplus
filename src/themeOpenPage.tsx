@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import styles from "./themeOpenPage.css";
 import { CaretLeftIcon, CaretRightIcon, Sun, Moon } from "@phosphor-icons/react";
 
-type Props = { 
-    onContinue:()=>void 
+type Props = {
+    onContinue:()=>void
 };
 
 function OpeningTheme({ onContinue }: Props) {

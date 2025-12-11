@@ -125,6 +125,8 @@ function WidgetSettings() {
 }
 
 function ThemeSettings() {
+  const { setTheme } = useContext(AppContext);
+
   const [blurAmount, setBlurAmount] = useState(() => {
     return Number(localStorage.getItem("theme_blurAmount")) || 0;
   });
@@ -133,18 +135,19 @@ function ThemeSettings() {
   });
   const [lightMode, setLightMode] = useState(() => {
     const lightModeStored = localStorage.getItem("theme_lightMode");
-    const darkModeStored = localStorage.getItem("theme_darkMode");
-
-    // If neither mode has been set, default to light mode
-    if (lightModeStored === null && darkModeStored === null) {
-      localStorage.setItem("theme_lightMode", "true");
-      return true;
-    }
+    // Only return true if explicitly set to true
     return lightModeStored === "true";
   });
   const [darkMode, setDarkMode] = useState(() => {
+    const lightModeStored = localStorage.getItem("theme_lightMode");
     const darkModeStored = localStorage.getItem("theme_darkMode");
-    // Only return true if explicitly set to true
+
+    // If neither mode has been set, default to dark mode
+    if (lightModeStored !== "true" && darkModeStored !== "true") {
+      localStorage.setItem("theme_darkMode", "true");
+      localStorage.setItem("theme_lightMode", "false");
+      return true;
+    }
     return darkModeStored === "true";
   });
 
@@ -186,12 +189,14 @@ function ThemeSettings() {
       setDarkMode(true);
       localStorage.setItem("theme_lightMode", "false");
       localStorage.setItem("theme_darkMode", "true");
+      setTheme('dark');
     } else if (value && !lightMode) {
       // User is checking light mode, uncheck dark mode
       setLightMode(true);
       setDarkMode(false);
       localStorage.setItem("theme_lightMode", "true");
       localStorage.setItem("theme_darkMode", "false");
+      setTheme('light');
     }
     // If trying to check when already checked, do nothing
   };
@@ -204,12 +209,14 @@ function ThemeSettings() {
       setLightMode(true);
       localStorage.setItem("theme_darkMode", "false");
       localStorage.setItem("theme_lightMode", "true");
+      setTheme('light');
     } else if (value && !darkMode) {
       // User is checking dark mode, uncheck light mode
       setDarkMode(true);
       setLightMode(false);
       localStorage.setItem("theme_darkMode", "true");
       localStorage.setItem("theme_lightMode", "false");
+      setTheme('dark');
     }
     // If trying to check when already checked, do nothing
   };

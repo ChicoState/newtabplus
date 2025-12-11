@@ -64,6 +64,34 @@ body {
   backface-visibility: hidden;
 }
 
+/* Light mode styling */
+.lightMode .container {
+  background-color: rgba(255, 255, 255, 0.95);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.lightMode {
+  color: #000;
+}
+
+.lightMode .content h1 {
+  color: #000;
+}
+
+.lightMode .content p {
+  color: #000;
+  opacity: 0.7;
+}
+
+.lightMode .button {
+  color: rgba(0, 0, 0, 0.8);
+}
+
+.lightMode .button:hover {
+  border-color: rgba(0, 0, 0, 0.3);
+  color: #000;
+}
+
 .container::before {
   content: "";
   position: absolute;
