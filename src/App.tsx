@@ -153,6 +153,12 @@ const App = () => {
 
   useEffect(() => {
     readTemplates();
+
+    // Apply blur from localStorage on initial load
+    const blurAmount = localStorage.getItem("theme_blurAmount");
+    if (blurAmount !== null) {
+      document.documentElement.style.setProperty('--blur-amount', `${blurAmount}px`);
+    }
   }, []);
 
   if (openingTheme) {

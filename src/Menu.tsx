@@ -150,9 +150,16 @@ function ThemeSettings() {
 
   const fontOptions = ["Arial", "Times New Roman", "Georgia", "Courier New", "Verdana"];
 
+  // Apply blur on initial load
+  useEffect(() => {
+    document.documentElement.style.setProperty('--blur-amount', `${blurAmount}px`);
+  }, []);
+
   const handleBlurChange = (value: number) => {
     setBlurAmount(value);
     localStorage.setItem("theme_blurAmount", value.toString());
+    // Apply the blur to widgets using CSS variable
+    document.documentElement.style.setProperty('--blur-amount', `${value}px`);
   };
 
   const handleFontChange = (value: string) => {
