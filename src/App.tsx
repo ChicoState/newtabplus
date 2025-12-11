@@ -159,6 +159,12 @@ const App = () => {
     if (blurAmount !== null) {
       document.documentElement.style.setProperty('--blur-amount', `${blurAmount}px`);
     }
+
+    // Apply font from localStorage on initial load
+    const selectedFont = localStorage.getItem("theme_font");
+    if (selectedFont && selectedFont !== "") {
+      document.documentElement.style.setProperty('--app-font', selectedFont);
+    }
   }, []);
 
   if (openingTheme) {

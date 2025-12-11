@@ -11,7 +11,7 @@ body {
   height: 100svh;
   margin: 0;
   color: #fff;
-  font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
+  font-family: var(--app-font);
   background-image: url(https://images.unsplash.com/photo-1507166763745-bfe008fbb831?q=80&w=960&auto=format);
   background-size: cover;
   overflow: hidden;
@@ -49,6 +49,7 @@ body {
 
 :root {
   --blur-amount: 40px;
+  --app-font: Inter, Avenir, Helvetica, Arial, sans-serif;
 }
 
 .container {

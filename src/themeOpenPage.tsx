@@ -149,7 +149,7 @@ function OpeningTheme({ onContinue }: Props) {
                     }}
                     onClick={(e) => e.stopPropagation()}
                 >
-                    <option value="">Choose a font...</option>
+                    <option value="">Default</option>
                     {fontOptions.map((font) => (
                         <option key={font} value={font} style={{ fontFamily: font }}>
                             {font}

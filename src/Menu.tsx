@@ -150,9 +150,13 @@ function ThemeSettings() {
 
   const fontOptions = ["Arial", "Times New Roman", "Georgia", "Courier New", "Verdana"];
 
-  // Apply blur on initial load
+  // Apply blur and font on initial load
   useEffect(() => {
     document.documentElement.style.setProperty('--blur-amount', `${blurAmount}px`);
+
+    if (selectedFont && selectedFont !== "") {
+      document.documentElement.style.setProperty('--app-font', selectedFont);
+    }
   }, []);
 
   const handleBlurChange = (value: number) => {
@@ -165,6 +169,13 @@ function ThemeSettings() {
   const handleFontChange = (value: string) => {
     setSelectedFont(value);
     localStorage.setItem("theme_font", value);
+    // Apply the font using CSS variable
+    if (value && value !== "") {
+      document.documentElement.style.setProperty('--app-font', value);
+    } else {
+      // Reset to default font if "None" is selected
+      document.documentElement.style.setProperty('--app-font', 'Inter, Avenir, Helvetica, Arial, sans-serif');
+    }
   };
 
   const handleLightModeChange = (value: boolean) => {
@@ -228,7 +239,7 @@ function ThemeSettings() {
             onChange={(e) => handleFontChange(e.target.value)}
             style={{ fontFamily: selectedFont || "inherit" }}
           >
-            <option value="">None</option>
+            <option value="">Default</option>
             {fontOptions.map((font) => (
               <option key={font} value={font} style={{ fontFamily: font }}>
                 {font}
