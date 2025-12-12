@@ -129,8 +129,11 @@ const App = () => {
   function loadTemplate(index?: number) {
     const i = index ?? activeTemplate;
     if (i >= templates.length) return;
-    setWidgets(templates[i].widgets);
-    setActiveTemplate(i);
+
+    widgets = structuredClone(templates[i].widgets);
+    activeTemplate = i;
+    setWidgets(widgets);
+    setActiveTemplate(activeTemplate);
     localStorage.setItem("activeTemplate", JSON.stringify(i));
   }
 
@@ -149,10 +152,13 @@ const App = () => {
       });
     }
 
-    setTemplates(_templates);
-    setActiveTemplate(_activeTemplate);
+    templates = _templates;
+    activeTemplate = _activeTemplate;
+    setTemplates(templates);
+    setActiveTemplate(activeTemplate);
 
-    setWidgets(_templates[_activeTemplate].widgets);
+    widgets = _templates[_activeTemplate].widgets;
+    setWidgets(widgets);
   }
 
   function addWidget(type: string) {
@@ -221,7 +227,10 @@ const App = () => {
     <div
       className={`${styles.content} ${theme === 'light' ? 'lightMode' : ''}`}
       onClick={(e) => {
-        if (e.target === e.currentTarget) setMenuOpen(false);
+        if (e.target === e.currentTarget) {
+          setMenuOpen(false);
+          setHidden(false);
+        }
       }}
     >
       <AppContext.Provider

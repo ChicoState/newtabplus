@@ -119,6 +119,7 @@ export default function Header() {
         <button
           className={[styles.container, styles.button].join(" ")}
           onClick={() => {
+            if (!menuOpen) setDeleting(false);
             setMenuOpen(!menuOpen);
           }}
         >

@@ -340,7 +340,7 @@ function TemplateList() {
                   onClick={(e) => {
                     e.stopPropagation();
                     template.pinned = !template.pinned;
-                    setTemplates([...templates]);
+                    setTemplates(structuredClone(templates));
                   }}
                 >
                   {template.pinned ? (
@@ -350,13 +350,13 @@ function TemplateList() {
                   )}
                 </button>
 
-                <button
+                {/*<button
                   className={[globalStyles.container, globalStyles.button].join(
                     " ",
                   )}
                 >
                   <XIcon size={14} weight={"bold"}></XIcon>
-                </button>
+                </button>*/}
               </div>
             </div>
             {showImage && (
@@ -386,7 +386,7 @@ enum MenuTab {
   Add,
   General,
   Theme,
-  Template,
+  Templates,
 }
 
 export default function Menu({ active }: { active: boolean }) {
