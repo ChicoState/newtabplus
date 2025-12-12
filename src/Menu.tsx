@@ -151,7 +151,7 @@ function ThemeSettings() {
     return darkModeStored === "true";
   });
 
-  const fontOptions = ["Arial", "Times New Roman", "Georgia", "Courier New", "Verdana"];
+  const fontOptions = ["Times New Roman", "Georgia", "Courier New", "Verdana"];
 
   // Apply blur and font on initial load
   useEffect(() => {
@@ -176,8 +176,8 @@ function ThemeSettings() {
     if (value && value !== "") {
       document.documentElement.style.setProperty('--app-font', value);
     } else {
-      // Reset to default font if "None" is selected
-      document.documentElement.style.setProperty('--app-font', 'Inter, Avenir, Helvetica, Arial, sans-serif');
+      // Reset to default font if "Default" is selected
+      document.documentElement.style.setProperty('--app-font', 'Arial, sans-serif');
     }
   };
 
@@ -244,9 +244,9 @@ function ThemeSettings() {
           <select
             value={selectedFont}
             onChange={(e) => handleFontChange(e.target.value)}
-            style={{ fontFamily: selectedFont || "inherit" }}
+            style={{ fontFamily: selectedFont || "Arial" }}
           >
-            <option value="">Default</option>
+            <option value="">Arial</option>
             {fontOptions.map((font) => (
               <option key={font} value={font} style={{ fontFamily: font }}>
                 {font}

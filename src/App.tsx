@@ -76,23 +76,53 @@ const App = () => {
   const gridRef = useRef(null);
 
   async function saveTemplate(name?: string) {
-    const template = {
-      name: name ?? templates[activeTemplate]?.name ?? "Default",
-      image: await toPng(gridRef.current, {
-        canvasWidth: 240,
-        canvasHeight: 135,
-      }),
-      widgets: structuredClone(widgets),
-      pinned: false,
-    };
+    try {
+      // Create template WITHOUT screenshot first
+      const templateWithoutImage = {
+        name: name ?? templates[activeTemplate]?.name ?? "Default",
+        image: null, // Will be updated after screenshot
+        widgets: structuredClone(widgets),
+        pinned: false,
+      };
 
-    if (name === null || name === undefined) {
-      const _templates = [...templates];
-      _templates[activeTemplate] = template;
-      setTemplates([..._templates]);
-    } else {
-      setTemplates([...templates, template]);
-      setActiveTemplate(templates.length);
+      let _templates: Template[];
+      let _activeTemplate: number;
+
+      if (name === null || name === undefined) {
+        _templates = [...templates];
+        _templates[activeTemplate] = templateWithoutImage;
+        _activeTemplate = activeTemplate;
+      } else {
+        _templates = [...templates, templateWithoutImage];
+        _activeTemplate = templates.length;
+      }
+
+      // Save to localStorage FIRST (before screenshot can block)
+      localStorage.setItem("templates", JSON.stringify(_templates));
+      localStorage.setItem("activeTemplate", JSON.stringify(_activeTemplate));
+
+      // Update state
+      setTemplates(_templates);
+      if (name !== null && name !== undefined) {
+        setActiveTemplate(_activeTemplate);
+      }
+
+      // THEN take screenshot (async, won't block the save)
+      try {
+        const image = await toPng(gridRef.current, {
+          canvasWidth: 240,
+          canvasHeight: 135,
+        });
+
+        // Update template with image
+        _templates[_activeTemplate].image = image;
+        localStorage.setItem("templates", JSON.stringify(_templates));
+        setTemplates([..._templates]);
+      } catch (screenshotError) {
+        console.warn("Screenshot failed, but template was saved:", screenshotError);
+      }
+    } catch (error) {
+      console.error("Error in saveTemplate:", error);
     }
   }
 
@@ -123,11 +153,6 @@ const App = () => {
     setActiveTemplate(_activeTemplate);
 
     setWidgets(_templates[_activeTemplate].widgets);
-  }
-
-  function writeTemplates() {
-    localStorage.setItem("templates", JSON.stringify(templates));
-    localStorage.setItem("activeTemplate", JSON.stringify(activeTemplate));
   }
 
   function addWidget(type: string) {
@@ -176,17 +201,8 @@ const App = () => {
     }
   }, []);
 
-  // Write templates to localStorage whenever they change
-  useEffect(() => {
-    if (templates.length > 0) {
-      localStorage.setItem("templates", JSON.stringify(templates));
-    }
-  }, [templates]);
-
-  // Write active template to localStorage whenever it changes
-  useEffect(() => {
-    localStorage.setItem("activeTemplate", JSON.stringify(activeTemplate));
-  }, [activeTemplate]);
+  // Note: We no longer use useEffect to save templates because it caused race conditions
+  // Templates are now saved directly in saveTemplate() to ensure data consistency
 
   if (openingTheme) {
     return <OpeningTheme onContinue={() => {
@@ -238,6 +254,7 @@ const App = () => {
         <Grid width={24} height={12} ref={gridRef}>
           {widgets.map((state) => {
             const map = WidgetMap[state.type];
+            if (!map) return null;
             const Component = map.component;
             return (
               <Widget

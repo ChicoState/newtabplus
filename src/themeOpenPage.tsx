@@ -8,14 +8,14 @@ type Props = {
 
 function OpeningTheme({ onContinue }: Props) {
     const themes = ["Blur","Fonts","Light/Dark mode"];
-    const fontOptions = ["Arial", "Times New Roman", "Georgia", "Courier New", "Verdana"];
+    const fontOptions = ["Times New Roman", "Georgia", "Courier New", "Verdana"];
     const [index, setIndex] = React.useState(0);
     const n = themes.length;
     const left  = (index - 1 + n) % n;
     const right = (index + 1) % n;
     const [selected, setSelected] = useState<Set<number>>(new Set());
     const [lightDarkMode, setLightDarkMode] = useState<Map<number, 'light' | 'dark' | null>>(new Map());
-    const [selectedFont, setSelectedFont] = useState<string | null>(null);
+    const [selectedFont, setSelectedFont] = useState<string>("");
     const [blurAmount, setBlurAmount] = useState(50);
     const [showError, setShowError] = useState(false);
     const isSelected = (i: number) => selected.has(i);
@@ -71,7 +71,7 @@ function OpeningTheme({ onContinue }: Props) {
 
     const toggleFont = (i: number, font: string) => {
         if (selectedFont === font) {
-            setSelectedFont(null);
+            setSelectedFont("");
             setSelected(prev => {
                 const nextSelected = new Set(prev);
                 nextSelected.delete(i);
@@ -81,7 +81,8 @@ function OpeningTheme({ onContinue }: Props) {
         } else {
             setSelectedFont(font);
             setSelected(prev => new Set(prev).add(i));
-            localStorage.setItem("theme_font", font);
+            // Save empty string for Arial (use default), otherwise save the font name
+            localStorage.setItem("theme_font", font === "Arial" ? "" : font);
         }
     };
 
@@ -140,7 +141,7 @@ function OpeningTheme({ onContinue }: Props) {
                 <div className={styles.fontsLabel}>Select Font:</div>
                 <select
                     className={styles.fontDropdown}
-                    value={selectedFont || ""}
+                    value={selectedFont}
                     onChange={(e) => {
                         e.stopPropagation();
                         if (e.target.value) {
@@ -149,7 +150,8 @@ function OpeningTheme({ onContinue }: Props) {
                     }}
                     onClick={(e) => e.stopPropagation()}
                 >
-                    <option value="">Default</option>
+                    <option value="" disabled hidden>Arial</option>
+                    <option value="Arial">Arial</option>
                     {fontOptions.map((font) => (
                         <option key={font} value={font} style={{ fontFamily: font }}>
                             {font}
