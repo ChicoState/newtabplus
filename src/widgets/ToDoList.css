@@ -11,6 +11,14 @@
   overflow: hidden;
 }
 
+/* Light mode - light grey with blur */
+:global(.lightMode) .body {
+  background-color: rgba(255, 255, 255, 0.55) !important;
+  border: 1px solid rgba(0, 0, 0, 0.15) !important;
+  -webkit-backdrop-filter: blur(var(--blur-amount)) !important;
+  backdrop-filter: blur(var(--blur-amount)) !important;
+}
+
 /* Title at the top */
 .title {
   font-size: 1rem;
@@ -18,6 +26,10 @@
   margin-bottom: 10px;
   color: #fffc;
   text-align: center;
+}
+
+:global(.lightMode) .title {
+  color: #000;
 }
 
 /* Task list */
@@ -45,6 +57,14 @@
   background-color: #fff2; /* subtle hover effect */
 }
 
+:global(.lightMode) .todo-list li {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+:global(.lightMode) .todo-list li:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
 /* Bullet point before task */
 .todo-list li span::before {
   content: "•";
@@ -57,10 +77,18 @@
   vertical-align: middle;
 }
 
+:global(.lightMode) .todo-list li span::before {
+  color: #666;
+}
+
 /* Task text */
 .todo-list li span {
-  color: #fffc; /* black text */
+  color: #fffc;
   flex: 1; /* fill available width */
+}
+
+:global(.lightMode) .todo-list li span {
+  color: #000;
 }
 
 /* Completed task style */
@@ -72,8 +100,8 @@
 /* Checkmark delete button */
 .delete-task {
   background: transparent; /* empty square */
-  border: 2px solid #fff4; /* green border */
-  color: #fff8; /* green checkmark */
+  border: 2px solid #fff4;
+  color: #fff8;
   border-radius: 4px;
   width: 22px;
   height: 22px;
@@ -91,7 +119,16 @@
 }
 
 .delete-task:hover {
-  background: #fff4; /* light green background on hover */
+  background: #fff4;
+}
+
+:global(.lightMode) .delete-task {
+  border: 2px solid rgba(0, 0, 0, 0.2);
+  color: #666;
+}
+
+:global(.lightMode) .delete-task:hover {
+  background: rgba(0, 0, 0, 0.1);
 }
 
 /* Input container */
@@ -123,6 +160,20 @@
   color: #fff6;
 }
 
+:global(.lightMode) .todo-input-container input {
+  color: #000;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+:global(.lightMode) .todo-input-container input:focus {
+  border-color: rgba(0, 0, 0, 0.3);
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+:global(.lightMode) .todo-input-container input::placeholder {
+  color: #999;
+}
+
 .todo-input-container button {
   padding: 6px 12px;
   border: 1px solid #fff2;
@@ -137,4 +188,14 @@
 .todo-input-container button:hover {
   background-color: #fff4;
   transition: background-color 0.2s;
+}
+
+:global(.lightMode) .todo-input-container button {
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  background-color: rgba(0, 0, 0, 0.1);
+  color: #000;
+}
+
+:global(.lightMode) .todo-input-container button:hover {
+  background-color: rgba(0, 0, 0, 0.2);
 }

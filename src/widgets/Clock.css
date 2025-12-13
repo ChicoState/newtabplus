@@ -7,7 +7,7 @@
   align-items: center;
   justify-content: center;
 
-  font-family: Inter, sans-serif;
+  font-family: var(--app-font);
   text-align: center;
 
   container-name: clock;

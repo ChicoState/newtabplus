@@ -7,6 +7,7 @@ import { Grid } from "./Grid";
 import { nanoid } from "nanoid";
 import { toPng } from "html-to-image";
 import styles from "./App.css";
+import OpeningTheme from "./themeOpenPage";
 
 export interface Template {
   name: string;
@@ -25,6 +26,7 @@ interface AppContextType {
   deleting: boolean;
   hidden: boolean;
   menuOpen: boolean;
+  theme: 'light' | 'dark';
 
   setWidgets: React.Dispatch<React.SetStateAction<WidgetState<any>[]>>;
   setTemplates: React.Dispatch<React.SetStateAction<Template[]>>;
@@ -32,6 +34,7 @@ interface AppContextType {
   setDeleting: React.Dispatch<React.SetStateAction<boolean>>;
   setHidden: React.Dispatch<React.SetStateAction<boolean>>;
   setMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setTheme: React.Dispatch<React.SetStateAction<'light' | 'dark'>>;
 
   saveTemplate: (name?: string) => void;
   loadTemplate: (index?: number) => void;
@@ -67,34 +70,61 @@ const App = () => {
   let [widgets, setWidgets] = useState<WidgetState<any>[]>([]);
   let [templates, setTemplates] = useState<Template[]>([]);
   let [activeTemplate, setActiveTemplate] = useState(0);
+  const [openingTheme, setOpeningTheme] = useState(() => {
+    const completed = localStorage.getItem("theme_setup_completed");
+    return completed !== "true";
+  });
+  const [theme, setTheme] = useState<'light' | 'dark'>('dark');
 
   const gridRef = useRef(null);
 
   async function saveTemplate(name?: string) {
-    const template = {
-      name: name ?? templates[activeTemplate]?.name ?? "Default",
-      image: await toPng(gridRef.current, {
-        canvasWidth: 240,
-        canvasHeight: 135,
-      }),
-      widgets: structuredClone(widgets),
-      pinned: false,
-    };
+    try {
+      const templateWithoutImage = {
+        name: name ?? templates[activeTemplate]?.name ?? "Default",
+        image: null,
+        widgets: structuredClone(widgets),
+        pinned: false,
+      };
 
-    if (name === null || name === undefined) {
-      const _templates = [...templates];
-      _templates[activeTemplate] = template;
+      let _templates: Template[];
+      let _activeTemplate: number;
 
-      templates = [..._templates];
+      if (name === null || name === undefined) {
+        _templates = [...templates];
+        _templates[activeTemplate] = templateWithoutImage;
+        _activeTemplate = activeTemplate;
+      } else {
+        _templates = [...templates, templateWithoutImage];
+        _activeTemplate = templates.length;
+      }
+
+      localStorage.setItem("templates", JSON.stringify(_templates));
+      localStorage.setItem("activeTemplate", JSON.stringify(_activeTemplate));
+
+      templates = _templates;
+      activeTemplate = _activeTemplate;
       setTemplates(templates);
-    } else {
-      templates = [...templates, template];
-      activeTemplate = templates.length;
-      setTemplates(templates);
-      setActiveTemplate(activeTemplate);
+      if (name !== null && name !== undefined) {
+        setActiveTemplate(activeTemplate);
+      }
+
+      try {
+        const image = await toPng(gridRef.current, {
+          canvasWidth: 240,
+          canvasHeight: 135,
+        });
+
+        _templates[_activeTemplate].image = image;
+        templates = _templates;
+        localStorage.setItem("templates", JSON.stringify(templates));
+        setTemplates([...templates]);
+      } catch (screenshotError) {
+        console.warn("Screenshot failed, but template was saved:", screenshotError);
+      }
+    } catch (error) {
+      console.error("Error in saveTemplate:", error);
     }
-
-    writeTemplates();
   }
 
   function loadTemplate(index?: number) {
@@ -161,11 +191,47 @@ const App = () => {
 
   useEffect(() => {
     readTemplates();
+
+    const blurAmount = localStorage.getItem("theme_blurAmount");
+    if (blurAmount !== null) {
+      document.documentElement.style.setProperty('--blur-amount', `${blurAmount}px`);
+    }
+
+    const selectedFont = localStorage.getItem("theme_font");
+    if (selectedFont && selectedFont !== "") {
+      document.documentElement.style.setProperty('--app-font', selectedFont);
+    }
+
+    const lightMode = localStorage.getItem("theme_lightMode");
+    if (lightMode === "true") {
+      setTheme('light');
+    } else {
+      setTheme('dark');
+    }
   }, []);
+
+  if (openingTheme) {
+    return <OpeningTheme onContinue={() => {
+      setOpeningTheme(false);
+      localStorage.setItem("theme_setup_completed", "true");
+
+      const blurAmount = localStorage.getItem("theme_blurAmount");
+      if (blurAmount !== null) {
+        document.documentElement.style.setProperty('--blur-amount', `${blurAmount}px`);
+      }
+
+      const lightMode = localStorage.getItem("theme_lightMode");
+      if (lightMode === "true") {
+        setTheme('light');
+      } else {
+        setTheme('dark');
+      }
+    }} />;
+  }
 
   return (
     <div
-      className={styles.content}
+      className={`${styles.content} ${theme === 'light' ? 'lightMode' : ''}`}
       onClick={(e) => {
         if (e.target === e.currentTarget) {
           setMenuOpen(false);
@@ -182,6 +248,7 @@ const App = () => {
           deleting,
           hidden,
           menuOpen,
+          theme,
 
           setWidgets,
           setTemplates,
@@ -189,6 +256,7 @@ const App = () => {
           setDeleting,
           setHidden,
           setMenuOpen,
+          setTheme,
 
           saveTemplate,
           loadTemplate,
@@ -201,6 +269,7 @@ const App = () => {
         <Grid width={24} height={12} ref={gridRef}>
           {widgets.map((state) => {
             const map = WidgetMap[state.type];
+            if (!map) return null;
             const Component = map.component;
             return (
               <Widget

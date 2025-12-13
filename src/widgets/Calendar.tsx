@@ -7,8 +7,16 @@ import { CaretLeftIcon, CaretRightIcon } from "@phosphor-icons/react";
 export interface CalendarSettings {}
 
 export function Calendar({ settings }: WidgetState<CalendarSettings>) {
-  const [date, setDate] = useState<Date>(new Date());
+  const [date, setDate] = useState<Date>(() => {
+    const saved = localStorage.getItem("calendar-date");
+    return saved ? new Date(JSON.parse(saved)) : new Date();
+  });
   const offset = new Date(date.getFullYear(), date.getMonth(), 1).getDay();
+
+  // Save selected date to localStorage
+  useEffect(() => {
+    localStorage.setItem("calendar-date", JSON.stringify(date.toISOString()));
+  }, [date]);
 
   const days = [];
   for (let i = -offset; i < 42 - offset; i++) {

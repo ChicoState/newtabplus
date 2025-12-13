@@ -10,14 +10,11 @@ interface Task {
 }
 
 export function ToDoList() {
-  const [tasks, setTasks] = useState<Task[]>([]);
-  const [input, setInput] = useState("");
-
-  // Load tasks from localStorage
-  useEffect(() => {
+  const [tasks, setTasks] = useState<Task[]>(() => {
     const saved = localStorage.getItem("todo-tasks");
-    if (saved) setTasks(JSON.parse(saved));
-  }, []);
+    return saved ? JSON.parse(saved) : [];
+  });
+  const [input, setInput] = useState("");
 
   // Save tasks to localStorage whenever tasks change
   useEffect(() => {

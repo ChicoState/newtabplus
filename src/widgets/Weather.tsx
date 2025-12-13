@@ -84,7 +84,6 @@ export function Weather() {
                 {getIcon(t.cloudCover, {
                   size: 16,
                   weight: "fill",
-                  color: "#fff8",
                 })}
                 <div className={styles.temp}>
                   <span className={styles.tempMin}>
