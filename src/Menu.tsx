@@ -128,7 +128,8 @@ function ThemeSettings() {
   const { setTheme } = useContext(AppContext);
 
   const [blurAmount, setBlurAmount] = useState(() => {
-    return Number(localStorage.getItem("theme_blurAmount")) || 0;
+    const saved = localStorage.getItem("theme_blurAmount");
+    return saved !== null ? Number(saved) : 40;
   });
   const [selectedFont, setSelectedFont] = useState(() => {
     return localStorage.getItem("theme_font") || "";
@@ -153,9 +154,11 @@ function ThemeSettings() {
 
   const fontOptions = ["Times New Roman", "Georgia", "Courier New", "Verdana"];
 
-  // Apply blur and font on initial load
   useEffect(() => {
-    document.documentElement.style.setProperty('--blur-amount', `${blurAmount}px`);
+    const savedBlur = localStorage.getItem("theme_blurAmount");
+    if (savedBlur !== null) {
+      document.documentElement.style.setProperty('--blur-amount', `${blurAmount}px`);
+    }
 
     if (selectedFont && selectedFont !== "") {
       document.documentElement.style.setProperty('--app-font', selectedFont);

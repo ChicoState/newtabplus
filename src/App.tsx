@@ -67,20 +67,22 @@ const App = () => {
   const [deleting, setDeleting] = useState(false);
   const [hidden, setHidden] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
-  const [widgets, setWidgets] = useState<WidgetState<any>[]>([]);
-  const [templates, setTemplates] = useState<Template[]>([]);
-  const [activeTemplate, setActiveTemplate] = useState(0);
-  const [openingTheme, setOpeningTheme] = useState(true);
+  let [widgets, setWidgets] = useState<WidgetState<any>[]>([]);
+  let [templates, setTemplates] = useState<Template[]>([]);
+  let [activeTemplate, setActiveTemplate] = useState(0);
+  const [openingTheme, setOpeningTheme] = useState(() => {
+    const completed = localStorage.getItem("theme_setup_completed");
+    return completed !== "true";
+  });
   const [theme, setTheme] = useState<'light' | 'dark'>('dark');
 
   const gridRef = useRef(null);
 
   async function saveTemplate(name?: string) {
     try {
-      // Create template WITHOUT screenshot first
       const templateWithoutImage = {
         name: name ?? templates[activeTemplate]?.name ?? "Default",
-        image: null, // Will be updated after screenshot
+        image: null,
         widgets: structuredClone(widgets),
         pinned: false,
       };
@@ -97,27 +99,26 @@ const App = () => {
         _activeTemplate = templates.length;
       }
 
-      // Save to localStorage FIRST (before screenshot can block)
       localStorage.setItem("templates", JSON.stringify(_templates));
       localStorage.setItem("activeTemplate", JSON.stringify(_activeTemplate));
 
-      // Update state
-      setTemplates(_templates);
+      templates = _templates;
+      activeTemplate = _activeTemplate;
+      setTemplates(templates);
       if (name !== null && name !== undefined) {
-        setActiveTemplate(_activeTemplate);
+        setActiveTemplate(activeTemplate);
       }
 
-      // THEN take screenshot (async, won't block the save)
       try {
         const image = await toPng(gridRef.current, {
           canvasWidth: 240,
           canvasHeight: 135,
         });
 
-        // Update template with image
         _templates[_activeTemplate].image = image;
-        localStorage.setItem("templates", JSON.stringify(_templates));
-        setTemplates([..._templates]);
+        templates = _templates;
+        localStorage.setItem("templates", JSON.stringify(templates));
+        setTemplates([...templates]);
       } catch (screenshotError) {
         console.warn("Screenshot failed, but template was saved:", screenshotError);
       }
@@ -161,6 +162,11 @@ const App = () => {
     setWidgets(widgets);
   }
 
+  function writeTemplates() {
+    localStorage.setItem("templates", JSON.stringify(templates));
+    localStorage.setItem("activeTemplate", JSON.stringify(activeTemplate));
+  }
+
   function addWidget(type: string) {
     if (!Object.keys(WidgetMap).includes(type)) {
       console.error("Invalid widget type");
@@ -186,19 +192,16 @@ const App = () => {
   useEffect(() => {
     readTemplates();
 
-    // Apply blur from localStorage on initial load
     const blurAmount = localStorage.getItem("theme_blurAmount");
     if (blurAmount !== null) {
       document.documentElement.style.setProperty('--blur-amount', `${blurAmount}px`);
     }
 
-    // Apply font from localStorage on initial load
     const selectedFont = localStorage.getItem("theme_font");
     if (selectedFont && selectedFont !== "") {
       document.documentElement.style.setProperty('--app-font', selectedFont);
     }
 
-    // Apply theme from localStorage on initial load
     const lightMode = localStorage.getItem("theme_lightMode");
     if (lightMode === "true") {
       setTheme('light');
@@ -207,13 +210,16 @@ const App = () => {
     }
   }, []);
 
-  // Note: We no longer use useEffect to save templates because it caused race conditions
-  // Templates are now saved directly in saveTemplate() to ensure data consistency
-
   if (openingTheme) {
     return <OpeningTheme onContinue={() => {
       setOpeningTheme(false);
-      // Re-read theme from localStorage after opening theme page
+      localStorage.setItem("theme_setup_completed", "true");
+
+      const blurAmount = localStorage.getItem("theme_blurAmount");
+      if (blurAmount !== null) {
+        document.documentElement.style.setProperty('--blur-amount', `${blurAmount}px`);
+      }
+
       const lightMode = localStorage.getItem("theme_lightMode");
       if (lightMode === "true") {
         setTheme('light');

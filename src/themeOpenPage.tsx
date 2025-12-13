@@ -78,11 +78,17 @@ function OpeningTheme({ onContinue }: Props) {
                 return nextSelected;
             });
             localStorage.setItem("theme_font", "");
+            document.documentElement.style.setProperty('--app-font', 'Arial, sans-serif');
         } else {
             setSelectedFont(font);
             setSelected(prev => new Set(prev).add(i));
-            // Save empty string for Arial (use default), otherwise save the font name
-            localStorage.setItem("theme_font", font === "Arial" ? "" : font);
+            const fontToSave = font === "Arial" ? "" : font;
+            localStorage.setItem("theme_font", fontToSave);
+            if (fontToSave) {
+                document.documentElement.style.setProperty('--app-font', font);
+            } else {
+                document.documentElement.style.setProperty('--app-font', 'Arial, sans-serif');
+            }
         }
     };
 
@@ -91,6 +97,10 @@ function OpeningTheme({ onContinue }: Props) {
             setShowError(true);
             setTimeout(() => setShowError(false), 3000); // Hide after 3 seconds
         } else {
+            const blurIndex = themes.indexOf("Blur");
+            if (selected.has(blurIndex)) {
+                localStorage.setItem("theme_blurAmount", blurAmount.toString());
+            }
             onContinue();
         }
     };
@@ -117,19 +127,21 @@ function OpeningTheme({ onContinue }: Props) {
                     className={styles.blurSlider}
                     onChange={(e) => {
                         e.stopPropagation();
-                        setBlurAmount(Number(e.target.value));
+                        const newValue = Number(e.target.value);
+                        setBlurAmount(newValue);
+
+                        if (newValue !== 50) {
+                            setSelected(prev => new Set(prev).add(i));
+                        } else {
+                            setSelected(prev => {
+                                const next = new Set(prev);
+                                next.delete(i);
+                                return next;
+                            });
+                        }
                     }}
                     onClick={(e) => e.stopPropagation()}
                 />
-                <button
-                    className={styles.selectButton}
-                    onClick={(e) => {
-                        e.stopPropagation();
-                        toggle(i);
-                    }}
-                >
-                    {isSelected(i) ? "Selected" : "Select"}
-                </button>
             </div>
         );
     };

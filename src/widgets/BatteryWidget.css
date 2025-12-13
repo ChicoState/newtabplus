@@ -10,7 +10,7 @@
   justify-content: center;
   gap: 4px;
   height: 100%;
-  color: #fffc;
+  color: rgba(255, 255, 255, 0.849);
   font-variant-numeric: tabular-nums;
 }
 
@@ -18,12 +18,12 @@
 :global(.lightMode) .row {
   color: #fff;
   --stroke: rgba(255, 255, 255, 0.8);
-  --level: rgba(255, 255, 255, 0.6);
+  --level: rgba(255, 255, 255, 0.872);
 }
 
 @media (prefers-color-scheme: light) {
   .row {
-    --stroke: rgba(232, 225, 225, 0.35);
+    --stroke: rgba(246, 239, 239, 0.35);
     color: #a9a9b8;
   }
 }
