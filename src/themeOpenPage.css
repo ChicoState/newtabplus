@@ -487,6 +487,7 @@
     font-weight: 600;
     color: #4a4a68;
     text-align: center;
+    margin-top: -10px;
 }
 
 .blurSlider {
@@ -499,6 +500,7 @@
     background: #e0e0e0;
     border-radius: 10px;
     outline: none;
+    margin-top: 20px;
 }
 
 .blurSlider::-webkit-slider-thumb {
