@@ -11,7 +11,7 @@ body {
   height: 100svh;
   margin: 0;
   color: #fff;
-  font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
+  font-family: var(--app-font);
   background-image: url(https://images.unsplash.com/photo-1507166763745-bfe008fbb831?q=80&w=960&auto=format);
   background-size: cover;
   overflow: hidden;
@@ -36,15 +36,9 @@ body {
   z-index: -1;
 }
 
-.content h1 {
-  font-size: 3.6rem;
-  font-weight: 700;
-}
-
-.content p {
-  font-size: 1.5rem;
-  font-weight: 400;
-  opacity: 0.5;
+:root {
+  --blur-amount: 40px;
+  --app-font: Arial, sans-serif;
 }
 
 .container {
@@ -54,9 +48,28 @@ body {
   border-radius: 8px;
   border: 1px solid #fff2;
 
-  backdrop-filter: blur(40px);
+  backdrop-filter: blur(var(--blur-amount));
   transform: translateZ(0);
   backface-visibility: hidden;
+}
+
+/* Light mode styling */
+.lightMode .container {
+  background-color: rgba(255, 255, 255, 0.95);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.lightMode {
+  color: #000;
+}
+
+.lightMode .button {
+  color: rgba(0, 0, 0, 0.8);
+}
+
+.lightMode .button:hover {
+  border-color: rgba(0, 0, 0, 0.3);
+  color: #000;
 }
 
 .container::before {

@@ -124,6 +124,166 @@ function WidgetSettings() {
   );
 }
 
+function ThemeSettings() {
+  const { setTheme } = useContext(AppContext);
+
+  const [blurAmount, setBlurAmount] = useState(() => {
+    const saved = localStorage.getItem("theme_blurAmount");
+    return saved !== null ? Number(saved) : 40;
+  });
+  const [selectedFont, setSelectedFont] = useState(() => {
+    return localStorage.getItem("theme_font") || "";
+  });
+  const [lightMode, setLightMode] = useState(() => {
+    const lightModeStored = localStorage.getItem("theme_lightMode");
+    // Only return true if explicitly set to true
+    return lightModeStored === "true";
+  });
+  const [darkMode, setDarkMode] = useState(() => {
+    const lightModeStored = localStorage.getItem("theme_lightMode");
+    const darkModeStored = localStorage.getItem("theme_darkMode");
+
+    // If neither mode has been set, default to dark mode
+    if (lightModeStored !== "true" && darkModeStored !== "true") {
+      localStorage.setItem("theme_darkMode", "true");
+      localStorage.setItem("theme_lightMode", "false");
+      return true;
+    }
+    return darkModeStored === "true";
+  });
+
+  const fontOptions = ["Times New Roman", "Georgia", "Courier New", "Verdana"];
+
+  useEffect(() => {
+    const savedBlur = localStorage.getItem("theme_blurAmount");
+    if (savedBlur !== null) {
+      document.documentElement.style.setProperty('--blur-amount', `${blurAmount}px`);
+    }
+
+    if (selectedFont && selectedFont !== "") {
+      document.documentElement.style.setProperty('--app-font', selectedFont);
+    }
+  }, []);
+
+  const handleBlurChange = (value: number) => {
+    setBlurAmount(value);
+    localStorage.setItem("theme_blurAmount", value.toString());
+    // Apply the blur to widgets using CSS variable
+    document.documentElement.style.setProperty('--blur-amount', `${value}px`);
+  };
+
+  const handleFontChange = (value: string) => {
+    setSelectedFont(value);
+    localStorage.setItem("theme_font", value);
+    // Apply the font using CSS variable
+    if (value && value !== "") {
+      document.documentElement.style.setProperty('--app-font', value);
+    } else {
+      // Reset to default font if "Default" is selected
+      document.documentElement.style.setProperty('--app-font', 'Arial, sans-serif');
+    }
+  };
+
+  const handleLightModeChange = (value: boolean) => {
+    // Always keep one mode selected - if trying to uncheck, keep it checked
+    if (!value && lightMode) {
+      // User is trying to uncheck light mode, switch to dark mode instead
+      setLightMode(false);
+      setDarkMode(true);
+      localStorage.setItem("theme_lightMode", "false");
+      localStorage.setItem("theme_darkMode", "true");
+      setTheme('dark');
+    } else if (value && !lightMode) {
+      // User is checking light mode, uncheck dark mode
+      setLightMode(true);
+      setDarkMode(false);
+      localStorage.setItem("theme_lightMode", "true");
+      localStorage.setItem("theme_darkMode", "false");
+      setTheme('light');
+    }
+    // If trying to check when already checked, do nothing
+  };
+
+  const handleDarkModeChange = (value: boolean) => {
+    // Always keep one mode selected - if trying to uncheck, keep it checked
+    if (!value && darkMode) {
+      // User is trying to uncheck dark mode, switch to light mode instead
+      setDarkMode(false);
+      setLightMode(true);
+      localStorage.setItem("theme_darkMode", "false");
+      localStorage.setItem("theme_lightMode", "true");
+      setTheme('light');
+    } else if (value && !darkMode) {
+      // User is checking dark mode, uncheck light mode
+      setDarkMode(true);
+      setLightMode(false);
+      localStorage.setItem("theme_darkMode", "true");
+      localStorage.setItem("theme_lightMode", "false");
+      setTheme('dark');
+    }
+    // If trying to check when already checked, do nothing
+  };
+
+  return (
+    <>
+      <span>Themes</span>
+
+      <div className={[globalStyles.container, styles.menuItem].join(" ")}>
+        <span className={styles.itemName}>Blur ({blurAmount}%)</span>
+        <div className={styles.itemInput}>
+          <input
+            type="range"
+            min="0"
+            max="100"
+            value={blurAmount}
+            onChange={(e) => handleBlurChange(Number(e.target.value))}
+          />
+        </div>
+      </div>
+
+      <div className={[globalStyles.container, styles.menuItem].join(" ")}>
+        <span className={styles.itemName}>Fonts</span>
+        <div className={styles.itemInput}>
+          <select
+            value={selectedFont}
+            onChange={(e) => handleFontChange(e.target.value)}
+            style={{ fontFamily: selectedFont || "Arial" }}
+          >
+            <option value="">Arial</option>
+            {fontOptions.map((font) => (
+              <option key={font} value={font} style={{ fontFamily: font }}>
+                {font}
+              </option>
+            ))}
+          </select>
+        </div>
+      </div>
+
+      <div className={[globalStyles.container, styles.menuItem].join(" ")}>
+        <span className={styles.itemName}>Light Mode</span>
+        <div className={styles.itemInput}>
+          <input
+            type="checkbox"
+            checked={lightMode}
+            onChange={(e) => handleLightModeChange(e.target.checked)}
+          />
+        </div>
+      </div>
+
+      <div className={[globalStyles.container, styles.menuItem].join(" ")}>
+        <span className={styles.itemName}>Dark Mode</span>
+        <div className={styles.itemInput}>
+          <input
+            type="checkbox"
+            checked={darkMode}
+            onChange={(e) => handleDarkModeChange(e.target.checked)}
+          />
+        </div>
+      </div>
+    </>
+  );
+}
+
 function TemplateList() {
   const {
     templates,
@@ -264,10 +424,11 @@ export default function Menu({ active }: { active: boolean }) {
       </div>
       {activeTab === MenuTab.Widget && <WidgetSettings></WidgetSettings>}
       {activeTab === MenuTab.Add && active && <WidgetList></WidgetList>}
+      {activeTab === MenuTab.Theme && <ThemeSettings></ThemeSettings>}
       {activeTab === MenuTab.Templates && <TemplateList></TemplateList>}
-      {![MenuTab.Widget, MenuTab.Add, MenuTab.Templates].includes(
-        activeTab,
-      ) && <span>No Settings Available</span>}
+      {![MenuTab.Widget, MenuTab.Add, MenuTab.Theme, MenuTab.Templates].includes(activeTab) && (
+        <span>No Settings Available</span>
+      )}
     </div>
   );
 }

@@ -11,24 +11,24 @@ interface NoteState {
 }
 
 export function Notepad() {
-  const [notes, setNotes] = useState<NoteState[]>([
-    { id: "1", title: "Note 1", content: "", pinned: false },
-  ]);
-  const [activeNoteId, setActiveNoteId] = useState("1");
-  const [editingId, setEditingId] = useState<string>(null);
-  const [tempTitle, setTempTitle] = useState("");
-
-  // Load from localStorage
-  useEffect(() => {
+  const [notes, setNotes] = useState<NoteState[]>(() => {
     const saved = localStorage.getItem("multi-notes");
     if (saved) {
       const parsed = JSON.parse(saved);
-      setNotes(parsed);
-      if (parsed.length > 0) setActiveNoteId(parsed[0].id);
-    } else {
-      createNewNote(true);
+      return parsed;
     }
-  }, []);
+    return [{ id: "1", title: "Note 1", content: "", pinned: false }];
+  });
+  const [activeNoteId, setActiveNoteId] = useState(() => {
+    const saved = localStorage.getItem("multi-notes");
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      return parsed.length > 0 ? parsed[0].id : "1";
+    }
+    return "1";
+  });
+  const [editingId, setEditingId] = useState<string>(null);
+  const [tempTitle, setTempTitle] = useState("");
 
   // Save to localStorage
   useEffect(() => {
