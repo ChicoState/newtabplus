@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import styles from "./themeOpenPage.css";
 import { CaretLeftIcon, CaretRightIcon, Sun, Moon } from "@phosphor-icons/react";
+import globalStyles from "./App.css"
+import styles from "./themeOpenPage.css";
 
 type Props = {
     onContinue:()=>void
@@ -222,9 +223,9 @@ function OpeningTheme({ onContinue }: Props) {
     };
 
     return (
-        <div className={styles.openingTheme}>
+        <div className={globalStyles.content}>
             <p className={styles.welcome}>Welcome</p>
-            <p className={styles.chooseTheme}>Choose your themes!</p>
+            <p className={styles.chooseTheme}>Select your home theme</p>
 
             <div className={styles.optionsRow}>
                 <button className={`${styles.navButton} ${styles.navPrev}`} aria-label="Previous theme" onClick={() => setIndex(left)}><CaretLeftIcon weight="bold" size={20} /> </button>

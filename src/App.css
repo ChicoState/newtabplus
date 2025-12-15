@@ -36,17 +36,6 @@ body {
   z-index: -1;
 }
 
-.content h1 {
-  font-size: 3.6rem;
-  font-weight: 700;
-}
-
-.content p {
-  font-size: 1.5rem;
-  font-weight: 400;
-  opacity: 0.5;
-}
-
 :root {
   --blur-amount: 40px;
   --app-font: Arial, sans-serif;
@@ -72,15 +61,6 @@ body {
 
 .lightMode {
   color: #000;
-}
-
-.lightMode .content h1 {
-  color: #000;
-}
-
-.lightMode .content p {
-  color: #000;
-  opacity: 0.7;
 }
 
 .lightMode .button {
