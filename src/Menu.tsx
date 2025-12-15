@@ -425,8 +425,8 @@ export default function Menu({ active }: { active: boolean }) {
       {activeTab === MenuTab.Widget && <WidgetSettings></WidgetSettings>}
       {activeTab === MenuTab.Add && active && <WidgetList></WidgetList>}
       {activeTab === MenuTab.Theme && <ThemeSettings></ThemeSettings>}
-      {activeTab === MenuTab.Template && <TemplateList></TemplateList>}
-      {![MenuTab.Widget, MenuTab.Add, MenuTab.Theme, MenuTab.Template].includes(activeTab) && (
+      {activeTab === MenuTab.Templates && <TemplateList></TemplateList>}
+      {![MenuTab.Widget, MenuTab.Add, MenuTab.Theme, MenuTab.Templates].includes(activeTab) && (
         <span>No Settings Available</span>
       )}
     </div>
