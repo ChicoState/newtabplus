@@ -6,6 +6,9 @@ import { Search, SearchSettings } from "./widgets/Search";
 import { Shortcut, ShortcutSettings } from "./widgets/Shortcut";
 import { ToDoList } from "./widgets/ToDoList";
 import { Weather } from "./widgets/Weather";
+import { TimerWidget } from "./widgets/TimeCounter";
+import TimerWidgetSet from "./widgets/TimerSet";
+
 
 const WidgetMap = {
   battery: {
@@ -59,6 +62,14 @@ const WidgetMap = {
   weather: {
     component: Weather,
     size: { width: 6, height: 1 },
+  },
+  timer: {
+    component: TimerWidget,
+    size: { width: 4, height: 1 },
+  },
+  Countdown: {
+    component: TimerWidgetSet,
+    size: { width: 4, height: 1 },
   },
 };
 
