@@ -1,0 +1,10 @@
+{
+    "name": "New Tab - CustomP",
+    "description": "this is to override the normal create tab command and start the build process",
+    "version": "1.0.0",
+    "manifest_version": 3
+    "chrome_url_overrides" : {
+        "newtab": " to be determined"
+  }
+    "permissions": ["storage"]
+}
